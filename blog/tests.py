@@ -3585,6 +3585,21 @@ class AutoFillPostRefundTests(TestCase):
         self.assertEqual(leg1.refund + leg2.refund, Decimal('100.01'))
         self.assertEqual(leg2.refund - leg1.refund, Decimal('0.01'))
 
+    def test_return_leg_found_by_x_marker_when_outbound_return_date_cleared(self):
+        """The 'x' marker alone still pairs the legs if the outbound's
+        return_pickup_date was edited away in admin."""
+        from blog.tasks import _auto_fill_post_refund
+
+        leg1, leg2 = self._return_booking()
+        self.assertEqual(leg2.return_pickup_time, 'x')
+        Post.objects.filter(pk=leg1.pk).update(return_pickup_date=None)
+        _auto_fill_post_refund(self._refund('-51.50'))
+        leg1.refresh_from_db()
+        leg2.refresh_from_db()
+
+        self.assertEqual(leg1.refund, Decimal('25.00'))
+        self.assertEqual(leg2.refund, Decimal('25.00'))
+
     def test_return_booking_full_refund_cancels_both_legs(self):
         from blog.tasks import _auto_fill_post_refund
 

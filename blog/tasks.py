@@ -27,9 +27,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def _return_pair(posts):
     """The two legs of one return booking, earlier leg first, or None.
 
-    The first leg's return_pickup_date is the second leg's pickup_date."""
+    handle_return_trip() marks the return leg with return_pickup_time 'x' and
+    return_pickup_date = the outbound's pickup_date (same rule as
+    utils.post_helper._find_return_leg). Failing that marker, fall back to the
+    outbound's return_pickup_date being the other leg's pickup_date."""
     if len(posts) != 2:
         return None
+    a, b = posts
+    for outbound, ret in ((a, b), (b, a)):
+        if (ret.return_pickup_time or '').strip().lower() == 'x' \
+                and ret.return_pickup_date and ret.return_pickup_date == outbound.pickup_date:
+            return outbound, ret
     first, second = sorted(posts, key=lambda p: (p.pickup_date or date.min, p.pk))
     if first.return_pickup_date and first.return_pickup_date == second.pickup_date:
         return first, second
