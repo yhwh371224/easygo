@@ -348,3 +348,10 @@ def send_telegram_task(text, location_ip=None):
     if location_ip:
         text = f"{text}Location: {get_ip_info(location_ip)}"
     send_telegram_sync(text)
+
+
+@shared_task
+def notify_driver_job_offer_task(post_id, driver_ids):
+    """드라이버가 잡 후보(candidate_drivers)로 추가되면 드라이버 봇으로 알림."""
+    from blog.driver_reminder import send_job_offers
+    send_job_offers(post_id, list(driver_ids))

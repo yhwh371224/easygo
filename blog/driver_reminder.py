@@ -255,3 +255,59 @@ class ReminderRun:
             send_telegram_sync('\n'.join(self.alerts))
         except Exception:
             logger.exception('[driver_reminder] staff telegram alert failed')
+
+
+# ---------- 새 잡 오퍼 알림 ----------
+# 관리자가 Post.candidate_drivers 에 드라이버를 추가하면(대시보드 'Available Jobs'에
+# Accept 버튼이 뜬다) 그 드라이버에게 바로 알린다. 먼저 수락한 사람이 가져가므로
+# 크론이 아니라 시그널 → Celery 로 즉시 보낸다.
+
+def build_offer_message(booking):
+    """대시보드 후보 카드와 같은 수준만 — 고객 이름·주소·전화번호는 넣지 않는다."""
+    lines = [
+        '🆕 New job available on your EasyGo dashboard',
+        f'#{booking.pk} · {booking.pickup_date:%a %d %b} {format_pickup_time_12h(booking.pickup_time)}',
+    ]
+    label = DIRECTION_LABELS.get((booking.direction or '').strip().lower())
+    if label:
+        lines.append(label)
+    if booking.suburb:
+        lines.append(f'📍 {booking.suburb}')
+    if booking.driver_price:
+        lines.append(f'💵 ${booking.driver_price}')
+    lines += ['', 'Open your dashboard and tap "Accept This Job" — first to accept gets it.']
+    return '\n'.join(lines)
+
+
+def send_job_offers(post_id, driver_ids):
+    """후보로 추가된 드라이버들에게 잡 오퍼 알림. 보낸 수를 돌려준다.
+
+    작업이 큐에서 도는 사이 이미 배정·취소됐거나 후보에서 빠졌으면 보내지 않는다.
+    미연결·오너 드라이버는 조용히 건너뛴다(관리자가 직접 배정하는 경로라 경고 불필요)."""
+    from blog.models import Post
+    if not telegram_driver.is_configured():
+        return 0
+    booking = Post.objects.filter(pk=post_id).first()
+    if (booking is None or booking.driver_id or booking.cancelled
+            or (booking.pickup_date and booking.pickup_date < timezone.localdate())):
+        return 0
+    drivers = booking.candidate_drivers.filter(pk__in=driver_ids).exclude(telegram_chat_id__isnull=True).exclude(telegram_chat_id='')
+    text = build_offer_message(booking)
+    sent, failures = 0, []
+    for driver in drivers:
+        if is_owner_driver(driver):
+            continue
+        try:
+            telegram_driver.send_message(driver.telegram_chat_id, text, [dashboard_button_row()])
+        except telegram_driver.TelegramDriverError as exc:
+            logger.warning('[job_offer] send failed post=%s driver=%s: %s', post_id, driver.pk, exc)
+            failures.append(f'{driver.driver_name}: {exc}')
+            continue
+        sent += 1
+    if failures:
+        from utils.telegram import send_telegram_sync
+        try:
+            send_telegram_sync(f'❌ 잡 오퍼 텔레그램 실패 | #{booking.pk} {booking.name}\n' + '\n'.join(failures))
+        except Exception:
+            logger.exception('[job_offer] staff telegram alert failed')
+    return sent

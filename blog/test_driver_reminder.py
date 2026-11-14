@@ -259,3 +259,73 @@ class DashboardConnectTests(TestCase):
         c, _ = self.login_driver(chat_id=None)
         r = c.get(reverse('blog:driver_dashboard'), secure=True)
         self.assertIsNone(r.context['telegram_link_url'])
+
+
+@override_settings(**BOT)
+@patch('utils.telegram.send_telegram_sync')
+@patch('utils.telegram_driver.send_message')
+class JobOfferNotificationTests(TestCase):
+    """candidate_drivers 에 추가되면 드라이버 봇으로 '대시보드에 잡이 올라왔다' 알림."""
+
+    def setUp(self):
+        self.post = make_post(None, day=datetime.date.today() + timedelta(days=3),
+                              suburb='Chatswood', driver_price='85.00')
+
+    def add(self, *drivers):
+        with self.captureOnCommitCallbacks(execute=True):
+            self.post.candidate_drivers.add(*drivers)
+
+    def test_new_candidate_gets_offer_with_dashboard_button(self, send, staff):
+        driver = make_driver()
+        self.add(driver)
+        send.assert_called_once()
+        chat_id, text, buttons = send.call_args[0]
+        self.assertEqual(chat_id, '111')
+        self.assertIn('New job available', text)
+        self.assertIn(f'#{self.post.pk}', text)
+        self.assertIn('Chatswood', text)
+        self.assertIn('$85.00', text)
+        self.assertNotIn('Customer', text)
+        self.assertEqual(buttons[0][0]['url'][-len(reverse('blog:driver_dashboard')):],
+                         reverse('blog:driver_dashboard'))
+        staff.assert_not_called()
+
+    def test_existing_candidates_not_renotified_on_set(self, send, staff):
+        a, b = make_driver('Alex', '111'), make_driver('Ben', '222')
+        self.add(a)
+        send.reset_mock()
+        with self.captureOnCommitCallbacks(execute=True):
+            self.post.candidate_drivers.set([a, b])
+        send.assert_called_once()
+        self.assertEqual(send.call_args[0][0], '222')
+
+    def test_reverse_add_notifies(self, send, staff):
+        driver = make_driver()
+        with self.captureOnCommitCallbacks(execute=True):
+            driver.candidate_posts.add(self.post)
+        send.assert_called_once()
+
+    def test_skips_unconnected_owner_assigned_and_cancelled(self, send, staff):
+        self.add(make_driver('Zed', None), make_driver('Sam', '999'))
+        send.assert_not_called()
+
+        Post.objects.filter(pk=self.post.pk).update(cancelled=True)
+        self.post.refresh_from_db()
+        self.add(make_driver('Cara', '333'))
+        send.assert_not_called()
+
+        other = make_post(make_driver('Dan', '444'), day=self.post.pickup_date)
+        with self.captureOnCommitCallbacks(execute=True):
+            other.candidate_drivers.add(make_driver('Eve', '555'))
+        send.assert_not_called()
+
+    def test_send_failure_alerts_staff(self, send, staff):
+        send.side_effect = TelegramDriverError('blocked', status_code=403)
+        self.add(make_driver())
+        staff.assert_called_once()
+        self.assertIn('잡 오퍼', staff.call_args[0][0])
+
+    @override_settings(TELEGRAM_DRIVER_BOT_TOKEN='')
+    def test_noop_when_bot_not_configured(self, send, staff):
+        self.add(make_driver())
+        send.assert_not_called()

@@ -78,8 +78,9 @@ def handle_message(message):
                 telegram_chat_id=chat_id, telegram_link_token=None)
             _safe(telegram_driver.send_message, chat_id,
                   f"✅ Connected, {driver.driver_name or 'driver'}! "
-                  "You'll get a reminder here 2 hours before each pickup — "
-                  "please tap ✅ on it to confirm.")
+                  "You'll get a message here when a new job is offered on your "
+                  "dashboard, and a reminder 2 hours before each pickup — "
+                  "please tap ✅ on the reminder to confirm.")
             from blog.tasks import send_telegram_task
             send_telegram_task.delay(f'🔗 기사 텔레그램 연결됨: {driver.driver_name} (#{driver.pk})')
             return

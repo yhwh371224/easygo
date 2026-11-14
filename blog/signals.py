@@ -1,5 +1,5 @@
 import logging
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.db import transaction
 from django.dispatch import receiver
 from django.core.management import call_command
@@ -15,6 +15,7 @@ from .tasks import (
     check_and_send_missing_info_email_task,
     send_inquiry_email_task,
     send_telegram_task,
+    notify_driver_job_offer_task,
 )
 
 from utils.return_booking import handle_return_trip
@@ -290,3 +291,20 @@ def update_sitemap_from_blog(sender, instance, created, **kwargs):
     if instance.status == 'published':
         from articles.models import Post
         call_command('generate_sitemap')
+
+# 잡 후보(candidate_drivers)로 추가된 드라이버에게 텔레그램 오퍼 알림.
+# admin 의 filter_horizontal 은 set() 으로 저장해 새로 추가된 드라이버만 post_add 로 온다 —
+# 다시 저장해도 기존 후보에게 중복 발송되지 않는다.
+@receiver(m2m_changed, sender=Post.candidate_drivers.through, dispatch_uid="notify_driver_job_offer_once")
+def notify_driver_job_offer(sender, instance, action, reverse, pk_set, **kwargs):
+    if action != 'post_add' or not pk_set:
+        return
+    if reverse:
+        # driver.candidate_posts.add(post, ...) — instance 가 Driver
+        jobs = [(post_id, [instance.pk]) for post_id in pk_set]
+    else:
+        jobs = [(instance.pk, sorted(pk_set))]
+    for post_id, driver_ids in jobs:
+        transaction.on_commit(
+            lambda p=post_id, d=driver_ids: notify_driver_job_offer_task.delay(p, d)
+        )
