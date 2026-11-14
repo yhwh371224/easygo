@@ -13,7 +13,10 @@ from main import settings
 from main.settings import RECIPIENT_EMAIL
 from .models import Inquiry, Post, PaypalPayment, StripePayment
 from utils.inquiry_helper import send_inquiry_email
-from utils.post_helper import send_missing_direction_email, send_post_cancelled_email, send_post_confirmation_email
+from utils.post_helper import (
+    arrival_legs, send_arrival_guide_email, send_missing_direction_email,
+    send_post_cancelled_email, send_post_confirmation_email,
+)
 
 
 logger = logging.getLogger('easygo')
@@ -271,6 +274,19 @@ def send_post_confirmation_email_task(pk):
     if affected:
         instance = Post.objects.get(pk=pk)
         send_post_confirmation_email(instance)
+        # 비행기 도착 구간(편도·왕복 리턴 편 포함)이 있으면 Arrival Guide 를 따로 보낸다.
+        # 컨펌 메일 뒤에 도착하도록 1분 늦추고, 실패해도 컨펌 메일과는 무관하게 둔다.
+        if arrival_legs(instance):
+            send_arrival_guide_email_task.apply_async(args=[pk], countdown=60)
+
+
+@shared_task
+def send_arrival_guide_email_task(pk):
+    try:
+        instance = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        return
+    send_arrival_guide_email(instance)
 
 
 @shared_task

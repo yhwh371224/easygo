@@ -4311,3 +4311,99 @@ class StripeWebhookPaidOnlyTests(TestCase):
     def test_async_payment_failed_is_not_recorded(self, construct, handle, err):
         self._send(construct, 'checkout.session.async_payment_failed', 'unpaid')
         handle.assert_not_called()
+
+
+class ArrivalGuideEmailTests(TestCase):
+    """컨펌 메일이 나갈 때 비행기 도착 구간(편도·왕복 리턴 편)이 있으면 Arrival Guide 메일도 나간다."""
+
+    def setUp(self):
+        self.region = make_region()
+        self.region.arrival_guide = (
+            "1. Check your email - Open the reminder email.\r\n\r\n"
+            "2. Call or text your driver - Once you have your luggage.\r\n"
+        )
+        self.region.save()
+
+    def make_post(self, **kwargs):
+        fields = dict(
+            name='Flyer', email='flyer@example.com', contact='0412345678',
+            no_of_passenger='2', price='TBA', region=self.region,
+            pickup_date=datetime.date.today() + timedelta(days=3), pickup_time='10:00',
+            direction='Drop off to Domestic Airport',
+        )
+        fields.update(kwargs)
+        return Post.objects.create(**fields)
+
+    def test_single_arrival_has_leg(self):
+        from utils.post_helper import arrival_legs
+        post = self.make_post(direction='Pickup from Intl Airport', flight_number='QF1')
+        legs = arrival_legs(post)
+        self.assertEqual(len(legs), 1)
+        self.assertEqual(legs[0]['flight_number'], 'QF1')
+
+    def test_departure_only_has_no_leg(self):
+        from utils.post_helper import arrival_legs
+        self.assertEqual(arrival_legs(self.make_post()), [])
+
+    def test_return_trip_arrival_detected(self):
+        from utils.post_helper import arrival_legs
+        post = self.make_post(
+            return_direction='Pickup from Domestic Airport',
+            return_pickup_date=datetime.date.today() + timedelta(days=10),
+            return_pickup_time='18:00', return_flight_number='VA900',
+        )
+        legs = arrival_legs(post)
+        self.assertEqual([l['flight_number'] for l in legs], ['VA900'])
+
+    def test_return_direction_blank_is_reversed(self):
+        from utils.post_helper import arrival_legs
+        post = self.make_post(
+            return_pickup_date=datetime.date.today() + timedelta(days=10),
+            return_pickup_time='18:00',
+        )
+        self.assertEqual(len(arrival_legs(post)), 1)
+
+    def test_split_return_row_does_not_double_count(self):
+        from utils.post_helper import arrival_legs
+        post = self.make_post(direction='Pickup from Intl Airport', return_pickup_time='x',
+                              return_pickup_date=datetime.date.today())
+        self.assertEqual(len(arrival_legs(post)), 1)
+
+    def test_email_contains_region_steps(self):
+        from utils.post_helper import send_arrival_guide_email
+        post = self.make_post(direction='Pickup from Intl Airport', flight_number='QF1')
+        mail.outbox = []
+        self.assertTrue(send_arrival_guide_email(post))
+        self.assertEqual(len(mail.outbox), 1)
+        msg = mail.outbox[0]
+        self.assertIn('flyer@example.com', msg.to)
+        html = msg.alternatives[0][0]
+        self.assertIn('Check your email', html)
+        self.assertIn('Once you have your luggage', html)
+        self.assertIn('QF1', html)
+        self.assertIn('after your flight lands', html)
+        self.assertNotIn('meeting-point', html)
+        self.assertNotIn('arrival-guide', html)
+
+    def test_no_email_for_departure_cancelled_or_past(self):
+        from utils.post_helper import send_arrival_guide_email
+        mail.outbox = []
+        self.assertFalse(send_arrival_guide_email(self.make_post()))
+        self.assertFalse(send_arrival_guide_email(
+            self.make_post(direction='Pickup from Intl Airport', cancelled=True)))
+        self.assertFalse(send_arrival_guide_email(
+            self.make_post(direction='Pickup from Intl Airport',
+                           pickup_date=datetime.date.today() - timedelta(days=1))))
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.tasks.send_arrival_guide_email_task.apply_async')
+    @patch('blog.tasks.send_post_confirmation_email')
+    def test_confirmation_task_queues_guide_only_for_arrivals(self, confirm, guide):
+        from blog.tasks import send_post_confirmation_email_task
+        arrival = self.make_post(direction='Pickup from Intl Airport')
+        departure = self.make_post()
+        send_post_confirmation_email_task(arrival.pk)
+        send_post_confirmation_email_task(departure.pk)
+        send_post_confirmation_email_task(arrival.pk)  # 이미 sent_email — 둘 다 안 나감
+        self.assertEqual(confirm.call_count, 2)
+        guide.assert_called_once_with(args=[arrival.pk], countdown=60)

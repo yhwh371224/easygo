@@ -1,7 +1,12 @@
 from main.settings import RECIPIENT_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from utils.email import send_html_email
+import re
 from decimal import Decimal
+
+from django.utils import timezone
+
+from utils.direction_utils import arrival_type
 
 
 def _safe_decimal(value):
@@ -134,6 +139,85 @@ def send_post_confirmation_email(instance):
     customer_recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
     recipients = customer_recipients + [RECIPIENT_EMAIL]
     send_html_email(subject, html_content, recipients)
+
+
+def arrival_legs(instance):
+    """이 부킹(왕복이면 리턴 편 포함) 중 비행기 도착 픽업인 구간 목록.
+
+    왕복은 handle_return_trip() 이 리턴 편을 별도 Post(return_pickup_time='x')로
+    쪼개지만, 컨펌 메일은 원래 행에 return_* 필드를 담아 한 번에 나가므로 여기서도
+    원래 행의 return_* 를 보고 리턴 편 도착 여부를 판단한다. 'x' 행 자체는 자기
+    direction 이 곧 리턴 편 방향이라 그 구간만 본다.
+    """
+    from utils.booking_helper import reverse_direction
+
+    legs = []
+    if arrival_type(instance.direction, instance.start_point):
+        legs.append({
+            'label': 'Arrival',
+            'date': instance.pickup_date,
+            'flight_number': instance.flight_number,
+            'flight_time': instance.flight_time,
+        })
+
+    has_return = instance.return_pickup_time and instance.return_pickup_time != 'x'
+    if has_return:
+        return_dir = instance.return_direction or reverse_direction(instance.direction)
+        if arrival_type(return_dir, instance.return_start_point):
+            legs.append({
+                'label': 'Return arrival' if legs else 'Arrival (return trip)',
+                'date': instance.return_pickup_date,
+                'flight_number': instance.return_flight_number,
+                'flight_time': instance.return_flight_time,
+            })
+    return legs
+
+
+def _arrival_guide_steps(region):
+    """Region.arrival_guide(줄마다 '1. 제목 - 내용') 를 메일용 [{title, body}] 로 바꾼다."""
+    steps = []
+    for line in (getattr(region, 'arrival_guide', '') or '').splitlines():
+        line = re.sub(r'^\s*\d+\s*[.)]\s*', '', line.strip())
+        if not line:
+            continue
+        title, sep, body = line.partition(' - ')
+        steps.append({'title': title.strip(), 'body': body.strip()} if sep else {'title': '', 'body': line})
+    return steps
+
+
+def send_arrival_guide_email(instance):
+    """비행기 도착 구간이 있는 부킹에 지역별 Arrival Guide 를 안내하는 메일.
+
+    컨펌 메일 직후 send_arrival_guide_email_task 가 부른다. 보낼 게 없으면
+    (도착 구간 없음/취소/도착일이 모두 지남) False 를 돌려준다.
+    """
+    from regions.models import Region
+
+    if instance.cancelled:
+        return False
+
+    today = timezone.localdate()
+    legs = [leg for leg in arrival_legs(instance) if not leg['date'] or leg['date'] >= today]
+    if not legs:
+        return False
+
+    region = instance.region if instance.region_id else Region.objects.filter(slug='sydney').first()
+    # 미팅 장소(meeting-point / arrival-guide 페이지) 링크는 넣지 않는다. 미리 보면 손님이
+    # 그곳이 자기 장소인 줄 알고 가버린다 — 실제 장소는 도착 후 리마인더 메일로만 안내한다.
+    html_content = render_email_template("html_email-arrival-guide.html", {
+        'booker_name': instance.booker_name,
+        'name': instance.name,
+        'email': instance.email,
+        'legs': legs,
+        'city': region.name if region else 'Sydney',
+        'steps': _arrival_guide_steps(region),
+    })
+
+    customer_recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    if not customer_recipients:
+        return False
+    send_html_email("Your Airport Arrival Guide - EasyGo", html_content, customer_recipients + [RECIPIENT_EMAIL])
+    return True
 
 
 def send_post_cancelled_email(instance, unpaid_balance=None, amount_paid=None, non_payment=False):
