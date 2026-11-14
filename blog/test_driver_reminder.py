@@ -1,4 +1,4 @@
-"""픽업 2시간 전 드라이버 텔레그램 알림 / 확인 버튼 / 미확인 경고 / 연결 webhook."""
+"""픽업 2시간 전 드라이버 알림(텔레그램/SMS fallback) / 연결 webhook."""
 import datetime
 import json
 from datetime import timedelta
@@ -41,6 +41,7 @@ def make_post(driver, day=DAY, time='14:30', **kw):
 
 
 @override_settings(**BOT)
+@patch('blog.sms_utils.send_sms_notice', return_value='SM123')
 @patch('utils.telegram.send_telegram_sync')
 @patch('utils.telegram_driver.send_message')
 class ReminderRunTests(TestCase):
@@ -48,7 +49,7 @@ class ReminderRunTests(TestCase):
     def run_at(self, now):
         return ReminderRun(now_fn=lambda: now).run()
 
-    def test_sends_two_hours_before_and_marks(self, send, staff):
+    def test_sends_two_hours_before_and_marks(self, send, staff, sms):
         driver = make_driver()
         post = make_post(driver)
 
@@ -59,10 +60,10 @@ class ReminderRunTests(TestCase):
         send.assert_called_once()
         chat_id, text, buttons = send.call_args[0]
         self.assertEqual(chat_id, '111')
-        self.assertIn('#%d · Today 02:30 PM' % post.pk, text)
-        self.assertIn('Sydney Airport T1 → Chatswood', text)
-        self.assertNotIn('Customer', text)  # 고객 이름은 넣지 않는다
-        self.assertEqual(buttons[0][0]['callback_data'], f'ack:{post.pk}')
+        self.assertEqual(text, '🚐 EasyGo job in 2 hours.')
+        self.assertIn('url', buttons[0][0])  # Dashboard 버튼
+        self.assertNotIn('callback_data', json.dumps(buttons))  # 확인 버튼 없음, 알림만
+        sms.assert_not_called()
 
         post.refresh_from_db()
         self.assertEqual(post.driver_reminder_sent_to_id, driver.pk)
@@ -71,34 +72,62 @@ class ReminderRunTests(TestCase):
         self.run_at(at(DAY, '12:46'))
         send.assert_called_once()  # 중복 발송 없음
 
-    def test_not_sent_after_pickup(self, send, staff):
+    def test_not_sent_after_pickup(self, send, staff, sms):
         make_post(make_driver())
         self.run_at(at(DAY, '14:31'))
         send.assert_not_called()
 
-    def test_cancelled_and_owner_skipped(self, send, staff):
+    def test_cancelled_and_owner_skipped(self, send, staff, sms):
         make_post(make_driver(), cancelled=True)
         make_post(make_driver(name='Sam', chat_id='999'))
         self.run_at(at(DAY, '13:00'))
         send.assert_not_called()
 
-    def test_after_midnight_pickup_sent_previous_evening(self, send, staff):
+    def test_after_midnight_pickup_sent_previous_evening(self, send, staff, sms):
         make_post(make_driver(), day=DAY + timedelta(days=1), time='00:30')
         self.run_at(at(DAY, '22:45'))
         send.assert_called_once()
-        self.assertIn('Tomorrow 12:30 AM', send.call_args[0][1])
 
-    def test_unlinked_driver_alerts_staff_once(self, send, staff):
+    def test_unlinked_driver_gets_sms_once(self, send, staff, sms):
         post = make_post(make_driver(chat_id=None))
         self.run_at(at(DAY, '12:31'))
         self.run_at(at(DAY, '12:46'))
         send.assert_not_called()
-        staff.assert_called_once()
-        self.assertIn('미연결', staff.call_args[0][0])
+        sms.assert_called_once()
+        number, text = sms.call_args[0]
+        self.assertEqual(number, '0400111222')
+        self.assertEqual(text, 'EasyGo job in 2 hours.')  # 1 segment
+        self.assertIn('SMS', staff.call_args[0][0])
         post.refresh_from_db()
+        self.assertIsNotNone(post.driver_reminder_sent_at)
+
+    def test_sms_failure_alerts_staff_no_retry(self, send, staff, sms):
+        sms.return_value = None
+        post = make_post(make_driver(chat_id=None))
+        self.run_at(at(DAY, '12:31'))
+        self.run_at(at(DAY, '12:46'))
+        sms.assert_called_once()
+        staff.assert_called_once()
+        self.assertIn('전화 필요', staff.call_args[0][0])
+        post.refresh_from_db()
+        self.assertEqual(post.driver_reminder_sent_to_id, post.driver_id)
         self.assertIsNone(post.driver_reminder_sent_at)
 
-    def test_reassignment_resends_and_resets_ack(self, send, staff):
+    def test_no_contact_number_alerts_staff(self, send, staff, sms):
+        make_post(make_driver(chat_id=None, ))
+        Driver.objects.update(driver_contact='')
+        self.run_at(at(DAY, '12:31'))
+        sms.assert_not_called()
+        self.assertIn('번호: 없음', staff.call_args[0][0])
+
+    @override_settings(TELEGRAM_DRIVER_BOT_TOKEN='')
+    def test_bot_not_configured_falls_back_to_sms(self, send, staff, sms):
+        make_post(make_driver())
+        self.run_at(at(DAY, '12:31'))
+        send.assert_not_called()
+        sms.assert_called_once()
+
+    def test_reassignment_resends_and_resets_ack(self, send, staff, sms):
         post = make_post(make_driver())
         self.run_at(at(DAY, '12:31'))
         Post.objects.filter(pk=post.pk).update(driver_ack_at=at(DAY, '12:35'))
@@ -113,59 +142,33 @@ class ReminderRunTests(TestCase):
         self.assertEqual(post.driver_reminder_sent_to_id, other.pk)
         self.assertIsNone(post.driver_ack_at)
 
-    def test_permanent_error_marks_handled(self, send, staff):
+    def test_permanent_error_falls_back_to_sms(self, send, staff, sms):
         send.side_effect = TelegramDriverError('blocked', status_code=403)
         post = make_post(make_driver())
         self.run_at(at(DAY, '12:31'))
         self.run_at(at(DAY, '12:46'))
         self.assertEqual(send.call_count, 1)
+        sms.assert_called_once()
         post.refresh_from_db()
-        self.assertIsNotNone(post.driver_reminder_sent_to_id)
+        self.assertIsNotNone(post.driver_reminder_sent_at)
 
-    def test_transient_error_retries(self, send, staff):
+    def test_transient_error_retries(self, send, staff, sms):
         send.side_effect = [TelegramDriverError('timeout'), None]
         post = make_post(make_driver())
         self.run_at(at(DAY, '12:31'))
         self.run_at(at(DAY, '12:46'))
         self.assertEqual(send.call_count, 2)
+        sms.assert_not_called()
         post.refresh_from_db()
         self.assertIsNotNone(post.driver_reminder_sent_at)
 
-    def test_unacked_alert_one_hour_before(self, send, staff):
-        post = make_post(make_driver())
-        with patch('django.utils.timezone.now', return_value=at(DAY, '12:31')):
-            self.run_at(at(DAY, '12:31'))
-        staff.reset_mock()
-
-        self.run_at(at(DAY, '13:16'))
-        staff.assert_not_called()
-
-        self.run_at(at(DAY, '13:31'))
-        staff.assert_called_once()
-        self.assertIn('미확인', staff.call_args[0][0])
-
-        self.run_at(at(DAY, '13:46'))
-        staff.assert_called_once()  # 경고는 한 번만
-        post.refresh_from_db()
-        self.assertIsNotNone(post.driver_ack_alert_sent_at)
-
-    def test_acked_no_alert(self, send, staff):
-        post = make_post(make_driver())
-        self.run_at(at(DAY, '12:31'))
-        Post.objects.filter(pk=post.pk).update(driver_ack_at=at(DAY, '12:40'))
-        staff.reset_mock()
-        self.run_at(at(DAY, '13:31'))
-        staff.assert_not_called()
-
-    def test_late_send_gets_grace_before_alert(self, send, staff):
+    def test_no_unacked_alert(self, send, staff, sms):
         make_post(make_driver())
-        with patch('django.utils.timezone.now', return_value=at(DAY, '14:00')):
-            self.run_at(at(DAY, '14:00'))
+        self.run_at(at(DAY, '12:31'))
         staff.reset_mock()
-        self.run_at(at(DAY, '14:15'))
-        staff.assert_not_called()
+        self.run_at(at(DAY, '13:31'))
         self.run_at(at(DAY, '14:21'))
-        staff.assert_called_once()
+        staff.assert_not_called()
 
 
 @override_settings(**BOT)

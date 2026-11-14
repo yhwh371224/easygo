@@ -1,11 +1,12 @@
-"""픽업 2시간 전 드라이버 텔레그램 알림 + 확인(ack) 버튼.
+"""픽업 2시간 전 배정 드라이버 알림 (알림만 — 확인 버튼/미확인 경고 없음).
 
 흐름
-  1. driver_pickup_reminder 크론(15분 간격)이 '픽업 2시간 전'이 된 배정 건을 찾아
-     드라이버 봇으로 보낸다. 메시지에 [✅ Got it] / [📋 Dashboard] 버튼이 달린다.
-  2. 드라이버가 Got it 을 누르면 webhook 이 Post.driver_ack_at 을 찍는다.
-  3. 픽업 1시간 전까지(늦게 보낸 건은 발송 후 ACK_GRACE 뒤) 확인이 없으면 관리자
-     텔레그램으로 경고한다 — 전화해 볼 시간이 남아 있을 때.
+  driver_pickup_reminder 크론(15분 간격)이 '픽업 2시간 전'이 된 배정 건을 찾아
+  - 텔레그램을 연결한 드라이버 → 드라이버 봇 메시지([📋 Dashboard] 버튼만)
+  - 연결 안 했거나 봇을 차단한 드라이버 → driver_contact 로 Twilio SMS
+  둘 다 못 보내면(번호 없음/Twilio 실패) 관리자 텔레그램으로 전화하라고 알린다.
+
+예전 확인(ack) 버튼이 달린 메시지가 남아 있을 수 있어 webhook 의 ack 처리는 남겨 둔다.
 
 부킹별 Celery eta 예약을 쓰지 않는 이유는 arrival_reminder 와 같다: 서버가 매일
 재부팅되면 eta 작업이 사라지고, 재배정·시간 변경을 따라가지 못한다. 매 실행마다
@@ -30,13 +31,9 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TZ = 'Australia/Sydney'
 REMINDER_LEAD = timedelta(hours=2)
-ACK_DEADLINE_LEAD = timedelta(hours=1)
-# 픽업 직전에 배정돼 늦게 나간 알림은 드라이버가 볼 시간을 준 뒤에 경고한다.
-ACK_GRACE = timedelta(minutes=20)
-# 픽업이 지나도 이만큼은 미확인 경고를 낸다(그 뒤로는 의미 없음).
-ACK_ALERT_CUTOFF = timedelta(hours=1)
 TIME_FORMATS = ('%H:%M', '%I:%M %p', '%H:%M:%S')
 
+# 예전 알림 메시지의 확인 버튼 callback_data (webhook 호환용).
 ACK_PREFIX = 'ack:'
 
 DIRECTION_LABELS = {
@@ -85,43 +82,21 @@ def dashboard_button_row():
 
 
 def reminder_buttons(booking):
-    return [
-        [{'text': "✅ Got it — I'll be there", 'callback_data': f'{ACK_PREFIX}{booking.pk}'}],
-        dashboard_button_row(),
-    ]
+    return [dashboard_button_row()]
+
+
+REMINDER_TEXT = 'EasyGo job in 2 hours.'
 
 
 def build_message(booking, pickup_dt, now_dt):
-    """고객 이름·전화번호는 넣지 않는다 — 연락은 대시보드의 프록시 번호로 한다."""
-    if pickup_dt.date() == now_dt.date():
-        day = 'Today'
-    elif pickup_dt.date() == now_dt.date() + timedelta(days=1):
-        day = 'Tomorrow'
-    else:
-        day = pickup_dt.strftime('%a %d %b')
-    lines = [
-        '🚐 EasyGo job in 2 hours',
-        f'#{booking.pk} · {day} {format_pickup_time_12h(booking.pickup_time)}',
-    ]
-    label = DIRECTION_LABELS.get((booking.direction or '').strip().lower())
-    if label:
-        lines.append(label)
-    route = ' → '.join(p for p in (booking.start_point, booking.end_point) if p)
-    if route:
-        lines.append(route)
-    if booking.suburb and booking.suburb not in route:
-        lines.append(f'📍 {booking.suburb}')
-    meta = []
-    if booking.flight_number:
-        meta.append(f'Flight {booking.flight_number}')
-    if booking.no_of_passenger:
-        meta.append(f'{booking.no_of_passenger} pax')
-    if booking.no_of_baggage:
-        meta.append(f'{booking.no_of_baggage} bags')
-    if meta:
-        lines.append(' · '.join(meta))
-    lines += ['', 'Please tap ✅ to confirm. Full details & customer contact are on your dashboard.']
-    return '\n'.join(lines)
+    """텔레그램 — 한 줄만. 자세한 내용은 Dashboard 버튼으로 본다."""
+    return f'🚐 {REMINDER_TEXT}'
+
+
+def build_sms_message(booking, pickup_dt, now_dt):
+    """1 segment 로 짧게. 이모지를 넣으면 UCS-2 로 바뀌어 요금이 늘어나니 넣지 말 것."""
+    return REMINDER_TEXT
+
 
 
 class ReminderRun:
@@ -160,8 +135,6 @@ class ReminderRun:
                 continue
             if booking.driver_reminder_sent_to_id != booking.driver_id:
                 self.maybe_send(booking, now)
-            else:
-                self.maybe_alert_unacked(booking, now)
         self.flush_alerts()
         return self.sent
 
@@ -185,31 +158,50 @@ class ReminderRun:
         local_now = now.astimezone(pickup_dt.tzinfo)
         summary = f'{driver.driver_name} | #{booking.pk} {booking.name} | {pickup_dt:%H:%M}'
 
-        if not driver.telegram_chat_id:
-            self.alerts.append(f'📵 텔레그램 미연결 — 2시간 전 알림 못 보냄, 전화 필요 | {summary}')
-            self.mark_handled(booking, sent=False)
-            return
+        if driver.telegram_chat_id and telegram_driver.is_configured():
+            text = build_message(booking, pickup_dt, local_now)
+            if self.dry_run:
+                self.log(f'[dry-run] telegram → {driver.driver_name} ({driver.telegram_chat_id})\n{text}\n')
+                self.sent += 1
+                return
+            try:
+                telegram_driver.send_message(driver.telegram_chat_id, text, reminder_buttons(booking))
+            except telegram_driver.TelegramDriverError as exc:
+                logger.warning('[driver_reminder] telegram failed post=%s: %s', booking.pk, exc)
+                if not exc.permanent:
+                    # 일시 오류는 다음 실행(15분 뒤)에서 다시 시도한다.
+                    self.alerts.append(f'❌ 기사 텔레그램 실패(재시도 예정) | {summary} | {exc}')
+                    return
+                # 봇 차단/잘못된 chat id — 재시도해도 같으니 SMS 로 대신 보낸다.
+                self.alerts.append(f'⚠️ 기사 텔레그램 실패(봇 차단/연결 오류) → SMS 로 대체 | {summary} | {exc}')
+            else:
+                self.mark_handled(booking, sent=True)
+                self.sent += 1
+                self.alerts.append(f'🔔 기사 2시간 전 알림 발송(텔레그램) | {summary}')
+                return
 
-        text = build_message(booking, pickup_dt, local_now)
+        self.send_sms(booking, pickup_dt, local_now, summary)
+
+    def send_sms(self, booking, pickup_dt, local_now, summary):
+        driver = booking.driver
+        text = build_sms_message(booking, pickup_dt, local_now)
         if self.dry_run:
-            self.log(f'[dry-run] → {driver.driver_name} ({driver.telegram_chat_id})\n{text}\n')
+            self.log(f'[dry-run] sms → {driver.driver_name} ({driver.driver_contact})\n{text}\n')
             self.sent += 1
             return
-        try:
-            telegram_driver.send_message(driver.telegram_chat_id, text, reminder_buttons(booking))
-        except telegram_driver.TelegramDriverError as exc:
-            logger.warning('[driver_reminder] send failed post=%s: %s', booking.pk, exc)
-            if exc.permanent:
-                # 봇 차단/잘못된 chat id — 재시도해도 같은 실패라 처리됨으로 둔다.
-                self.alerts.append(f'❌ 기사 알림 실패(봇 차단/연결 오류) — 전화 필요 | {summary} | {exc}')
-                self.mark_handled(booking, sent=False)
-            else:
-                # 일시 오류는 다음 실행에서 다시 시도한다.
-                self.alerts.append(f'❌ 기사 알림 실패(재시도 예정) | {summary} | {exc}')
-            return
-        self.mark_handled(booking, sent=True)
-        self.sent += 1
-        self.alerts.append(f'🔔 기사 2시간 전 알림 발송 | {summary}')
+        from blog import sms_utils
+        sid = sms_utils.send_sms_notice(driver.driver_contact, text) if driver.driver_contact else None
+        # SMS 실패는 재시도하지 않는다 — 잘못된 번호면 매번 같은 실패이고, Twilio 가
+        # 실제로는 보냈는데 오류로 보인 경우 15분마다 중복 문자가 나간다.
+        self.mark_handled(booking, sent=bool(sid))
+        if sid:
+            self.sent += 1
+            self.alerts.append(f'🔔 기사 2시간 전 알림 발송(SMS) | {summary}')
+        else:
+            self.alerts.append(
+                f'❌ 기사 2시간 전 SMS 실패 — 전화 필요 | {summary} | '
+                f'번호: {driver.driver_contact or "없음"}'
+            )
 
     def mark_handled(self, booking, sent):
         if self.dry_run:
@@ -223,26 +215,6 @@ class ReminderRun:
             driver_ack_at=None,
             driver_ack_alert_sent_at=None,
         )
-
-    # ---------- 미확인 경고 ----------
-    def maybe_alert_unacked(self, booking, now):
-        if (booking.driver_ack_at or booking.driver_ack_alert_sent_at
-                or not booking.driver_reminder_sent_at):
-            return
-        pickup_dt = pickup_datetime(booking)
-        if pickup_dt is None:
-            return
-        due = max(pickup_dt - ACK_DEADLINE_LEAD, booking.driver_reminder_sent_at + ACK_GRACE)
-        if not (due <= now < pickup_dt + ACK_ALERT_CUTOFF):
-            return
-        driver = booking.driver
-        self.alerts.append(
-            f'🚨 기사 미확인 — 픽업 {pickup_dt:%H:%M}, 알림 확인 안 함. 전화해 주세요 | '
-            f'{driver.driver_name} {driver.driver_contact or ""} | #{booking.pk} {booking.name}'
-        )
-        if not self.dry_run:
-            from blog.models import Post
-            Post.objects.filter(pk=booking.pk).update(driver_ack_alert_sent_at=timezone.now())
 
     def flush_alerts(self):
         if not self.alerts:
