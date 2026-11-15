@@ -227,9 +227,20 @@ class ReminderRun:
 # Accept 버튼이 뜬다) 그 드라이버에게 바로 알린다. 먼저 수락한 사람이 가져가므로
 # 크론이 아니라 시그널 → Celery 로 즉시 보낸다.
 
-def build_offer_message(booking):
-    """짧게 — 날짜·시간과 고객 요청(아기 시트 등은 message 란에 들어온다)만. 나머지는 대시보드에서."""
-    lines = ['🆕 New job available',
+OFFER_SIGNOFF = 'Thanks Peter'
+
+
+def offer_greeting(driver):
+    """'Hi Ali, Please check your dashboard. Thanks Peter' — 이름은 첫 단어만."""
+    first = ((getattr(driver, 'driver_name', None) or '').strip().split() or ['there'])[0]
+    return f'Hi {first}, Please check your dashboard. {OFFER_SIGNOFF}'
+
+
+def build_offer_message(booking, driver):
+    """짧게 — 인사말 + 날짜·시간과 고객 요청(아기 시트 등은 message 란에 들어온다)만. 나머지는 대시보드에서."""
+    lines = [offer_greeting(driver),
+             '',
+             '🆕 New job available',
              f'{booking.pickup_date:%a %d %b} {format_pickup_time_12h(booking.pickup_time)}']
     note = (booking.message or '').strip()
     if note:
@@ -242,7 +253,8 @@ def build_offer_message(booking):
 def send_job_offers(post_id, driver_ids):
     """후보로 추가된 드라이버들에게 잡 오퍼 알림. 보낸 수를 돌려준다.
 
-    작업이 큐에서 도는 사이 이미 배정·취소됐거나 후보에서 빠졌으면 보내지 않는다.
+    텔레그램을 연결한 드라이버에게만 보낸다(SMS 대체 없음). 작업이 큐에서 도는 사이
+    이미 배정·취소됐거나 후보에서 빠졌으면 보내지 않는다.
     미연결·오너 드라이버는 조용히 건너뛴다(관리자가 직접 배정하는 경로라 경고 불필요)."""
     from blog.models import Post
     if not telegram_driver.is_configured():
@@ -252,13 +264,13 @@ def send_job_offers(post_id, driver_ids):
             or (booking.pickup_date and booking.pickup_date < timezone.localdate())):
         return 0
     drivers = booking.candidate_drivers.filter(pk__in=driver_ids).exclude(telegram_chat_id__isnull=True).exclude(telegram_chat_id='')
-    text = build_offer_message(booking)
     sent, failures = 0, []
     for driver in drivers:
         if is_owner_driver(driver):
             continue
         try:
-            telegram_driver.send_message(driver.telegram_chat_id, text, [dashboard_button_row()])
+            telegram_driver.send_message(driver.telegram_chat_id, build_offer_message(booking, driver),
+                                         [dashboard_button_row()])
         except telegram_driver.TelegramDriverError as exc:
             logger.warning('[job_offer] send failed post=%s driver=%s: %s', post_id, driver.pk, exc)
             failures.append(f'{driver.driver_name}: {exc}')

@@ -374,11 +374,12 @@
      style="display:block;text-decoration:none;background:#0c4a6e;border:1px solid #0284c7;
             color:#e0f2fe;padding:.85rem 1rem;border-radius:10px;margin-bottom:1rem;">
     🔔 <strong>Connect Telegram</strong>
-    <ol style="margin:.4rem 0 .4rem 1.2rem;padding:0;">
-      <li>Download <strong>Telegram</strong> on your phone.</li>
-      <li>Come back here and tap this blue box.</li>
-      <li>Tap <strong>Start</strong> in Telegram.</li>
-    </ol>
+    {# base_home.css forces list-style:none!important, so numbers are written out #}
+    <div style="margin:.4rem 0 .4rem .3rem;">
+      <div><strong style="color:#fff;">1.</strong> Download <strong>Telegram</strong> on your phone.</div>
+      <div><strong style="color:#fff;">2.</strong> Come back here and tap this blue box.</div>
+      <div><strong style="color:#fff;">3.</strong> Tap <strong>Start</strong> in Telegram.</div>
+    </div>
     New job alerts on Telegram.
   </a>
   {% endif %}
