@@ -284,11 +284,7 @@ class JobOfferNotificationTests(TestCase):
         send.assert_called_once()
         chat_id, text, buttons = send.call_args[0]
         self.assertEqual(chat_id, '111')
-        self.assertIn('New job available', text)
-        self.assertIn(f'#{self.post.pk}', text)
-        self.assertIn('Chatswood', text)
-        self.assertIn('$85.00', text)
-        self.assertNotIn('Customer', text)
+        self.assertEqual(text, 'A job available: please check your EasyGo dashboard.')
         self.assertEqual(buttons[0][0]['url'][-len(reverse('blog:driver_dashboard')):],
                          reverse('blog:driver_dashboard'))
         staff.assert_not_called()

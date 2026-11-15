@@ -24,7 +24,6 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 
-from basecamp.modules.date_utils import format_pickup_time_12h
 from utils import telegram_driver
 
 logger = logging.getLogger(__name__)
@@ -35,14 +34,6 @@ TIME_FORMATS = ('%H:%M', '%I:%M %p', '%H:%M:%S')
 
 # 예전 알림 메시지의 확인 버튼 callback_data (webhook 호환용).
 ACK_PREFIX = 'ack:'
-
-DIRECTION_LABELS = {
-    'drop off to domestic airport': '✈️ To Domestic Airport',
-    'drop off to intl airport': '✈️ To International Airport',
-    'pickup from domestic airport': '✈️ From Domestic Airport',
-    'pickup from intl airport': '✈️ From International Airport',
-    'cruise or point to point': '🚗 Point to Point',
-}
 
 
 def is_owner_driver(driver):
@@ -235,20 +226,8 @@ class ReminderRun:
 # 크론이 아니라 시그널 → Celery 로 즉시 보낸다.
 
 def build_offer_message(booking):
-    """대시보드 후보 카드와 같은 수준만 — 고객 이름·주소·전화번호는 넣지 않는다."""
-    lines = [
-        '🆕 New job available on your EasyGo dashboard',
-        f'#{booking.pk} · {booking.pickup_date:%a %d %b} {format_pickup_time_12h(booking.pickup_time)}',
-    ]
-    label = DIRECTION_LABELS.get((booking.direction or '').strip().lower())
-    if label:
-        lines.append(label)
-    if booking.suburb:
-        lines.append(f'📍 {booking.suburb}')
-    if booking.driver_price:
-        lines.append(f'💵 ${booking.driver_price}')
-    lines += ['', 'Open your dashboard and tap "Accept This Job" — first to accept gets it.']
-    return '\n'.join(lines)
+    """짧게 — 세부 내용은 대시보드에서 확인(고객 정보는 넣지 않는다)."""
+    return 'A job available: please check your EasyGo dashboard.'
 
 
 def send_job_offers(post_id, driver_ids):
