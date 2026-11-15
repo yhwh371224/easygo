@@ -272,7 +272,8 @@ class JobOfferNotificationTests(TestCase):
 
     def setUp(self):
         self.post = make_post(None, day=datetime.date.today() + timedelta(days=3),
-                              suburb='Chatswood', driver_price='85.00')
+                              suburb='Chatswood', driver_price='85.00',
+                              message='A baby seat required (1 yrs)')
 
     def add(self, *drivers):
         with self.captureOnCommitCallbacks(execute=True):
@@ -284,7 +285,12 @@ class JobOfferNotificationTests(TestCase):
         send.assert_called_once()
         chat_id, text, buttons = send.call_args[0]
         self.assertEqual(chat_id, '111')
-        self.assertEqual(text, 'A job available: please check your EasyGo dashboard.')
+        self.assertIn('New job available', text)
+        self.assertIn('2:30 PM', text)
+        self.assertIn('A baby seat required (1 yrs)', text)
+        self.assertNotIn('Customer', text)
+        self.assertNotIn('Chatswood', text)
+        self.assertEqual(len(buttons), 1)
         self.assertEqual(buttons[0][0]['url'][-len(reverse('blog:driver_dashboard')):],
                          reverse('blog:driver_dashboard'))
         staff.assert_not_called()

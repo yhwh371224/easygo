@@ -24,6 +24,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 
+from basecamp.modules.date_utils import format_pickup_time_12h
+
 from utils import telegram_driver
 
 logger = logging.getLogger(__name__)
@@ -226,8 +228,15 @@ class ReminderRun:
 # 크론이 아니라 시그널 → Celery 로 즉시 보낸다.
 
 def build_offer_message(booking):
-    """짧게 — 세부 내용은 대시보드에서 확인(고객 정보는 넣지 않는다)."""
-    return 'A job available: please check your EasyGo dashboard.'
+    """짧게 — 날짜·시간과 고객 요청(아기 시트 등은 message 란에 들어온다)만. 나머지는 대시보드에서."""
+    lines = ['🆕 New job available',
+             f'{booking.pickup_date:%a %d %b} {format_pickup_time_12h(booking.pickup_time)}']
+    note = (booking.message or '').strip()
+    if note:
+        if len(note) > 500:  # 텔레그램 4096자 제한 여유
+            note = note[:500].rstrip() + '…'
+        lines.append(note)
+    return '\n'.join(lines)
 
 
 def send_job_offers(post_id, driver_ids):
