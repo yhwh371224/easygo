@@ -19,7 +19,7 @@ from blog.tasks import send_post_confirmation_email_task, send_telegram_task
 from main.settings import RECIPIENT_EMAIL
 from regions.models import Region
 from regions.pricing import calculate_inquiry_price
-from basecamp.modules.baggage_utils import split_child_seats, join_child_seats
+from basecamp.modules.baggage_utils import split_child_seats, join_child_seats, message_with_child_ages
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_special_items, parse_date,
     to_bool, verify_turnstile,
@@ -821,6 +821,7 @@ def quick_rebook_confirm(request, region_slug=None):
             'booster_seats'     : booster_seats,
             'seat_choices'      : range(0, MAX_CHILD_SEATS + 1),
             'message'           : message,
+            'child_ages'        : request.POST.get('child_ages', ''),
             'extra_stop'        : request.POST.get('extra_stop', ''),
             'extra_stop_addresses': _posted_stop_addresses(request),
             'active_regions'    : Region.objects.filter(is_active=True),
@@ -937,7 +938,7 @@ def quick_rebook_confirm(request, region_slug=None):
         street          = previous_street,
         no_of_passenger = no_of_passenger,
         no_of_baggage   = baggage_str,
-        message         = message,
+        message         = message_with_child_ages(request, message),
         customer_history      = previous_customer_history,
         terminal_pickup_point = previous_terminal_pickup_point,
         extra_stop_area       = previous_extra_stop_area,
@@ -1091,7 +1092,7 @@ def direct_booking(request):
         return_pickup_time=request.POST.get('return_pickup_time'),
         return_start_point=request.POST.get('return_start_point', ''),
         return_end_point=request.POST.get('return_end_point', ''),
-        message=request.POST.get('message', ''),
+        message=message_with_child_ages(request, request.POST.get('message', '')),
         region=region,
         direct_booking=True,
     )

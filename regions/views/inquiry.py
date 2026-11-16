@@ -13,6 +13,7 @@ from basecamp.basecamp_utils import (
     booking_success_response, parse_baggage, parse_special_items, parse_booking_dates,
     get_client_ip,
 )
+from basecamp.modules.baggage_utils import message_with_child_ages
 from blog.tasks import send_telegram_task
 
 logger = logging.getLogger("inquiry")
@@ -78,6 +79,7 @@ def region_inquiry_details(request, region_slug):
             return JsonResponse({'success': False, 'error': str(e)})
 
         baggage_str = parse_baggage(request)
+        message = message_with_child_ages(request, message)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
         extra_stop_addresses = [

@@ -138,3 +138,19 @@ def join_child_seats(luggage, baby, booster):
     if at == 0:  # 자유 입력("2 bags, golf clubs")이면 뒤에 붙인다.
         at = len(tokens)
     return ", ".join(tokens[:at] + seats + tokens[at:])
+
+
+# ── 아이 나이 ──
+# 카시트를 고른 손님에게만 "Child age(s)" 칸이 보인다. 별도 필드 없이 message 맨 앞에
+# 붙여서 관리자·기사 화면, 캘린더에 그대로 보이게 한다.
+CHILD_AGES_MAX_LENGTH = 50
+
+
+def message_with_child_ages(request, message):
+    """카시트가 1개 이상이고 나이를 적었으면 message 앞에 'Child age: ...' 줄을 붙인다."""
+    ages = ' '.join((request.POST.get('child_ages') or '').split())[:CHILD_AGES_MAX_LENGTH]
+    seats = to_int(request.POST.get('baggage_baby')) + to_int(request.POST.get('baggage_booster'))
+    if not ages or seats <= 0:
+        return message
+    line = f"Child age: {ages}"
+    return f"{line}\n{message}" if message else line

@@ -4503,3 +4503,46 @@ class ChildSeatSplitJoinTests(TestCase):
         self.assertEqual(join_child_seats('2 bags, golf clubs', 1, 0), '2 bags, golf clubs, Baby1')
         self.assertEqual(join_child_seats('L1, Baby5', 0, 0), 'L1')
         self.assertEqual(join_child_seats('', 0, 1), 'Booster1')
+
+
+class ChildAgesMessageTests(TestCase):
+    """카시트를 고르고 아이 나이를 적으면 message 맨 앞에 'Child age: ...' 줄이 붙는다."""
+
+    def _msg(self, message, **post):
+        from django.test import RequestFactory
+        from basecamp.modules.baggage_utils import message_with_child_ages
+        return message_with_child_ages(RequestFactory().post('/', post), message)
+
+    def test_prefixes_ages_when_a_seat_is_selected(self):
+        self.assertEqual(self._msg('Late flight', baggage_baby='1', child_ages='1, 4'),
+                         'Child age: 1, 4\nLate flight')
+        self.assertEqual(self._msg('', baggage_booster='2', child_ages=' 5   and 7 '),
+                         'Child age: 5 and 7')
+
+    def test_ignored_without_seats_or_ages(self):
+        self.assertEqual(self._msg('Hi', baggage_baby='0', child_ages='3'), 'Hi')
+        self.assertEqual(self._msg('Hi', baggage_baby='1', child_ages='  '), 'Hi')
+
+    def test_length_is_capped(self):
+        self.assertEqual(self._msg('', baggage_baby='1', child_ages='9' * 80), 'Child age: ' + '9' * 50)
+
+    def test_quick_rebook_saves_child_ages_in_message(self):
+        cache.clear()
+        pickup_date = datetime.date.today() + timedelta(days=10)
+        previous = Post.objects.create(
+            name='Age Parent', email='ages@example.com', contact='0400000000',
+            no_of_passenger='2', no_of_baggage='L1', price='100',
+            direction='Drop off to Intl Airport', suburb='Ryde',
+            pickup_date=datetime.date.today() - timedelta(days=30),
+        )
+        self.client.post(reverse('basecamp:quick_rebook_confirm'), {
+            'email': 'ages@example.com', 'previous_id': previous.pk,
+            'pickup_date': pickup_date.isoformat(), 'pickup_time': '10:00',
+            'contact': '0400000000', 'no_of_passenger': '2',
+            'direction': 'Drop off to Intl Airport', 'suburb': 'Ryde', 'trip_type': 'airport',
+            'no_of_baggage': 'L1', 'baggage_baby': '1', 'baggage_booster': '0',
+            'child_ages': '1', 'message': 'Gate 3 please',
+        })
+        post = Post.objects.get(pickup_date=pickup_date)
+        self.assertEqual(post.message, 'Child age: 1\nGate 3 please')
+        self.assertEqual(post.no_of_baggage, 'L1, Baby1')

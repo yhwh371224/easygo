@@ -1077,3 +1077,14 @@ class HomeInquiryPointToPointAddressTests(TestCase):
         self.assertEqual(inquiry.suburb, 'Mosman')
         self.assertEqual(inquiry.street, '10 Military Rd')
         self.assertEqual(inquiry.start_point, '')
+
+    def test_child_ages_go_into_message(self):
+        inquiry = self._inquiry(str(self.terminal.pk), 'Mosman', street='10 Military Rd',
+                                baggage_booster='1', child_ages='4', message='Thanks')
+        self.assertEqual(inquiry.message, 'Child age: 4\nThanks')
+        self.assertIn('Booster1', inquiry.no_of_baggage)
+
+    def test_step2_includes_hidden_child_ages_field(self):
+        response = self._price_detail('Kingsgrove', 'Mosman')
+        self.assertContains(response, 'name="child_ages"')
+        self.assertContains(response, 'child_ages.js')

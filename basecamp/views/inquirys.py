@@ -16,6 +16,7 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates,
     get_client_ip,
 )
+from basecamp.modules.baggage_utils import message_with_child_ages
 from django_ratelimit.decorators import ratelimit
 from regions.models.airport import CruiseTerminal
 from blog.tasks import send_telegram_task
@@ -141,6 +142,7 @@ def inquiry_details(request):
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
+        message = message_with_child_ages(request, message)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
         extra_stop_addresses = [
@@ -349,6 +351,7 @@ def inquiry_details1(request):
                 street = ''
 
         baggage_str = parse_baggage(request)
+        message = message_with_child_ages(request, message)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
         extra_stop_addresses = [

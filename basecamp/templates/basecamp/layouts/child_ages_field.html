@@ -1,0 +1,9 @@
+{% load static %}
+{# 카시트(Baby/Booster)를 1개 이상 고르면 나타나는 아이 나이 칸. 값은 서버에서 message 맨 앞에 "Child age: ..." 로 붙는다. #}
+<div class="{{ wrapper_class|default:'mb-3' }}" id="child-ages-field" hidden>
+  <label class="form-label mb-0" for="child_ages">Child age(s)</label>
+  <input type="text" class="form-control" name="child_ages" id="child_ages" maxlength="50"
+         placeholder="e.g. 1, 4" value="{{ child_ages|default_if_none:'' }}">
+  <small class="text-muted">Optional &mdash; helps us fit the right seat.</small>
+</div>
+<script src="{% static 'basecamp/js/child_ages.js' %}" nonce="{{ CSP_NONCE }}" defer></script>
