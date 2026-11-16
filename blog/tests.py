@@ -4433,3 +4433,73 @@ class ArrivalGuideEmailTests(TestCase):
         send_post_confirmation_email_task(arrival.pk)  # 이미 sent_email — 둘 다 안 나감
         self.assertEqual(confirm.call_count, 2)
         guide.assert_called_once_with(args=[arrival.pk], countdown=60)
+
+
+class QuickRebookChildSeatTests(TestCase):
+    """Quick Rebook 도 다른 예약 폼처럼 Baby/Booster 카시트를 고를 수 있다.
+    지난 예약 값이 먼저 채워지고, 고객이 바꾸면 바꾼 값으로 저장된다."""
+
+    def setUp(self):
+        cache.clear()
+        self.pickup_date = datetime.date.today() + timedelta(days=10)
+        self.previous = Post.objects.create(
+            name='Seat Parent', email='seats@example.com', contact='0400000000',
+            no_of_passenger='3', no_of_baggage='L2, S1, Baby1, Booster1, Pram1',
+            special_items={'baby': 1, 'pram': 1}, price='100',
+            direction='Drop off to Intl Airport', suburb='Ryde',
+            pickup_date=datetime.date.today() - timedelta(days=30),
+        )
+
+    def test_step2_prefills_previous_luggage_and_seats(self):
+        response = self.client.post(reverse('basecamp:quick_rebook_step1'), {
+            'email': 'seats@example.com', 'pickup_date': self.pickup_date.isoformat(),
+            'pickup_time': '10:00', 'no_of_passenger': '3',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['no_of_baggage'], 'L2, S1, Pram1')
+        self.assertEqual(response.context['baby_seats'], 1)
+        self.assertEqual(response.context['booster_seats'], 1)
+        self.assertContains(response, 'name="baggage_baby"')
+        self.assertContains(response, 'name="baggage_booster"')
+
+    def _confirm(self, **overrides):
+        data = {
+            'email': 'seats@example.com', 'previous_id': self.previous.pk,
+            'pickup_date': self.pickup_date.isoformat(), 'pickup_time': '10:00',
+            'flight_number': 'QF1', 'contact': '0400000000', 'no_of_passenger': '3',
+            'direction': 'Drop off to Intl Airport', 'suburb': 'Ryde', 'trip_type': 'airport',
+            'no_of_baggage': 'L2, S1, Pram1', 'baggage_baby': '1', 'baggage_booster': '1',
+        }
+        data.update(overrides)
+        self.client.post(reverse('basecamp:quick_rebook_confirm'), data)
+        return Post.objects.get(pickup_date=self.pickup_date)
+
+    def test_unchanged_seats_are_kept(self):
+        post = self._confirm()
+        self.assertEqual(post.no_of_baggage, 'L2, S1, Baby1, Booster1, Pram1')
+        self.assertEqual(post.special_items, {'baby': 1, 'booster': 1, 'pram': 1})
+
+    def test_changed_seats_are_saved(self):
+        post = self._confirm(baggage_baby='2', baggage_booster='0')
+        self.assertEqual(post.no_of_baggage, 'L2, S1, Baby2, Pram1')
+        self.assertEqual(post.special_items, {'baby': 2, 'pram': 1})
+
+
+class ChildSeatSplitJoinTests(TestCase):
+
+    def test_split_reads_seats_from_baggage_string(self):
+        from basecamp.modules.baggage_utils import split_child_seats
+        self.assertEqual(split_child_seats('L8, M8, S4, Baby3, Booster1, Pram1', {}),
+                         ('L8, M8, S4, Pram1', 3, 1))
+
+    def test_split_falls_back_to_special_items(self):
+        from basecamp.modules.baggage_utils import split_child_seats
+        self.assertEqual(split_child_seats('4 bags', {'booster': 2}), ('4 bags', 0, 2))
+        self.assertEqual(split_child_seats(None, None), ('', 0, 0))
+
+    def test_join_puts_seats_after_bag_sizes(self):
+        from basecamp.modules.baggage_utils import join_child_seats
+        self.assertEqual(join_child_seats('L1, M1, Surfboard1', 1, 2), 'L1, M1, Baby1, Booster2, Surfboard1')
+        self.assertEqual(join_child_seats('2 bags, golf clubs', 1, 0), '2 bags, golf clubs, Baby1')
+        self.assertEqual(join_child_seats('L1, Baby5', 0, 0), 'L1')
+        self.assertEqual(join_child_seats('', 0, 1), 'Booster1')

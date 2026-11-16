@@ -318,8 +318,27 @@
               <label class="form-label" for="no_of_baggage">Luggage</label>
               <input type="text" class="form-control"
                 id="no_of_baggage" name="no_of_baggage"
-                value="{{ no_of_baggage|default:previous.no_of_baggage|default_if_none:'' }}"
+                value="{{ no_of_baggage|default_if_none:'' }}"
                 placeholder="e.g. 4 bags, 1 pram, golf clubs">
+              <small class="form-text text-muted">Filled in from your last booking &mdash; change it if needed.</small>
+            </div>
+
+            <div class="col-6">
+              <label class="form-label" for="baggage_baby">Baby seats</label>
+              <select class="form-select" id="baggage_baby" name="baggage_baby">
+                {% for i in seat_choices %}
+                  <option value="{{ i }}" {% if baby_seats|stringformat:"s" == i|stringformat:"s" %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-6">
+              <label class="form-label" for="baggage_booster">Booster seats</label>
+              <select class="form-select" id="baggage_booster" name="baggage_booster">
+                {% for i in seat_choices %}
+                  <option value="{{ i }}" {% if booster_seats|stringformat:"s" == i|stringformat:"s" %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+              </select>
             </div>
 
             <div class="col-12 mt-2">

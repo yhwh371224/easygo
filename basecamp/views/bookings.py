@@ -19,6 +19,7 @@ from blog.tasks import send_post_confirmation_email_task, send_telegram_task
 from main.settings import RECIPIENT_EMAIL
 from regions.models import Region
 from regions.pricing import calculate_inquiry_price
+from basecamp.modules.baggage_utils import split_child_seats, join_child_seats
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_special_items, parse_date,
     to_bool, verify_turnstile,
@@ -651,6 +652,17 @@ def return_trip_detail(request):
 
 
 
+MAX_CHILD_SEATS = 4
+
+
+def _seat_count(value):
+    """카시트 수 — 0~MAX_CHILD_SEATS 로 자른다. 이상한 값은 0."""
+    try:
+        return max(0, min(int(value), MAX_CHILD_SEATS))
+    except (TypeError, ValueError):
+        return 0
+
+
 # STEP 1 — POST from home tab
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
@@ -714,6 +726,11 @@ def quick_rebook_step1(request, region_slug=None):
 
     logger.info(f"[QUICK REBOOK STEP1] email={email} found previous Post id={previous.id}")
 
+    # 짐·카시트는 지난 예약 값을 먼저 보여주고 step2 에서 고칠 수 있게 한다.
+    luggage, baby_seats, booster_seats = split_child_seats(
+        previous.no_of_baggage, previous.special_items,
+    )
+
     return render(request, 'basecamp/quick_rebook_step2.html', {
         'previous'       : previous,
         'email'          : email,
@@ -724,6 +741,10 @@ def quick_rebook_step1(request, region_slug=None):
         'pickup_time'    : pickup_time,
         'no_of_passenger': no_of_passenger,
         'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
+        'no_of_baggage'  : luggage,
+        'baby_seats'     : baby_seats,
+        'booster_seats'  : booster_seats,
+        'seat_choices'   : range(0, MAX_CHILD_SEATS + 1),
         'direction'      : previous.direction,
         # 지난 예약에 direction 이 없으면 공항을 안 거친 지점간 예약이었다는 뜻.
         'is_point_to_point': not (previous.direction or '').strip(),
@@ -752,6 +773,8 @@ def quick_rebook_confirm(request, region_slug=None):
     contact         = request.POST.get('contact', '').strip()
     no_of_passenger = request.POST.get('no_of_passenger', '').strip()
     no_of_baggage   = request.POST.get('no_of_baggage', '').strip()
+    baby_seats      = _seat_count(request.POST.get('baggage_baby'))
+    booster_seats   = _seat_count(request.POST.get('baggage_booster'))
     direction       = request.POST.get('direction', '').strip()
     suburb          = request.POST.get('suburb', '').strip()
     flight_time     = request.POST.get('flight_time', '').strip()
@@ -794,6 +817,9 @@ def quick_rebook_confirm(request, region_slug=None):
             # 고객이 고쳐 넣은 값들 — 다시 그릴 때 지난 예약 값으로 되돌아가면 안 된다.
             'contact'           : contact,
             'no_of_baggage'     : no_of_baggage,
+            'baby_seats'        : baby_seats,
+            'booster_seats'     : booster_seats,
+            'seat_choices'      : range(0, MAX_CHILD_SEATS + 1),
             'message'           : message,
             'extra_stop'        : request.POST.get('extra_stop', ''),
             'extra_stop_addresses': _posted_stop_addresses(request),
@@ -858,7 +884,14 @@ def quick_rebook_confirm(request, region_slug=None):
     ]
     if not extra_stop_addresses and same_extra_stop:
         extra_stop_addresses = previous.extra_stop_addresses
-    special_items  = previous.special_items or {}
+    # 카시트는 고객이 고친 값으로 — 짐 문자열과 special_items 를 함께 맞춘다.
+    special_items  = dict(previous.special_items or {})
+    for key, qty in (('baby', baby_seats), ('booster', booster_seats)):
+        if qty:
+            special_items[key] = qty
+        else:
+            special_items.pop(key, None)
+    baggage_str    = join_child_seats(no_of_baggage, baby_seats, booster_seats)
 
     # Driver 배정
     driver = resolve_booking_driver(direction, suburb, region)
@@ -903,7 +936,7 @@ def quick_rebook_confirm(request, region_slug=None):
         end_point       = end_point,
         street          = previous_street,
         no_of_passenger = no_of_passenger,
-        no_of_baggage   = no_of_baggage,
+        no_of_baggage   = baggage_str,
         message         = message,
         customer_history      = previous_customer_history,
         terminal_pickup_point = previous_terminal_pickup_point,

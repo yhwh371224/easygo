@@ -1,3 +1,6 @@
+import re
+
+
 def to_int(value, default=0):
     try:
         return int(value)
@@ -87,3 +90,51 @@ def parse_baggage(request) -> str:
     add_bag(baggage_summary, "Box", boxes, box_os)
 
     return ", ".join(baggage_summary)
+
+
+# ── Quick Rebook 카시트 칸 ──
+# 다른 예약 폼은 parse_baggage 로 "L2, S1, Baby1, Booster1" 같은 문자열을 만든다.
+# Quick Rebook 은 짐을 자유 입력 한 칸으로 받으므로, 카시트만 따로 숫자 칸으로 빼서
+# 지난 예약 값을 미리 채워 보여주고 저장할 때 같은 표기로 다시 합친다.
+_SEAT_TOKENS = {'baby': 'Baby', 'booster': 'Booster'}
+
+
+def _split_tokens(baggage):
+    return [t.strip() for t in (baggage or '').split(',') if t.strip()]
+
+
+def split_child_seats(baggage, special_items=None):
+    """짐 문자열에서 카시트를 빼낸다 → (나머지 짐 문자열, baby 수, booster 수).
+
+    문자열의 BabyN/BoosterN 표기가 기준이고, 문자열에 없을 때만 special_items 를 쓴다
+    (예전 예약 중 special_items 에 카시트가 빠진 건이 있다).
+    """
+    rest, seats = [], {}
+    for token in _split_tokens(baggage):
+        m = re.fullmatch(r'(baby|booster)\s*(\d+)', token, re.IGNORECASE)
+        if m:
+            key = m.group(1).lower()
+            seats[key] = seats.get(key, 0) + int(m.group(2))
+        else:
+            rest.append(token)
+    special_items = special_items or {}
+    for key in _SEAT_TOKENS:
+        if key not in seats:
+            seats[key] = to_int(special_items.get(key))
+    return ", ".join(rest), seats['baby'], seats['booster']
+
+
+def join_child_seats(luggage, baby, booster):
+    """split_child_seats 의 반대. 카시트는 L/M/S 바로 뒤, 다른 폼과 같은 자리에 넣는다.
+    고객이 짐 칸에 BabyN/BoosterN 을 직접 적어도 카시트 칸 값이 기준이다."""
+    tokens = [t for t in _split_tokens(luggage)
+              if not re.fullmatch(r'(baby|booster)\s*\d+', t, re.IGNORECASE)]
+    seats = []
+    add_bag(seats, _SEAT_TOKENS['baby'], to_int(baby))
+    add_bag(seats, _SEAT_TOKENS['booster'], to_int(booster))
+    at = 0
+    while at < len(tokens) and re.fullmatch(r'[LMS]\d+', tokens[at]):
+        at += 1
+    if at == 0:  # 자유 입력("2 bags, golf clubs")이면 뒤에 붙인다.
+        at = len(tokens)
+    return ", ".join(tokens[:at] + seats + tokens[at:])
