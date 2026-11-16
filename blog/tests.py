@@ -2098,13 +2098,38 @@ class DriverAcceptJobViewTests(TestCase):
         queued.assert_called_once()
         self.assertIn(f'confirmed booking #{self.post.pk}', queued.call_args.args[0])
 
+    def test_accept_queues_thanks_to_driver(self, *_):
+        with patch('blog.tasks.send_telegram_task.delay'), \
+                patch('blog.tasks.notify_driver_accept_thanks_task.delay') as thanks:
+            response = self.client.post(self.url, secure=True)
+        self.assertEqual(response.json(), {'ok': True})
+        thanks.assert_called_once_with(self.driver.pk)
+
+    def test_thanks_task_sends_driver_name(self, *_):
+        from blog.tasks import notify_driver_accept_thanks_task
+        self.driver.telegram_chat_id = '12345'
+        self.driver.save()
+        with patch('utils.telegram_driver.is_configured', return_value=True), \
+                patch('utils.telegram_driver.send_message') as send:
+            notify_driver_accept_thanks_task(self.driver.pk)
+        send.assert_called_once_with('12345', f'Thank you! {self.driver.driver_name}')
+
+    def test_thanks_task_skips_unlinked_driver(self, *_):
+        from blog.tasks import notify_driver_accept_thanks_task
+        with patch('utils.telegram_driver.is_configured', return_value=True), \
+                patch('utils.telegram_driver.send_message') as send:
+            notify_driver_accept_thanks_task(self.driver.pk)
+        send.assert_not_called()
+
     def test_taken_job_sends_nothing(self, *_):
         self.post.driver = make_driver(user=make_user(username='acc2'))
         self.post.save()
-        with patch('blog.tasks.send_telegram_task.delay') as queued:
+        with patch('blog.tasks.send_telegram_task.delay') as queued, \
+                patch('blog.tasks.notify_driver_accept_thanks_task.delay') as thanks:
             response = self.client.post(self.url, secure=True)
         self.assertEqual(response.status_code, 409)
         queued.assert_not_called()
+        thanks.assert_not_called()
 
     def test_task_sends_the_text(self, *_):
         from blog.tasks import send_telegram_task

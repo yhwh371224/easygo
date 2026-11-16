@@ -370,3 +370,20 @@ def notify_driver_job_offer_task(post_id, driver_ids):
     """드라이버가 잡 후보(candidate_drivers)로 추가되면 드라이버 봇으로 알림."""
     from blog.driver_reminder import send_job_offers
     send_job_offers(post_id, list(driver_ids))
+
+
+@shared_task
+def notify_driver_accept_thanks_task(driver_id):
+    """대시보드에서 잡을 수락한 드라이버에게 드라이버 봇으로 "Thank you! {이름}".
+    텔레그램 미연결이면 조용히 건너뛰고, 실패해도 수락에는 영향 없다(로그만)."""
+    from blog.models import Driver
+    from utils import telegram_driver
+    if not telegram_driver.is_configured():
+        return
+    driver = Driver.objects.filter(pk=driver_id).first()
+    if driver is None or not driver.telegram_chat_id:
+        return
+    try:
+        telegram_driver.send_message(driver.telegram_chat_id, f'Thank you! {driver.driver_name}')
+    except telegram_driver.TelegramDriverError as exc:
+        logger.warning('[accept_thanks] send failed driver=%s: %s', driver_id, exc)

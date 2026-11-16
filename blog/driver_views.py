@@ -1141,5 +1141,7 @@ def driver_accept_job(request, post_id):
         f"🚗 Job accepted: {driver.driver_name} confirmed booking #{post.id} "
         f"({post.pickup_date} {post.pickup_time or ''}, {post.name})"
     )
+    from blog.tasks import notify_driver_accept_thanks_task
+    notify_driver_accept_thanks_task.delay(driver.pk)
 
     return JsonResponse({'ok': True})
