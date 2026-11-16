@@ -141,6 +141,44 @@ def _confirm_click_details(inquiry, post):
     )
 
 
+def _other_inquiry_price_warning(inquiries, chosen):
+    """같은 이메일로 가격이 다른 Inquiry 가 더 있으면 텔레그램 경고 문구를 돌려준다.
+
+    확정 폼의 index 는 기본 1 = 가장 최근 Inquiry 라, 관리자가 가격을 넣어 준
+    견적 뒤에 손님이 웹사이트 견적을 한 번 더 넣으면 그 자동 견적가로 Post 가
+    만들어진다(2026-11-16 Post 8512: $200 대신 $125). 고르는 규칙은 그대로 두고
+    관리자가 바로 알아채게만 한다. Post 저장이 chosen 을 지우므로 저장 전에 부른다.
+    """
+    def norm(value):
+        try:
+            return f"{float(value):.2f}"
+        except (TypeError, ValueError):
+            return (value or '').strip() or 'TBA'
+
+    # 지난 픽업 날짜의 오래된 Inquiry 는 보지 않는다 — 오늘 이후 픽업만 비교.
+    today = timezone.localdate()
+    chosen_price = norm(chosen.price)
+    others = [
+        i for i in inquiries
+        if i.pk != chosen.pk
+        and i.pickup_date and i.pickup_date >= today
+        and norm(i.price) != chosen_price
+    ]
+    if not others:
+        return ""
+    lines = [
+        f"⚠️ Other inquiries for this email have a different price — "
+        f"booked from #{chosen.pk} at {chosen_price}. Check the price:"
+    ]
+    for i in others:
+        created = timezone.localtime(i.created)
+        lines.append(
+            f"  • #{i.pk} {norm(i.price)} (created {created:%m-%d %H:%M}, "
+            f"pickup {i.pickup_date} {i.pickup_time or ''})".rstrip()
+        )
+    return "\n".join(lines) + "\n"
+
+
 HONEYPOT_ALERT_SECONDS = 60 * 60
 
 
@@ -319,6 +357,8 @@ def confirm_booking_detail(request):
         same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
+    price_warning = _other_inquiry_price_warning(users, user)
+
     if not _save_post_claiming_inquiry(p, user):
         logger.warning(f"[BOOKING] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
         return render_inquiry_done(request)
@@ -334,6 +374,7 @@ def confirm_booking_detail(request):
         send_telegram_task.delay(
             f"Clicked the confirm button:\n"
             f"{_confirm_click_details(user, p)}"
+            f"{price_warning}"
             f"IP: `{ip}`\n",
             location_ip=ip,
         )
@@ -466,6 +507,8 @@ def confirm_booking_prepay_detail(request):
         same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
+    price_warning = _other_inquiry_price_warning(users, user)
+
     if not _save_post_claiming_inquiry(p, user):
         logger.warning(f"[BOOKING PREPAY] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
         # 연타로 들어온 두 번째 요청 — 첫 요청이 만든 Post 로 결제 페이지를 연다.
@@ -493,6 +536,7 @@ def confirm_booking_prepay_detail(request):
         send_telegram_task.delay(
             f"Clicked the confirm button (prepay):\n"
             f"{_confirm_click_details(user, p)}"
+            f"{price_warning}"
             f"IP: `{ip}`\n",
             location_ip=ip,
         )
