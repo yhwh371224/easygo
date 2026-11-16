@@ -967,3 +967,35 @@ class DirectBookingViewTests(TestCase):
         response = self.client.post(url, self._data(), secure=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertFalse(response.json()['success'])
         self.assertEqual(Post.objects.filter(email='dana@example.com').count(), 1)
+
+
+# 같은 이메일로 가격이 다른 Inquiry 가 있으면 확정 알림 첫 줄부터 경고한다.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'confirm-price-warning-tests'}})
+class ConfirmClickPriceWarningHeaderTests(TestCase):
+
+    def _inquiry(self, price):
+        from blog.models import Inquiry
+        return Inquiry.objects.create(name='Two Quotes', email='two@example.com', price=price,
+                                      no_of_passenger='1', direction='Drop off to Domestic Airport',
+                                      pickup_date=datetime.date.today() + datetime.timedelta(days=5))
+
+    def _confirm_message(self):
+        with patch('basecamp.views.bookings.send_telegram_task.delay') as tg, \
+                patch('basecamp.views.bookings.send_post_confirmation_email_task.delay'):
+            self.client.post(reverse('basecamp:confirm_booking_detail'),
+                             {'email': 'two@example.com', 'index': '1', 'cash': 'on'}, secure=True)
+        return tg.call_args.args[0]
+
+    def test_header_flags_other_inquiry_with_different_price(self):
+        self._inquiry('135')
+        self._inquiry('148')
+        message = self._confirm_message()
+        self.assertTrue(message.startswith(
+            "Clicked the confirm button > ! Other inquiries with a different price\n"))
+        self.assertIn("⚠️ Other inquiries", message)
+
+    def test_header_unchanged_without_price_difference(self):
+        self._inquiry('148')
+        self.assertTrue(self._confirm_message().startswith("Clicked the confirm button:\n"))
+

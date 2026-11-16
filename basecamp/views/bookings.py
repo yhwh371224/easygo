@@ -179,6 +179,13 @@ def _other_inquiry_price_warning(inquiries, chosen):
     return "\n".join(lines) + "\n"
 
 
+def _confirm_click_header(label, price_warning):
+    """확정 알림 첫 줄. 가격이 다른 Inquiry 가 있으면 첫 줄부터 눈에 띄게 표시한다."""
+    if price_warning:
+        return f"{label} > ! Other inquiries with a different price\n"
+    return f"{label}:\n"
+
+
 HONEYPOT_ALERT_SECONDS = 60 * 60
 
 
@@ -372,7 +379,7 @@ def confirm_booking_detail(request):
     ip = get_client_ip(request)
     try:
         send_telegram_task.delay(
-            f"Clicked the confirm button:\n"
+            _confirm_click_header("Clicked the confirm button", price_warning) +
             f"{_confirm_click_details(user, p)}"
             f"{price_warning}"
             f"IP: `{ip}`\n",
@@ -534,7 +541,7 @@ def confirm_booking_prepay_detail(request):
     ip = get_client_ip(request)
     try:
         send_telegram_task.delay(
-            f"Clicked the confirm button (prepay):\n"
+            _confirm_click_header("Clicked the confirm button (prepay)", price_warning) +
             f"{_confirm_click_details(user, p)}"
             f"{price_warning}"
             f"IP: `{ip}`\n",
