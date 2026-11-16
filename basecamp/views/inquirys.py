@@ -64,6 +64,18 @@ def _resolve_cruise_terminal(region: Region, raw_value: str):
     return None
 
 
+def _join_address(address, area):
+    """'59 Picnic Point Rd' + 'Kingsgrove' → '59 Picnic Point Rd, Kingsgrove'.
+    주소에 이미 지역 이름이 들어 있으면 다시 붙이지 않는다."""
+    address = (address or '').strip()
+    area = (area or '').strip()
+    if not address:
+        return area
+    if not area or area.lower() in address.lower():
+        return address
+    return f"{address}, {area}"
+
+
 # Inquiry for airport (BOOk NOW/New Booking button)
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
@@ -325,6 +337,16 @@ def inquiry_details1(request):
             suburb = ''
             start_point = original_start_point
             end_point = end_cruise.name
+
+        # 공항이 없는 지점간: 출발/도착 주소를 각각 받아 start/end point 에 합친다
+        # (p2p_single 과 같은 저장 방식). 이때 street 는 비운다.
+        if not direction:
+            start_address = request.POST.get('start_address', '').strip()
+            end_address = request.POST.get('end_address', '').strip()
+            if start_address or end_address:
+                start_point = _join_address(start_address, start_point)
+                end_point = _join_address(end_address, end_point)
+                street = ''
 
         baggage_str = parse_baggage(request)
         special_items = parse_special_items(request)

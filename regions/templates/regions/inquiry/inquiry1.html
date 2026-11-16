@@ -110,7 +110,7 @@
             
 			  <hr class="my-5">
 
-          {% if condition_met %}           
+          {% if show_street %}           
             <div class="mb-3 pb-1" >
               <p class="form-label mb-1">Street Number & Street Name</p>
             </div>
@@ -120,6 +120,26 @@
                 <input class="form-control" type="text"  placeholder="Street Number and Street Name" required name="street" id="street">
                 <div class="invalid-feedback">Please enter street number & name!</div>
                 </div>
+              </div><br>
+          {% elif ask_start_address or ask_end_address %}
+            <div class="mb-3 pb-1">
+              <p class="form-label mb-1">Addresses</p>
+            </div>
+              <div class="card text-white bg-secondary p-4">
+              {% if ask_start_address %}
+              <div class="mb-3 pb-1">
+                <label class="form-label" for="start_address">Pickup address ({{ start_point_display|default:start_point }})</label>
+                <input class="form-control" type="text" placeholder="Street number and street name" required name="start_address" id="start_address">
+                <div class="invalid-feedback">Please enter the pickup address!</div>
+              </div>
+              {% endif %}
+              {% if ask_end_address %}
+              <div class="mb-3 pb-1">
+                <label class="form-label" for="end_address">Drop-off address ({{ end_point_display|default:end_point }})</label>
+                <input class="form-control" type="text" placeholder="Street number and street name" required name="end_address" id="end_address">
+                <div class="invalid-feedback">Please enter the drop-off address!</div>
+              </div>
+              {% endif %}
               </div><br>
           {% endif %}
               

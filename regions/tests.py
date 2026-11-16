@@ -999,3 +999,81 @@ class ConfirmClickPriceWarningHeaderTests(TestCase):
         self._inquiry('148')
         self.assertTrue(self._confirm_message().startswith("Clicked the confirm button:\n"))
 
+
+# 홈 가격조회 → inquiry1: 공항이 없는 지점간이면 Street 한 칸 대신
+# 출발/도착 주소를 따로 받아 start/end point 에 합쳐 저장한다.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'p2p-address-tests'}})
+class HomeInquiryPointToPointAddressTests(TestCase):
+
+    def setUp(self):
+        from django.core.cache import cache
+        from regions.models import CruiseTerminal
+        cache.clear()  # 중복 제출 방지가 캐시를 쓰므로 테스트마다 비운다.
+        self.region = make_region(slug='p2ptest', name='P2P Test')
+        self.airport = make_airport(code='PTP')
+        self.airport.regions.add(self.region)
+        self.terminal = Terminal.objects.create(airport=self.airport, name='T1',
+                                                type=Terminal.TerminalType.INTL)
+        self.cruise = CruiseTerminal.objects.create(region=self.region, name='Overseas Passenger Terminal')
+
+    def _price_detail(self, start, end):
+        return self.client.post(reverse('regions:price_detail', kwargs={'region_slug': 'p2ptest'}), {
+            'pickup_date': FUTURE, 'start_point': start, 'end_point': end, 'no_of_passenger': '2',
+        }, secure=True)
+
+    def _inquiry(self, start, end, **extra):
+        from blog.models import Inquiry
+        data = {
+            'pickup_date': FUTURE, 'name': 'Pat', 'contact': '0400000000',
+            'email': 'pat@example.com', 'pickup_time': '10:00', 'no_of_passenger': '2',
+            'start_point': start, 'end_point': end,
+            'original_start_point': start, 'original_end_point': end,
+            'cf-turnstile-response': 'XXXX',
+        }
+        data.update(extra)
+        with patch('basecamp.views.inquirys.send_telegram_task.delay'):
+            self.client.post(reverse('regions:inquiry_details1', kwargs={'region_slug': 'p2ptest'}),
+                             data, secure=True)
+        return Inquiry.objects.get(email='pat@example.com')
+
+    def test_suburb_to_suburb_asks_both_addresses(self):
+        response = self._price_detail('Kingsgrove', 'Mosman')
+        self.assertFalse(response.context['show_street'])
+        self.assertTrue(response.context['ask_start_address'])
+        self.assertTrue(response.context['ask_end_address'])
+        self.assertContains(response, 'name="start_address"')
+        self.assertContains(response, 'name="end_address"')
+        self.assertNotContains(response, 'name="street"')
+
+    def test_airport_trip_keeps_single_street(self):
+        response = self._price_detail(str(self.terminal.pk), 'Mosman')
+        self.assertTrue(response.context['show_street'])
+        self.assertContains(response, 'name="street"')
+        self.assertNotContains(response, 'name="start_address"')
+
+    def test_cruise_to_suburb_asks_only_suburb_side(self):
+        response = self._price_detail(f'cruise_{self.cruise.pk}', 'Mosman')
+        self.assertFalse(response.context['ask_start_address'])
+        self.assertTrue(response.context['ask_end_address'])
+
+    def test_suburb_to_suburb_saves_addresses_into_points(self):
+        inquiry = self._inquiry('Kingsgrove', 'Mosman',
+                                start_address='59 Picnic Point Rd', end_address='10 Military Rd')
+        self.assertEqual(inquiry.start_point, '59 Picnic Point Rd, Kingsgrove')
+        self.assertEqual(inquiry.end_point, '10 Military Rd, Mosman')
+        self.assertEqual(inquiry.street, '')
+        self.assertEqual(inquiry.direction, '')
+
+    def test_cruise_to_suburb_keeps_terminal_name(self):
+        inquiry = self._inquiry(f'cruise_{self.cruise.pk}', 'Mosman', end_address='10 Military Rd Mosman')
+        self.assertEqual(inquiry.start_point, 'Overseas Passenger Terminal')
+        self.assertEqual(inquiry.end_point, '10 Military Rd Mosman')
+        self.assertEqual(inquiry.street, '')
+
+    def test_airport_trip_still_saves_street_and_suburb(self):
+        inquiry = self._inquiry(str(self.terminal.pk), 'Mosman', street='10 Military Rd')
+        self.assertEqual(inquiry.direction, 'Pickup from Intl Airport')
+        self.assertEqual(inquiry.suburb, 'Mosman')
+        self.assertEqual(inquiry.street, '10 Military Rd')
+        self.assertEqual(inquiry.start_point, '')

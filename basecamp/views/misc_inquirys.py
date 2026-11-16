@@ -106,6 +106,13 @@ def price_detail(request):
             (is_start_cruise and is_end_airport) or
             (is_start_airport and is_end_cruise)
         )
+        # 주소 칸: 공항편이면 지금처럼 Street 한 칸(공항 반대쪽 주소).
+        # 공항이 없는 지점간이면 Street 한 칸으로는 출발지 주소인지 도착지 주소인지
+        # 알 수 없어서, 크루즈 터미널이 아닌 쪽마다 주소 칸을 따로 받는다.
+        is_airport_trip = is_start_airport or is_end_airport
+        show_street = condition_met and is_airport_trip
+        ask_start_address = not is_airport_trip and not is_start_cruise
+        ask_end_address = not is_airport_trip and not is_end_cruise
 
         start_display = (start_terminal.name if start_terminal else
                          start_cruise.name if start_cruise else start_point)
@@ -131,6 +138,9 @@ def price_detail(request):
             'original_end_point': end_point,
             'no_of_passenger': no_of_passenger,
             'condition_met': condition_met,
+            'show_street': show_street,
+            'ask_start_address': ask_start_address,
+            'ask_end_address': ask_end_address,
             'is_start_airport': is_start_airport,
             'is_end_airport': is_end_airport,
             'is_start_cruise': is_start_cruise,
