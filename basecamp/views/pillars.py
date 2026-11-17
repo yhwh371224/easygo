@@ -131,15 +131,11 @@ def inquiry1(request):
     })
 
 
-# Temporarily send /payonline/ to the PayPal page instead of Stripe.
-# Set back to False to restore the Stripe form (template/checkout untouched).
-PAYONLINE_USE_PAYPAL = True
-
-
 def payonline(request):
     """Card payment page (Stripe). Links from emails / redirects prefill it
     with ?name=&email=&amount=; the form posts to payonline_checkout."""
-    if PAYONLINE_USE_PAYPAL:
+    # settings.ONLINE_PAYMENT_PROVIDER (.env) picks Stripe or PayPal.
+    if settings.ONLINE_PAYMENT_PROVIDER != 'stripe':
         target = reverse('basecamp:payonline_paypal')
         qs = request.GET.urlencode()
         return redirect(f'{target}?{qs}' if qs else target)

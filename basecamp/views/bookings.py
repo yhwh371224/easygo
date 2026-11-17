@@ -1,6 +1,7 @@
 import logging
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.shortcuts import render, redirect
@@ -557,13 +558,15 @@ def confirm_booking_prepay_detail(request):
 def _redirect_to_prepay_payment(post, name, final_price):
     """prepay confirm 후 결제 페이지로 보낸다.
 
-    기본은 금액·이메일이 채워진 Stripe Checkout. 금액이 TBA 이거나 Stripe
+    settings.ONLINE_PAYMENT_PROVIDER (.env) 가 'stripe' 이면 금액·이메일이
+    채워진 Stripe Checkout. 그 외('paypal')이거나, 금액이 TBA 이거나 Stripe
     세션 생성이 실패하면 이름·금액이 채워진 PayPal 페이지로 보낸다.
     """
-    from basecamp.views.payments import stripe_checkout_url_for_post
-    url = stripe_checkout_url_for_post(post) if post else None
-    if url:
-        return redirect(url)
+    if settings.ONLINE_PAYMENT_PROVIDER == 'stripe' and post:
+        from basecamp.views.payments import stripe_checkout_url_for_post
+        url = stripe_checkout_url_for_post(post)
+        if url:
+            return redirect(url)
     return redirect(f"/payonline/paypal/?{urlencode({'name': name, 'amount': final_price})}")
 
 

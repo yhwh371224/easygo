@@ -688,7 +688,8 @@ class ConfirmBookingConcurrentClickTests(TransactionTestCase):
 
 
 # prepay confirm 후 PayPal 대신 금액·이메일이 채워진 Stripe Checkout 으로 보낸다.
-@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+@override_settings(ONLINE_PAYMENT_PROVIDER='stripe',
+                   CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
                                        'LOCATION': 'prepay-stripe-tests'}})
 class ConfirmPrepayStripeRedirectTests(TestCase):
 
@@ -726,6 +727,15 @@ class ConfirmPrepayStripeRedirectTests(TestCase):
         self.assertTrue(response['Location'].startswith('/payonline/paypal/?'))
         self.assertIn('amount=85', response['Location'])
 
+    @override_settings(ONLINE_PAYMENT_PROVIDER='paypal')
+    @patch('basecamp.views.payments.stripe.checkout.Session.create')
+    def test_provider_paypal_skips_stripe(self, create):
+        response = self._confirm(price='85')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith('/payonline/paypal/?'))
+        self.assertIn('amount=85', response['Location'])
+        create.assert_not_called()
+
     @patch('basecamp.views.payments.stripe.checkout.Session.create')
     def test_tba_price_skips_stripe(self, create):
         response = self._confirm(price='')
@@ -734,7 +744,8 @@ class ConfirmPrepayStripeRedirectTests(TestCase):
 
 
 # /payonline/ 는 Stripe 카드 결제 폼. 이름·이메일·금액이 채워진 Checkout 으로 보낸다.
-@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+@override_settings(ONLINE_PAYMENT_PROVIDER='stripe',
+                   CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
                                        'LOCATION': 'payonline-stripe-tests'}})
 class PayOnlineStripeTests(TestCase):
     CHECKOUT = 'https://checkout.stripe.com/c/pay/cs_test_po'
@@ -742,12 +753,12 @@ class PayOnlineStripeTests(TestCase):
     def _post(self, **data):
         return self.client.post(reverse('basecamp:payonline_checkout'), data, secure=True)
 
-    def test_payonline_temporarily_redirects_to_paypal(self):
+    @override_settings(ONLINE_PAYMENT_PROVIDER='paypal')
+    def test_payonline_redirects_to_paypal_when_provider_paypal(self):
         response = self.client.get('/payonline/?name=Jane%20Doe&amount=120', secure=True)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], '/payonline/paypal/?name=Jane+Doe&amount=120')
 
-    @patch('basecamp.views.pillars.PAYONLINE_USE_PAYPAL', False)
     def test_page_prefills_from_query(self):
         response = self.client.get('/payonline/?name=Jane%20Doe&email=jane@example.com&amount=120',
                                    secure=True)

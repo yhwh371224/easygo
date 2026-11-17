@@ -4,6 +4,11 @@ from decouple import config
 # PayPal
 PAYPAL_MODE = 'live'
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+
+# Which provider customer online payment uses: 'paypal' or 'stripe'.
+# Drives /payonline/ and the post-confirm (prepay) redirect. Change it in .env
+# and restart gunicorn — no code edit needed.
+ONLINE_PAYMENT_PROVIDER = config('ONLINE_PAYMENT_PROVIDER', default='paypal').strip().lower()
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')
 # Every PayPal account whose IPNs /paypal_ipn/ should accept; IPNs addressed to
