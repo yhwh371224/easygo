@@ -742,6 +742,12 @@ class PayOnlineStripeTests(TestCase):
     def _post(self, **data):
         return self.client.post(reverse('basecamp:payonline_checkout'), data, secure=True)
 
+    def test_payonline_temporarily_redirects_to_paypal(self):
+        response = self.client.get('/payonline/?name=Jane%20Doe&amount=120', secure=True)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], '/payonline/paypal/?name=Jane+Doe&amount=120')
+
+    @patch('basecamp.views.pillars.PAYONLINE_USE_PAYPAL', False)
     def test_page_prefills_from_query(self):
         response = self.client.get('/payonline/?name=Jane%20Doe&email=jane@example.com&amount=120',
                                    secure=True)

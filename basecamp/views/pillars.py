@@ -1,6 +1,7 @@
 import logging
 
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
@@ -130,9 +131,18 @@ def inquiry1(request):
     })
 
 
+# Temporarily send /payonline/ to the PayPal page instead of Stripe.
+# Set back to False to restore the Stripe form (template/checkout untouched).
+PAYONLINE_USE_PAYPAL = True
+
+
 def payonline(request):
     """Card payment page (Stripe). Links from emails / redirects prefill it
     with ?name=&email=&amount=; the form posts to payonline_checkout."""
+    if PAYONLINE_USE_PAYPAL:
+        target = reverse('basecamp:payonline_paypal')
+        qs = request.GET.urlencode()
+        return redirect(f'{target}?{qs}' if qs else target)
     return render(request, 'basecamp/payments/payonline.html', {
         'name': (request.GET.get('name') or '').strip()[:100],
         'email': (request.GET.get('email') or '').strip()[:254],
