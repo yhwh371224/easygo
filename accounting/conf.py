@@ -13,11 +13,13 @@ GST_REGISTRATION_DATE = date(2026, 7, 1)
 # ~2.39% of the booking amount in FY27 Q1, and a card surcharge should not
 # exceed the cost of acceptance. 2.5% -> 1.95% from 2026-10-18 (owner,
 # 2026-10-17); the rate is no longer stated on the terms/payment pages, it is
-# simply added at PayPal checkout. Append new rates, oldest first.
+# simply added at PayPal checkout. 1.95% -> 1.45% from 2026-11-18 09:20 Sydney
+# (owner, 2026-11-18, effective immediately). Append new rates, oldest first.
 PAYPAL_SURCHARGE_RATES = [
     (None, Decimal('0.03')),
     (datetime(2026, 10, 10, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.025')),
     (datetime(2026, 10, 18, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.0195')),
+    (datetime(2026, 11, 18, 9, 20, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.0145')),
 ]
 
 
