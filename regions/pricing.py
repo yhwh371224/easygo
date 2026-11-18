@@ -169,7 +169,6 @@ def get_pricing_rule(region_id: int):
 
 # ── Inquiry → BookingInput helper ─────────────────────────────────────────────
 
-_NO_FEE_KEYS = frozenset({"baby", "booster", "pram"})
 _OVERSIZE_SUFFIX = "_oversize"
 
 
@@ -188,7 +187,7 @@ def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
     special_items JSON schema:
         {
             "ski": 2, "ski_oversize": true,
-            "baby": 1,          # no fee
+            "baby": 1,          # child seats / prams: special_item_fee each
             ...
         }
     """
@@ -197,8 +196,6 @@ def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
 
     for key, qty in items.items():
         if key.endswith(_OVERSIZE_SUFFIX):
-            continue
-        if key in _NO_FEE_KEYS:
             continue
         qty = int(qty or 0)
         if not qty:

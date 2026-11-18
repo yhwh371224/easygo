@@ -868,6 +868,10 @@ class CalculateInquiryPriceTests(TestCase):
         )
         self.assertEqual(self._price(suburb='Mascot'), '60')
 
+    def test_child_seats_and_pram_charge_special_item_fee(self):
+        # $80 base + baby/booster/pram at $10 each
+        self.assertEqual(self._price(special_items={'baby': 1, 'booster': 1, 'pram': 1}), '110')
+
     def test_exactly_15km_adds_20(self):
         RegionSuburb.objects.filter(name='Ryde').update(distance_km=15)
         self.assertEqual(self._price(), '65')
