@@ -175,6 +175,16 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.WARNING(f"  {region.slug} sitemap error: {e}"))
 
+        # 비활성 지역(예: brisbane — 현재 운영 안 함)의 예전 sitemap 파일 삭제.
+        # 남아 있으면 /sitemap-brisbane.xml 로 계속 서빙되어 404 페이지 URL을 Google에 계속 알림.
+        for slug in Region.objects.exclude(
+            slug__in=list(regions.values_list('slug', flat=True)) + ['sydney']
+        ).values_list('slug', flat=True):
+            stale = os.path.join(base_dir, f"sitemap-{slug}.xml")
+            if os.path.exists(stale):
+                os.remove(stale)
+                self.stdout.write(f"  removed stale sitemap-{slug}.xml (region inactive)")
+
         # ── 4. sitemap-blog.xml ──────────────────────────────────────────
         blog_urls = []
         blog_lastmod = today
