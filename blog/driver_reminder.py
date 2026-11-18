@@ -1,4 +1,4 @@
-"""픽업 2시간 전 배정 드라이버 알림 (알림만 — 확인 버튼/미확인 경고 없음).
+"""픽업 2시간 전(새벽 6시 전 픽업은 1시간 전) 배정 드라이버 알림 (알림만 — 확인 버튼/미확인 경고 없음).
 
 흐름
   driver_pickup_reminder 크론(15분 간격)이 '픽업 2시간 전'이 된 배정 건을 찾아
@@ -17,7 +17,7 @@ DB 로 다시 판단한다.
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 
 import pytz
 from django.conf import settings
@@ -32,6 +32,9 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TZ = 'Australia/Sydney'
 REMINDER_LEAD = timedelta(hours=2)
+# 새벽 픽업(현지 6시 전)은 기사가 너무 일찍 깨지 않게 1시간 전에 보낸다.
+EARLY_PICKUP_BEFORE = time(6, 0)
+EARLY_REMINDER_LEAD = timedelta(hours=1)
 TIME_FORMATS = ('%H:%M', '%I:%M %p', '%H:%M:%S')
 
 # 예전 알림 메시지의 확인 버튼 callback_data (webhook 호환용).
@@ -78,17 +81,27 @@ def reminder_buttons(booking):
     return [dashboard_button_row()]
 
 
-REMINDER_TEXT = 'EasyGo job in 2 hours.'
+def reminder_lead(pickup_dt):
+    return EARLY_REMINDER_LEAD if pickup_dt.time() < EARLY_PICKUP_BEFORE else REMINDER_LEAD
+
+
+def lead_label(pickup_dt):
+    hours = int(reminder_lead(pickup_dt).total_seconds() // 3600)
+    return '1 hour' if hours == 1 else f'{hours} hours'
+
+
+def reminder_text(pickup_dt):
+    return f'EasyGo job in {lead_label(pickup_dt)}.'
 
 
 def build_message(booking, pickup_dt, now_dt):
     """텔레그램 — 한 줄만. 자세한 내용은 Dashboard 버튼으로 본다."""
-    return f'🚐 {REMINDER_TEXT}'
+    return f'🚐 {reminder_text(pickup_dt)}'
 
 
 def build_sms_message(booking, pickup_dt, now_dt):
     """1 segment 로 짧게. 이모지를 넣으면 UCS-2 로 바뀌어 요금이 늘어나니 넣지 말 것."""
-    return REMINDER_TEXT
+    return reminder_text(pickup_dt)
 
 
 
@@ -144,12 +157,13 @@ class ReminderRun:
             )
             self.mark_handled(booking, sent=False)
             return
-        if not (pickup_dt - REMINDER_LEAD <= now < pickup_dt):
+        if not (pickup_dt - reminder_lead(pickup_dt) <= now < pickup_dt):
             return
 
         driver = booking.driver
         local_now = now.astimezone(pickup_dt.tzinfo)
         summary = f'{driver.driver_name} | #{booking.pk} {booking.name} | {pickup_dt:%H:%M}'
+        self.lead_ko = '1시간' if reminder_lead(pickup_dt) == EARLY_REMINDER_LEAD else '2시간'
 
         if driver.telegram_chat_id and telegram_driver.is_configured():
             text = build_message(booking, pickup_dt, local_now)
@@ -170,7 +184,7 @@ class ReminderRun:
             else:
                 self.mark_handled(booking, sent=True)
                 self.sent += 1
-                self.alerts.append(f'🔔 기사 2시간 전 알림 발송(텔레그램) | {summary}')
+                self.alerts.append(f'🔔 기사 {self.lead_ko} 전 알림 발송(텔레그램) | {summary}')
                 return
 
         self.send_sms(booking, pickup_dt, local_now, summary)
@@ -189,10 +203,10 @@ class ReminderRun:
         self.mark_handled(booking, sent=bool(sid))
         if sid:
             self.sent += 1
-            self.alerts.append(f'🔔 기사 2시간 전 알림 발송(SMS) | {summary}')
+            self.alerts.append(f'🔔 기사 {self.lead_ko} 전 알림 발송(SMS) | {summary}')
         else:
             self.alerts.append(
-                f'❌ 기사 2시간 전 SMS 실패 — 전화 필요 | {summary} | '
+                f'❌ 기사 {self.lead_ko} 전 SMS 실패 — 전화 필요 | {summary} | '
                 f'번호: {driver.driver_contact or "없음"}'
             )
 

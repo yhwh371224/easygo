@@ -15,7 +15,7 @@ from blog.driver_reminder import ReminderRun
 
 
 class Command(BaseCommand):
-    help = 'Notify the assigned driver 2h before pickup (Telegram if connected, otherwise SMS).'
+    help = 'Notify the assigned driver 2h before pickup (1h if pickup is before 6am; Telegram if connected, otherwise SMS).'
 
     def add_arguments(self, parser):
         parser.add_argument('--dry-run', action='store_true',

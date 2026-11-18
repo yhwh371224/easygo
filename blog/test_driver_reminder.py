@@ -86,7 +86,29 @@ class ReminderRunTests(TestCase):
     def test_after_midnight_pickup_sent_previous_evening(self, send, staff, sms):
         make_post(make_driver(), day=DAY + timedelta(days=1), time='00:30')
         self.run_at(at(DAY, '22:45'))
+        send.assert_not_called()  # 새벽 픽업이라 1시간 전
+        self.run_at(at(DAY, '23:31'))
         send.assert_called_once()
+
+    def test_early_pickup_one_hour_before(self, send, staff, sms):
+        make_post(make_driver(), time='05:45')
+        self.run_at(at(DAY, '04:30'))
+        send.assert_not_called()
+        self.run_at(at(DAY, '04:46'))
+        send.assert_called_once()
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job in 1 hour.')
+        self.assertIn('1시간 전', staff.call_args[0][0])
+
+    def test_early_pickup_sms_one_hour(self, send, staff, sms):
+        make_post(make_driver(chat_id=None), time='05:00')
+        self.run_at(at(DAY, '04:00'))
+        self.assertEqual(sms.call_args[0][1], 'EasyGo job in 1 hour.')
+
+    def test_six_am_pickup_still_two_hours(self, send, staff, sms):
+        make_post(make_driver(), time='06:00')
+        self.run_at(at(DAY, '04:00'))
+        send.assert_called_once()
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job in 2 hours.')
 
     def test_unlinked_driver_gets_sms_once(self, send, staff, sms):
         post = make_post(make_driver(chat_id=None))
