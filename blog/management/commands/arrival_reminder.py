@@ -16,6 +16,10 @@
 pickup_date 가 어제라 대상에서 빠져 영영 발송되지 않는다(22:30 실행 = 23:30 도착까지
 커버). 반대로 창이 첫 실행보다 이른 건은 04:00 실행이 늦게라도 보내고 지연 알림을 띄운다.
 
+크루즈(cruise 체크) 건도 이 커맨드가 보낸다 — 픽업 2시간 전, 기사 정보가 든 당일 메일.
+아침 2시 Reminder-Today 는 너무 이르다는 이유로 booking_reminder 에서 뺐다(2026-11-19).
+크루즈이면서 공항 도착인 건(비행기 → 크루즈 터미널)은 기존처럼 도착시각 기준이다.
+
 부킹별 정시 예약(celery eta 등)을 쓰지 않는 이유: 이 서버는 매일 01:20에 재부팅되고
 celery의 eta 작업은 워커 메모리에 있어 재부팅이면 조용히 사라진다. 손님이 비행 중이라
 안 갔는지 알 방법도 없는 메일이라, 매 실행마다 DB에서 다시 판단하고 놓치면 다음 실행이
@@ -28,6 +32,7 @@ from datetime import datetime, timedelta
 
 import pytz
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from django.utils import timezone
 
 from blog.blog_utils import assign_default_driver_if_missing
@@ -35,7 +40,7 @@ from blog.models import Post
 from basecamp.modules.date_utils import format_pickup_time_12h
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
-from utils.direction_utils import airport_arrival_q
+from utils.direction_utils import airport_arrival_q, arrival_type
 from utils.email import collect_recipients, send_template_email
 from utils.telegram import send_telegram_sync
 
@@ -159,7 +164,7 @@ class Command(BaseCommand):
 
             queryset = (
                 Post.objects.filter(region=region, pickup_date=now_dt.date())
-                .filter(airport_arrival_q())
+                .filter(airport_arrival_q() | Q(cruise=True))
                 .filter(arrival_reminder_sent_at__isnull=True)
                 .exclude(cancelled=True)
                 .exclude(no_email_reminder=True)
@@ -205,14 +210,21 @@ class Command(BaseCommand):
 
         폴백을 두는 이유: 도착 건은 이 메일이 아침 메일을 '대체'하기 때문에,
         flight_time이 비어 있다고 스킵하면 그 손님은 당일 메일을 아예 못 받는다.
+        공항 도착이 아닌 크루즈 건은 flight_time 이 무의미하니 픽업시각만 본다.
         """
-        for value, source in ((booking.flight_time, 'flight_time'),
-                              (booking.pickup_time, 'pickup_time')):
+        candidates = ((booking.flight_time, 'flight_time'), (booking.pickup_time, 'pickup_time'))
+        if not self.is_airport_arrival(booking):
+            candidates = candidates[1:]
+        for value, source in candidates:
             parsed = self.parse_time(value)
             if parsed:
                 naive = datetime.combine(booking.pickup_date, parsed)
                 return tz.localize(naive), source
         return None, None
+
+    @staticmethod
+    def is_airport_arrival(booking):
+        return arrival_type(booking.direction, booking.start_point) is not None
 
     @staticmethod
     def parse_time(raw):
@@ -301,6 +313,8 @@ class Command(BaseCommand):
         point = booking.terminal_pickup_point
         if point:
             return f'{point.terminal.name} {point.name}'
+        if booking.cruise and not Command.is_airport_arrival(booking):
+            return '크루즈'
         if context.get('is_ugo_arrival'):
             return 'Ugo 안내'
         return '만남장소 미지정'

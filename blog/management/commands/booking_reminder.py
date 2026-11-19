@@ -115,6 +115,7 @@ class Command(BaseCommand):
             .exclude(cancelled=True)
             .exclude(no_email_reminder=True)
             .exclude(airport_arrival_q())
+            .exclude(cruise=True)
             .order_by('pickup_time')
         )
         if not pending:
@@ -139,6 +140,8 @@ class Command(BaseCommand):
             # 공항 도착 건의 당일 메일은 arrival_reminder 커맨드가 도착 1시간 전에
             # 따로 보낸다(비행 중이라 아침 메일을 못 보는 문제). 여기서 보내면 중복.
             booking_reminders = booking_reminders.exclude(airport_arrival_q())
+            # 크루즈 건도 arrival_reminder 가 픽업 2시간 전에 기사 정보와 함께 보낸다.
+            booking_reminders = booking_reminders.exclude(cruise=True)
             self.report_pending_today(target_date)
         if subject == "Reminder-Arrival-Today":
             booking_reminders = booking_reminders.filter(airport_arrival_q())

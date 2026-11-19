@@ -2730,6 +2730,63 @@ class ArrivalReminderTests(TestCase):
             self.assertIn('Once your flight lands, please check your email.', body)
             self.assertIn('KE121', body)
 
+    def make_cruise(self, **kwargs):
+        fields = dict(direction='Cruise transfers or Point to Point', cruise=True,
+                      start_point='Overseas Passenger Terminal', flight_number='',
+                      flight_time='', pickup_time='11:00')
+        fields.update(kwargs)
+        return self.make_arrival(**fields)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_cruise_sends_two_hours_before_pickup_with_driver_details(self, *_):
+        """크루즈 건은 픽업 2시간 전에 기사 정보가 든 메일을 받는다(now=09:00)."""
+        driver = make_driver(region=self.region)
+        self.make_cruise(pickup_time='11:30', driver=driver)
+        self.run_command()
+        self.assertEqual(mail.outbox, [])
+        post = self.make_cruise(pickup_time='11:00', driver=driver)
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=self.now), \
+             patch(f'{module}.booking_helper.update_meeting_point_for_arrivals'), \
+             patch(f'{module}.assign_default_driver_if_missing', return_value=driver), \
+             patch(f'{module}.send_telegram_sync'):
+            call_command('arrival_reminder', stdout=StringIO())
+        self.assertEqual(len(mail.outbox), 1)
+        html = mail.outbox[0].alternatives[0][0]
+        self.assertIn("Driver's details", html)
+        self.assertIn('Test Driver', html)
+        post.refresh_from_db()
+        self.assertIsNotNone(post.arrival_reminder_sent_at)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_cruise_ignores_flight_time(self, *_):
+        """공항 도착이 아닌 크루즈 건은 flight_time 이 있어도 픽업시각 기준."""
+        self.make_cruise(flight_time='10:00', pickup_time='14:00')
+        self.run_command()
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_cruise_departure_also_sent(self, *_):
+        """크루즈 터미널로 가는 건도 체크돼 있으면 같은 규칙."""
+        self.make_cruise(start_point='10 Military Rd Mosman',
+                         end_point='Overseas Passenger Terminal')
+        self.run_command()
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_booking_reminder_skips_cruise_today(self, *_):
+        """크루즈 당일 메일은 arrival_reminder 전담 — 새벽 Reminder-Today 와 중복 금지."""
+        self.make_cruise(pickup_date=timezone.localdate())
+        with patch('blog.management.commands.booking_reminder.booking_helper'
+                   '.update_meeting_point_for_arrivals'), \
+             patch('blog.management.commands.booking_reminder.send_telegram_sync'):
+            call_command('booking_reminder', '--today', stdout=StringIO())
+        self.assertEqual(mail.outbox, [])
+
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_arrival_today_notice_skips_departures_pending_and_opted_out(self, *_):
