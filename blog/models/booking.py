@@ -197,7 +197,7 @@ class Post(models.Model):
         default=False, blank=True,
         help_text='체크하면 여러 부킹을 한 장의 인보이스(날짜 범위 멀티 인보이스)로 청구하는 건으로 보고 '
                   '부킹별 결제 독촉 메일·SMS·자동취소에서 모두 제외한다. '
-                  '날짜 범위로 멀티 인보이스를 보내면 포함된 부킹에 자동으로 체크된다.',
+                  '수동으로만 체크한다 — 날짜 범위 멀티 인보이스를 보내도 자동으로 체크되지 않는다.',
     )
     final_warning_at = models.DateTimeField(
         null=True, blank=True,

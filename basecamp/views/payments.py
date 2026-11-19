@@ -282,9 +282,8 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         due = round(booking_total * deposit_percent / 100, 2) if deposit_percent is not None else None
         Post.objects.filter(pk=pk).update(deposit_amount_due=due)
 
-    # 날짜 범위로 한 장에 묶어 청구한 부킹은 부킹별 결제 독촉에서 빠지게 표시한다.
-    # (독촉은 같은 범위로 인보이스를 다시 보내는 방식으로 한 통에 합산)
-    Post.objects.filter(pk__in=[pk for pk, _ in booking_pks_and_totals]).update(bulk_invoice=True)
+    # bulk_invoice 는 여기서 자동으로 켜지 않는다 — 날짜 범위 인보이스를 보내도
+    # 부킹별 결제 독촉은 그대로 돈다. 독촉에서 빼야 하는 건은 admin 에서 수동 체크.
 
     context = {
         "inv_no": inv_no,

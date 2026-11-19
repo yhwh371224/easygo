@@ -3242,7 +3242,7 @@ class BulkInvoiceDunningTests(TestCase):
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
-    def test_multi_invoice_marks_bookings_as_bulk_invoice(self, *_):
+    def test_multi_invoice_does_not_mark_bookings_as_bulk_invoice(self, *_):
         from basecamp.views.payments import _build_multi_context
         inside = self.make_unpaid()
         outside = self.make_unpaid(pickup_date=datetime.date.today() + timedelta(days=40))
@@ -3254,7 +3254,7 @@ class BulkInvoiceDunningTests(TestCase):
         _build_multi_context(bookings, params, '1', datetime.date.today(), 'westpac')
         inside.refresh_from_db()
         outside.refresh_from_db()
-        self.assertTrue(inside.bulk_invoice)
+        self.assertFalse(inside.bulk_invoice)
         self.assertFalse(outside.bulk_invoice)
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
