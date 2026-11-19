@@ -34,6 +34,7 @@
       "areaServed": [{% for suburb in form_suburbs %}{ "@type": "Place", "name": "{{ suburb.name }}" }{% if not forloop.last %},{% endif %}{% endfor %}],
       "priceRange": "$$",
       "openingHours": "Mo-Su 03:00-23:00",
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "{{ google_rating }}", "reviewCount": "{{ google_review_count }}" },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Brisbane Airport Transfer Services",
