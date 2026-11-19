@@ -20,7 +20,7 @@ urlpatterns = [
     path('<slug:region_slug>/cruise-transfer/', views.region_cruise_transfer, name='region_cruise_transfer'),
     path('<slug:region_slug>/maxi-taxi/', views.region_maxi_taxi, name='region_maxi_taxi'),
 
-    path('sydney/', RedirectView.as_view(url='/', permanent=False)),
+    path('sydney/', RedirectView.as_view(url='/', permanent=True)),
 
     path('<slug:region_slug>/', views.region_home, name='home'),
 

@@ -50,7 +50,7 @@ class Command(BaseCommand):
         static_urls = [
             {"loc": f"{BASE_URL}/",                          "changefreq": "daily",   "priority": "1.0000"},
             {"loc": f"{BASE_URL}/sydney_airport_transfer/",  "changefreq": "weekly",  "priority": "0.9000"},
-            {"loc": f"{BASE_URL}/sydney-cruise-transfer/",   "changefreq": "weekly",  "priority": "0.9000"},
+            {"loc": f"{BASE_URL}/sydney_cruise_transfer/",   "changefreq": "weekly",  "priority": "0.9000"},
             {"loc": f"{BASE_URL}/sydney_airport_shuttle/",   "changefreq": "weekly",  "priority": "0.9000"},
             {"loc": f"{BASE_URL}/maxi-taxi/",                "changefreq": "weekly",  "priority": "0.9000"},
             {"loc": f"{BASE_URL}/inquiry/",                  "changefreq": "weekly",  "priority": "0.8000"},
