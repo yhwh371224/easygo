@@ -2968,7 +2968,9 @@ class ArrivalReminderTests(TestCase):
         sent = [m for m in mail.outbox if m.subject == 'Reminder-Arrival-2days']
         self.assertEqual(len(sent), 1)
         html = sent[0].alternatives[0][0]
-        self.assertIn('pickup location will be emailed to you a few hours before', html)
+        self.assertIn('Arrival Guide', html)
+        self.assertIn('EasyGo Tips', html)
+        self.assertNotIn('meeting-point', html)
         for leaked in ('Accessible Pickup', 'accessible pickup bay', 'Public Pickup', 'Public pickup zone',
                        'Pickup Map', 'sydmap'):
             self.assertNotIn(leaked, html)

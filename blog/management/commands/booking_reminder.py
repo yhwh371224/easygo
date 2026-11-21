@@ -13,6 +13,8 @@ from blog.blog_utils import assign_default_driver_if_missing
 from utils.direction_utils import airport_arrival_q
 from utils.email import send_template_email, collect_recipients
 from utils.telegram import send_telegram_sync
+from utils.post_helper import _arrival_guide_steps
+from regions.models import Region
 from basecamp.modules.date_utils import format_pickup_time_12h
 
 logger = logging.getLogger(__name__)
@@ -184,6 +186,12 @@ class Command(BaseCommand):
                 driver = getattr(booking_reminder, "driver", None)
                 pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
                 context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
+                if subject == "Reminder-Arrival-2days":
+                    # 2일 전 메일 본문 = 지역 Arrival Guide 페이지 내용(Region.arrival_guide).
+                    region = booking_reminder.region if booking_reminder.region_id else Region.objects.filter(slug='sydney').first()
+                    context['guide_steps'] = _arrival_guide_steps(region)
+                    if not context.get('city'):
+                        context['city'] = region.name if region else 'Sydney'
 
                 booker_email = booking_reminder.booker_email
                 is_today = subject == "Reminder-Today"
