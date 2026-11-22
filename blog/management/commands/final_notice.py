@@ -112,6 +112,8 @@ class Command(BaseCommand):
                 # (취소 예고까지 나간 디파짓 건은 보호가 풀려 여기 포함된다)
                 if paid <= 0 or balance <= 0 or is_deposit_protected(notice):
                     continue
+                # 리턴 부킹은 메일에 두 날짜가 나가므로 잔액도 왕복 합계로.
+                balance = dunning.round_trip_due(notice, balance)['amount']
                 self._send(
                     notice,
                     "EasyGo - Urgent notice\n\n"
@@ -173,6 +175,14 @@ class Command(BaseCommand):
         except Exception as e:
             sms_logger.error(f"Failed to send final-notice SMS for {notice.email}: {e}")
 
+    @staticmethod
+    def _dates(notice):
+        due = dunning.round_trip_due(notice, 0)
+        return {
+            'pickup_date': due['pickup_date'],
+            'return_pickup_date': due['return_pickup_date'],
+        }
+
     def _send_email(self, notice, label, balance):
         """SMS 와 같은 내용의 긴급 안내 메일. 실패해도 SMS 는 이미 나갔으므로
         재시도하지 않는다(재시도하면 SMS 가 또 나감) — 로그만 남긴다."""
@@ -188,8 +198,7 @@ class Command(BaseCommand):
                 {
                     'booker_name': notice.booker_name,
                     'name': notice.name,
-                    'pickup_date': notice.pickup_date,
-                    'return_pickup_date': notice.return_pickup_date,
+                    **self._dates(notice),
                     'balance': f"{balance:.2f}" if balance else None,
                 },
                 recipients,

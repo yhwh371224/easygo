@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from blog.models import Post
 from blog import dunning
+from blog.blog_utils import booking_balance
 from main.settings import RECIPIENT_EMAIL
 from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email, collect_recipients
@@ -95,6 +96,10 @@ class Command(TelegramAlertMixin, BaseCommand):
                     self.alerts.append(f"✉️ 수신자 없음 | {notice.name} | #{notice.id}")
                     continue
 
+                # 리턴 부킹은 두 날짜와 왕복 합계를 보여준다(dunning.round_trip_due).
+                amounts = booking_balance(notice)
+                due = dunning.round_trip_due(notice, amounts[0] if amounts else 0)
+                price = dunning.money(due['amount']) if amounts else notice.price
                 send_template_email(
                     "Your booking is pending — payment required to confirm",
                     "html_email-nopayment.html",
@@ -102,9 +107,9 @@ class Command(TelegramAlertMixin, BaseCommand):
                         'booker_name': notice.booker_name,
                         'name': notice.name,
                         'email': notice.email,
-                        'price': notice.price,
-                        'pickup_date': notice.pickup_date,
-                        'return_pickup_date': notice.return_pickup_date,
+                        'price': price,
+                        'pickup_date': due['pickup_date'],
+                        'return_pickup_date': due['return_pickup_date'],
                         'display_date': str(notice.pickup_date),
                         'prepay': notice.prepay,
                     },

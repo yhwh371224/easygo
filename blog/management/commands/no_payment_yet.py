@@ -22,51 +22,12 @@ def _has_company(booking):
     return bool((booking.company_name or '').strip())
 
 
-def _return_partner(booking):
-    """The other leg of a return booking, or None.
-
-    handle_return_trip() stores a return booking as two Post rows, each with
-    half the price; the return leg has return_pickup_time 'x' and the two rows
-    have their pickup/return dates swapped (see utils.post_helper._find_return_leg).
-    """
-    if not booking.return_pickup_date or not booking.return_pickup_time:
-        return None
-    if booking.return_pickup_date < date.today():
-        return None
-    qs = Post.objects.filter(
-        email=booking.email,
-        pickup_date=booking.return_pickup_date,
-        return_pickup_date=booking.pickup_date,
-        cancelled=False,
-    ).exclude(pk=booking.pk)
-    if booking.return_pickup_time == 'x':
-        qs = qs.exclude(return_pickup_time='x')
-    else:
-        qs = qs.filter(return_pickup_time='x')
-    return qs.order_by('-pk').first()
-
-
-def _unpaid_amount_context(booking, total):
-    """price/pickup_date/return_pickup_date for an unpaid reminder.
-
-    A return booking is two Post rows with half the price each, and each leg is
-    dunned on its own. Quoting this leg's half next to both dates read as the
-    wrong total (Janet Clinton 2026-11-22: "$71" for a $142 round trip), so a
-    still-upcoming other leg's unpaid balance is added and both dates are shown
-    in date order. Otherwise only this leg's date and amount are shown.
-    """
-    dates = [booking.pickup_date]
-    partner = _return_partner(booking)
-    if partner is not None:
-        dates.append(partner.pickup_date)
-        amounts = booking_balance(partner)
-        if amounts is not None and amounts[2] > 0:
-            total += amounts[2]
-    dates.sort()
+def _due_context(booking, own_due):
+    due = dunning.round_trip_due(booking, own_due)
     return {
-        'price': f"{total:g}" if float(total).is_integer() else f"{total:.2f}",
-        'pickup_date': dates[0],
-        'return_pickup_date': dates[1] if len(dates) > 1 else None,
+        'price': dunning.money(due['amount']),
+        'pickup_date': due['pickup_date'],
+        'return_pickup_date': due['return_pickup_date'],
     }
 
 
@@ -163,7 +124,7 @@ class Command(BaseCommand):
                         'email': booking.email,
                         'display_date': display_date,
                         'prepay': booking.prepay,
-                        **_unpaid_amount_context(booking, total),
+                        **_due_context(booking, total),
                     }
                     context.update(extra_ctx)
 

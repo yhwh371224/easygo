@@ -194,3 +194,66 @@ def is_prepay_required_at_booking(pickup_dt, now=None):
         return False
     now = now or timezone.now()
     return (pickup_dt - now) <= timedelta(hours=PREPAY_REQUIRED_LEAD_HOURS)
+
+
+# ── 리턴 부킹 합산 표시 ──
+def return_partner(booking):
+    """The other leg of a return booking, or None.
+
+    handle_return_trip() stores a return booking as two Post rows with half
+    the price each (no FK); the return leg has return_pickup_time 'x' and the
+    two rows have their pickup/return dates swapped (same rule as
+    utils.post_helper._find_return_leg). A cancelled or already-past other
+    leg is ignored.
+    """
+    from blog.models import Post
+
+    if not booking.return_pickup_date or not booking.return_pickup_time:
+        return None
+    if booking.return_pickup_date < timezone.localdate():
+        return None
+    qs = Post.objects.filter(
+        email=booking.email,
+        pickup_date=booking.return_pickup_date,
+        return_pickup_date=booking.pickup_date,
+        cancelled=False,
+    ).exclude(pk=booking.pk)
+    if booking.return_pickup_time == 'x':
+        qs = qs.exclude(return_pickup_time='x')
+    else:
+        qs = qs.filter(return_pickup_time='x')
+    return qs.order_by('-pk').first()
+
+
+def round_trip_due(booking, own_due):
+    """Amount and dates for a payment reminder about this booking.
+
+    Each leg of a return booking is dunned on its own, but the reminders name
+    both dates, so quoting this leg's half read as the wrong total (Janet
+    Clinton 2026-11-22: "$71" for a $142 round trip). Adds the other upcoming
+    leg's unpaid balance and returns both dates in date order:
+    {'amount': float, 'pickup_date': date, 'return_pickup_date': date|None}.
+    Without a live other leg, only this leg's amount and date are returned.
+    """
+    from blog.blog_utils import booking_balance
+
+    amount = float(own_due)
+    dates = [booking.pickup_date]
+    partner = return_partner(booking)
+    if partner is not None:
+        dates.append(partner.pickup_date)
+        amounts = booking_balance(partner)
+        if amounts is not None and amounts[2] > 0:
+            amount += amounts[2]
+    dates.sort()
+    return {
+        'amount': round(amount, 2),
+        'pickup_date': dates[0],
+        'return_pickup_date': dates[1] if len(dates) > 1 else None,
+    }
+
+
+def money(value):
+    """142 → '142', 35.5 → '35.50'."""
+    value = float(value)
+    return f"{value:g}" if value.is_integer() else f"{value:.2f}"

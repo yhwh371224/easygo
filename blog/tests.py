@@ -3392,6 +3392,47 @@ class ReturnBookingDunningAmountTests(TestCase):
         self.assertEqual(contexts[0]['price'], '71')
         self.assertIsNone(contexts[0]['return_pickup_date'])
 
+    def _html(self, msg):
+        return msg.alternatives[0][0] if msg.alternatives else msg.body
+
+    def test_final_notice_escalation_quotes_round_trip_balance(self):
+        """final_notice (last SMS + email) for a short-paid leg adds the other
+        leg's unpaid half."""
+        today = datetime.date.today()
+        Post.objects.filter(pk=self.outbound.pk).update(
+            pickup_date=today + timedelta(days=1), return_pickup_date=self.ret_date,
+            paid='40', contact='0412345678',
+            discrepancy_final_sent_at=timezone.now() - timedelta(hours=13))
+        Post.objects.filter(pk=self.ret.pk).update(return_pickup_date=today + timedelta(days=1))
+        cmd = 'blog.management.commands.final_notice'
+        with patch(f'{cmd}.send_sms_notice', return_value='SM1') as sms, \
+                patch(f'{cmd}.SEND_HOUR_START', 0), patch(f'{cmd}.SEND_HOUR_END', 24):
+            call_command('final_notice', stdout=StringIO())
+        self.assertIn('$102.00', sms.call_args.args[1])
+        self.assertEqual(len(mail.outbox), 1)
+        html = self._html(mail.outbox[0])
+        self.assertIn('$102.00', html)
+        self.assertIn(self.ret_date.strftime('%Y-%m-%d'), html)
+
+    def test_pending_nudge_quotes_round_trip_total(self):
+        """send_final_warning (far-future pending nudge) uses the same template,
+        which now names the return date, so it must quote the round trip too."""
+        today = datetime.date.today()
+        out_date, ret_date = today + timedelta(days=30), today + timedelta(days=34)
+        Post.objects.filter(pk=self.outbound.pk).update(
+            pickup_date=out_date, return_pickup_date=ret_date)
+        Post.objects.filter(pk=self.ret.pk).update(
+            pickup_date=ret_date, return_pickup_date=out_date)
+        Post.objects.filter(pk__in=[self.outbound.pk, self.ret.pk]).update(
+            reminder=False, created=timezone.now() - timedelta(days=3))
+        call_command('send_final_warning', stdout=StringIO())
+        customer_mails = [m for m in mail.outbox if 'ret@example.com' in m.to]
+        self.assertEqual(len(customer_mails), 2)
+        for m in customer_mails:
+            html = self._html(m)
+            self.assertIn('&#36;142<', html)
+            self.assertNotIn('&#36;71<', html)
+
 
 @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
 class FullyBookedDateTests(TestCase):
