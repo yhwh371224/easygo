@@ -460,6 +460,7 @@ def email_dispatch_detail(request):
             "Pickup Notice for Today - new": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("html_email-response-payment.html", "Payment Method - EasyGo"),
             "Payment Reminder": ("html_email-payment-reminder.html", "Payment required to confirm your booking - EasyGo"),
+            "Urgent Payment Reminder": ("html_email-payment-reminder-urgent.html", "Urgent: payment not received for your upcoming pickup - EasyGo"),
             "Airport Pickup Guide": ("html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
             'Earlier Pickup Requested for Departure': ("html_email-departure-early.html", "Urgent notice - EasyGo"),
             'Early Arrival Notification': ("html_email-arrival-early.html", "Urgent notice - EasyGo"),
@@ -813,7 +814,9 @@ def email_dispatch_detail(request):
                 user1.save()   
 
         # ✅ Payment Reminder — 이메일만으로 다가오는 미결제 예약을 모아 잔액과 함께 독촉한다.
-        if selected_option == "Payment Reminder":
+        # "Urgent Payment Reminder" 는 픽업 임박 건용 — 같은 잔액 집계를 쓰고 문구만
+        # 더 급하게 + 이미 냈으면 언제/어떻게 냈는지 회신해 달라고 요청한다.
+        if selected_option in ("Payment Reminder", "Urgent Payment Reminder"):
             unpaid_bookings = []
             for booking in (
                 Post.objects
