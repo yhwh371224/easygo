@@ -3341,6 +3341,58 @@ class BulkInvoiceDunningTests(TestCase):
         self.assertEqual(ctx['discount'], 0.0)
 
 
+class ReturnBookingDunningAmountTests(TestCase):
+    """A return booking is two Post rows with half the price each. Unpaid
+    reminders name both dates, so they must quote the round-trip amount, not
+    one leg's half (Janet Clinton 2026-11-22 got "$71" for a $142 trip)."""
+
+    def setUp(self):
+        self.region = make_region()
+        today = datetime.date.today()
+        common = dict(
+            name='Return Guest', email='ret@example.com', no_of_passenger='2',
+            price='71', region=self.region, pickup_time='10:00',
+            notice='===RETURN=== (Total Price: $142)',
+        )
+        self.out_date = today + timedelta(days=10)
+        self.ret_date = today + timedelta(days=14)
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+                patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            self.outbound = Post.objects.create(
+                pickup_date=self.out_date, direction='Pickup from Home',
+                return_pickup_date=self.ret_date, return_pickup_time='15:00', **common)
+            self.ret = Post.objects.create(
+                pickup_date=self.ret_date, direction='Drop off to Home',
+                return_pickup_date=self.out_date, return_pickup_time='x', **common)
+
+    def _contexts(self):
+        with patch('blog.management.commands.no_payment_yet.send_template_email') as send, \
+                patch('blog.management.commands.no_payment_yet.send_telegram_sync'):
+            call_command('no_payment_yet', stdout=StringIO())
+        return [c.args[2] for c in send.call_args_list]
+
+    def test_both_legs_quote_round_trip_total_and_both_dates_in_order(self):
+        contexts = self._contexts()
+        self.assertEqual(len(contexts), 2)
+        for ctx in contexts:
+            self.assertEqual(ctx['price'], '142')
+            self.assertEqual(ctx['pickup_date'], self.out_date)
+            self.assertEqual(ctx['return_pickup_date'], self.ret_date)
+
+    def test_paid_other_leg_is_not_added(self):
+        Post.objects.filter(pk=self.ret.pk).update(paid='71')
+        contexts = self._contexts()
+        self.assertEqual(len(contexts), 1)
+        self.assertEqual(contexts[0]['price'], '71')
+
+    def test_cancelled_other_leg_is_ignored(self):
+        Post.objects.filter(pk=self.ret.pk).update(cancelled=True)
+        contexts = self._contexts()
+        self.assertEqual(len(contexts), 1)
+        self.assertEqual(contexts[0]['price'], '71')
+        self.assertIsNone(contexts[0]['return_pickup_date'])
+
+
 @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
 class FullyBookedDateTests(TestCase):
     def setUp(self):
