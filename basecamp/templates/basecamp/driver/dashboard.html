@@ -693,8 +693,7 @@
   <!-- 총액: timeline 밖 - 오늘 트립만 있어도 표시 -->
   {% if timeline or trips %}
   <div class="totals-section">    
-    {# 현금 건(post.cash)은 드라이버가 손님에게 이미 받은 돈이라 회사가 줄 돈이
-       아니다 — 합계에 섞지 않고 'To be paid' 아래에 참고로만 따로 보여준다. #}
+    {# 현금 건은 드라이버가 손님에게 직접 받은 돈이라 합계에 넣지 않는다 #}
     <div class="totals-row grand">
       <span>Total Paid (online)</span>
       <span>${{ current_total_paid }}</span>
@@ -717,12 +716,6 @@
       <span>💰 To be paid to {{ driver.driver_name }}</span>
       <span id="to-be-paid-amount">${{ to_be_paid }}</span>
     </div>
-    {% if current_total_cash %}
-    <div class="totals-row" style="margin-top:.5rem; padding:.65rem .75rem; background:#f3f4f6; border-radius:8px; color:#6b7280; font-size:.9rem;">
-      <span>💵 Cash you collected (already yours, not paid out)</span>
-      <span>${{ current_total_cash }}</span>
-    </div>
-    {% endif %}
     {% if pending_total %}
     <div class="totals-row" style="margin-top:.5rem; padding:.65rem .75rem; background:#f3f4f6; border-radius:8px; color:#6b7280; font-size:.9rem;">
       <span>📅 Pending (future trips)</span>

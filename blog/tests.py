@@ -2009,7 +2009,8 @@ class DriverDashboardViewTests(TestCase):
         self.assertEqual(context['current_total_cash'], Decimal(str(cash.driver_price)))
         self.assertNotIn('current_grand_total', context)
         self.assertNotContains(response, 'Grand Total')
-        self.assertContains(response, 'Cash you collected')
+        self.assertNotContains(response, 'Cash you collected')
+        self.assertNotContains(response, '{#')
 
     def test_no_commission_row_for_driver_without_rate(self):
         user = make_user(username='cm2', password='TestPass1!')
