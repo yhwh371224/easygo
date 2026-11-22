@@ -21,7 +21,7 @@ KEY FEATURES:
 - Bus-lane access (advantage over Uber/DiDi)
 
 VEHICLES:
-- 8 to 13 seater maxi vans
+- 7 to 13 seater maxi vans
 - Spacious with generous luggage capacity
 - Suitable for families, large groups, and oversized luggage
 
