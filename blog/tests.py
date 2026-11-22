@@ -1827,7 +1827,7 @@ class DriverDashboardViewTests(TestCase):
         make_driver(user=user)
         self.client.force_login(user)
         response = self.client.get(self.url, secure=True)
-        self.assertEqual(response.context['current_grand_total'], Decimal('0'))
+        self.assertEqual(response.context['current_total_paid'], Decimal('0'))
 
     def _past_post(self, driver, days_ago, price='190'):
         with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
@@ -1982,11 +1982,34 @@ class DriverDashboardViewTests(TestCase):
         context = response.context
 
         # driver_price 200 → 5% commission 10 → owed 190.
-        self.assertEqual(context['current_grand_total'], Decimal('200'))
+        self.assertEqual(context['current_total_paid'], Decimal('200'))
         self.assertEqual(context['current_commission'], Decimal('10.00'))
         self.assertEqual(context['to_be_paid'], Decimal('190.00'))
         self.assertEqual(context['to_be_paid'], post.subcontractor_payout)
         self.assertContains(response, '5% Commission')
+
+    def test_cash_ride_is_not_counted_as_owed(self):
+        """Cash the driver collected from the customer is already the driver's.
+        It stays out of every payable total and shows only as a side note."""
+        user = make_user(username='cash1', password='TestPass1!')
+        driver = make_driver(user=user)
+        paid = self._past_post(driver, days_ago=2, price='210')
+        paid.paid = '210'
+        paid.save()
+        cash = self._past_post(driver, days_ago=1, price='120')
+        cash.cash = True
+        cash.save()
+
+        self.client.force_login(user)
+        response = self.client.get(self.url, secure=True)
+        context = response.context
+
+        self.assertEqual(context['current_total_paid'], Decimal('200'))
+        self.assertEqual(context['to_be_paid'], Decimal('200'))
+        self.assertEqual(context['current_total_cash'], Decimal(str(cash.driver_price)))
+        self.assertNotIn('current_grand_total', context)
+        self.assertNotContains(response, 'Grand Total')
+        self.assertContains(response, 'Cash you collected')
 
     def test_no_commission_row_for_driver_without_rate(self):
         user = make_user(username='cm2', password='TestPass1!')
@@ -2019,7 +2042,7 @@ class DriverDashboardViewTests(TestCase):
         context = response.context
 
         # driver_price 200 → 10% deduction 20 → owed 180.
-        self.assertEqual(context['current_grand_total'], Decimal('200'))
+        self.assertEqual(context['current_total_paid'], Decimal('200'))
         self.assertEqual(context['current_non_gst_deduction'], Decimal('20.00'))
         self.assertEqual(context['to_be_paid'], Decimal('180.00'))
         self.assertEqual(context['to_be_paid'], post.subcontractor_payout)

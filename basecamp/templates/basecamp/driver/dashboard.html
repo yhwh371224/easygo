@@ -693,17 +693,11 @@
   <!-- 총액: timeline 밖 - 오늘 트립만 있어도 표시 -->
   {% if timeline or trips %}
   <div class="totals-section">    
-    <div class="totals-row">
-      <span>Total Cash</span>
-      <span>${{ current_total_cash }}</span>
-    </div>
-    <div class="totals-row">
-      <span>Total Paid</span>
-      <span>${{ current_total_paid }}</span>
-    </div>
+    {# 현금 건(post.cash)은 드라이버가 손님에게 이미 받은 돈이라 회사가 줄 돈이
+       아니다 — 합계에 섞지 않고 'To be paid' 아래에 참고로만 따로 보여준다. #}
     <div class="totals-row grand">
-      <span>Grand Total</span>
-      <span>${{ current_grand_total }}</span>
+      <span>Total Paid (online)</span>
+      <span>${{ current_total_paid }}</span>
     </div>
     {# 커미션이 책정되지 않은 드라이버(commission_rate 0)에게는 줄 자체를 숨긴다 #}
     {% if driver.commission_rate %}
@@ -723,6 +717,12 @@
       <span>💰 To be paid to {{ driver.driver_name }}</span>
       <span id="to-be-paid-amount">${{ to_be_paid }}</span>
     </div>
+    {% if current_total_cash %}
+    <div class="totals-row" style="margin-top:.5rem; padding:.65rem .75rem; background:#f3f4f6; border-radius:8px; color:#6b7280; font-size:.9rem;">
+      <span>💵 Cash you collected (already yours, not paid out)</span>
+      <span>${{ current_total_cash }}</span>
+    </div>
+    {% endif %}
     {% if pending_total %}
     <div class="totals-row" style="margin-top:.5rem; padding:.65rem .75rem; background:#f3f4f6; border-radius:8px; color:#6b7280; font-size:.9rem;">
       <span>📅 Pending (future trips)</span>
@@ -758,17 +758,6 @@
         btn.className = 'btn-complete done';
         const badge = document.querySelector('#trip-' + postId + ' .badge-proxy');
         if (badge) badge.remove();
-
-        // cash 잡이 아닌 경우만 to be paid 에서 차감
-        const isCash = btn.dataset.cash === 'true';
-        if (isCash) {
-          const price = parseFloat(btn.dataset.price) || 0;
-          const el = document.getElementById('to-be-paid-amount');
-          if (el) {
-            const current = parseFloat(el.textContent.replace('$', '')) || 0;
-            el.textContent = '$' + (current - price).toFixed(2);
-          }
-        }
       } else {
         btn.disabled = false;
         btn.textContent = 'Complete Trip';

@@ -721,8 +721,6 @@ def driver_dashboard(request):
             current_commission += post.commission_amount
             current_non_gst_deduction += post.non_gst_deduction
 
-    current_grand_total = current_total_paid + current_total_cash
-
     # 미정산분이 곧 회사가 줘야 할 돈. cash 건은 드라이버가 이미 손님한테서
     # 받아 쥔 돈이라 'To be paid' 에는 들어가지 않는다.
     to_be_paid = current_total_paid - current_commission - current_non_gst_deduction
@@ -768,7 +766,6 @@ def driver_dashboard(request):
         'show_luggage_duty': show_luggage_duty,
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
-        'current_grand_total': current_grand_total,
         'current_commission': current_commission,
         'current_non_gst_deduction': current_non_gst_deduction,
         'to_be_paid': to_be_paid,
