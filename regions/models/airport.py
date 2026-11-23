@@ -56,6 +56,14 @@ class TerminalPickupPoint(models.Model):
     def __str__(self):
         return f"{self.terminal} — {self.name}"
 
+    # 이메일 만남장소 안내: image 맵은 Step 1, 2, … 사진+설명으로, 나머지는 링크로 보여준다.
+    # maps.all() 을 쓰므로 prefetch_related("maps") 가 걸려 있으면 추가 쿼리가 없다.
+    def image_maps(self):
+        return [m for m in self.maps.all() if m.type == PickupPointMap.MapType.IMAGE]
+
+    def link_maps(self):
+        return [m for m in self.maps.all() if m.type != PickupPointMap.MapType.IMAGE]
+
 
 class PickupPointMap(models.Model):
     class MapType(models.TextChoices):
@@ -79,6 +87,10 @@ class PickupPointMap(models.Model):
 
     title = models.CharField(max_length=255)
     url = models.URLField()
+    description = models.TextField(
+        blank=True,
+        help_text="Image Map 전용: 이메일에서 'Step N' 사진 바로 밑에 나오는 설명. 비우면 title 이 나간다.",
+    )
 
     class Meta:
         ordering = ["pickup_point", "type", "title"]

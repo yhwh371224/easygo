@@ -18,7 +18,7 @@ from .models import (
 class PickupPointMapInline(admin.TabularInline):
     model = PickupPointMap
     extra = 1
-    fields = ("type", "title", "url")
+    fields = ("type", "title", "url", "description")
 
 
 @admin.register(TerminalPickupPoint)
