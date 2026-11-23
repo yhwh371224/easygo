@@ -2,6 +2,7 @@
 만남장소 안내 블록 (이메일 공용). point = TerminalPickupPoint.
 image 맵이 있으면 instruction 글 대신 "Step N → 사진 → 사진 밑 설명" 순서로 보여주고,
 없으면 기존처럼 instruction 글을 보여준다. 나머지 맵(location/walking/pdf…)은 링크로.
+사진 밑 글: description → (사진 1장이면) instruction → title 에서 "Step N —" 뗀 것.
 image 맵 순서는 PickupPointMap.Meta.ordering(type, title) — title 을 "Step 1 — …" 처럼 붙이면 그 순서.
 {% endcomment %}
 {% with images=point.image_maps %}
@@ -10,7 +11,7 @@ image 맵 순서는 PickupPointMap.Meta.ordering(type, title) — title 을 "Ste
 <br>{% if images|length > 1 %}<strong style="color:#eb7828;font-size:15px;">Step {{ forloop.counter }}</strong><br>{% endif %}
 <a href="{{ map.url }}" target="_blank"><img src="{{ map.url }}" alt="{{ map.title }}" width="480" style="display:block;width:100%;max-width:480px;height:auto;border:1px solid #dddddd;border-radius:6px;Margin-top:6px;"></a>
 <a href="{{ map.url }}" target="_blank" style="color:#277fd2;text-decoration:underline;font-size:13px;">Can't see the photo? Tap here to open it</a><br>
-<span style="display:block;Margin-top:6px;">{% if map.description %}{{ map.description|linebreaksbr }}{% else %}{{ map.title }}{% endif %}</span>
+<span style="display:block;Margin-top:6px;">{% if map.description %}{{ map.description|linebreaksbr }}{% elif images|length == 1 and point.instruction %}{{ point.instruction|linebreaksbr }}{% else %}{{ map.caption }}{% endif %}</span>
 {% endfor %}
 {% else %}
 {{ point.instruction|linebreaksbr }}<br>

@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 
 from regions.models.region import Region
@@ -94,6 +96,15 @@ class PickupPointMap(models.Model):
 
     class Meta:
         ordering = ["pickup_point", "type", "title"]
+
+    @property
+    def caption(self):
+        """이메일에서 'Step N' 사진 밑에 나오는 글. description 이 우선이고,
+        비어 있으면 title 을 쓰되 앞의 "Step 1 — " 같은 번호는 뗀다 —
+        Step 번호는 템플릿이 이미 사진 위에 찍기 때문에 두 번 보이면 안 된다."""
+        if self.description:
+            return self.description
+        return re.sub(r"^\s*step\s*\d+\s*[—–:.\-]*\s*", "", self.title, flags=re.IGNORECASE)
 
     def __str__(self):
         return f"{self.pickup_point} — {self.get_type_display()} — {self.title}"
