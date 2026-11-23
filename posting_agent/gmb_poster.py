@@ -4,7 +4,9 @@ from posting_agent.review_manager import get_credentials
 
 
 def post_to_google_business(text, call_to_action_url=None, image_url=None):
-    """Post a local post to Google My Business."""
+    """Post a local post to Google My Business.
+
+    Returns (ok, detail): detail is the API error text on failure (for the staff alert)."""
     creds = get_credentials()
     account_name = settings.GMB_ACCOUNT_NAME
     location_name = settings.GMB_LOCATION_NAME
@@ -33,12 +35,11 @@ def post_to_google_business(text, call_to_action_url=None, image_url=None):
             "sourceUrl": image_url,
         }]
 
-    response = requests.post(url, headers=headers, json=body)
+    response = requests.post(url, headers=headers, json=body, timeout=30)
 
     # GMB API returns 200 or 201 on success
     if response.ok:
         print("[GMB] Post published successfully!")
-        return True
-    else:
-        print(f"[GMB] Failed: {response.status_code} {response.text}")
-        return False
+        return True, ""
+    print(f"[GMB] Failed: {response.status_code} {response.text}")
+    return False, f"{response.status_code} {response.text[:300]}"
