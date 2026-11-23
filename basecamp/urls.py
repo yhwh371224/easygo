@@ -16,7 +16,7 @@ urlpatterns = [
     path('blackglide/', views.blackglide, name='blackglide'),
     path('maxi-taxi/<slug:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),
     path('maxi-taxi/', views.maxi_taxi, name='maxi_taxi_hyphen'),
-    path('maxi_taxi/<slug:suburb>/', RedirectView.as_view(url='/maxi-taxi/%(suburb)s/', permanent=True)),
+    path('maxi_taxi/<slug:suburb>/', views.maxi_taxi_legacy),
     path('maxi_taxi/', RedirectView.as_view(url='/maxi-taxi/', permanent=True)),        
     path('maxi_taxi/', views.maxi_taxi, name='maxi_taxi'),
     path('airport-shuttle-<slug:suburb>/', RedirectView.as_view(url='/sydney/airport-shuttle/%(suburb)s/', permanent=True), name='airport_shuttle_suburb'),

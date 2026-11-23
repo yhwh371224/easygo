@@ -1169,3 +1169,45 @@ class HomeInquiryPointToPointAddressTests(TestCase):
         response = self._price_detail('Kingsgrove', 'Mosman')
         self.assertContains(response, 'name="child_ages"')
         self.assertContains(response, 'child_ages.js')
+
+
+class FillSuburbRoutesHelpersTests(TestCase):
+    """fill_suburb_routes: 2026-11-24 첫 실행에서 지명이 엉뚱한 곳으로 잡힌 사례들."""
+
+    def setUp(self):
+        self.region = make_region(slug='gold-coast', name='Gold Coast')
+        self.region.state_code = 'QLD'
+        self.region.save()
+
+    def _sub(self, slug, name, km=None):
+        return RegionSuburb.objects.create(region=self.region, name=name, slug=slug, price=50,
+                                           zone='Airport Surrounds', distance_km=km)
+
+    def test_tweed_is_searched_in_nsw_not_region_state(self):
+        from regions.management.commands.fill_suburb_routes import origin_text
+        self.assertEqual(origin_text(self._sub('tweed-heads', 'Tweed Heads')), 'Tweed Heads NSW, Australia')
+        self.assertEqual(origin_text(self._sub('burleigh-heads', 'Burleigh Heads')), 'Burleigh Heads QLD, Australia')
+
+    def test_hotels_in_cbd_uses_a_real_place(self):
+        from regions.management.commands.fill_suburb_routes import origin_text
+        self.assertEqual(origin_text(self._sub('hotels-in-cbd', 'Hotels in CBD')), 'Surfers Paradise QLD, Australia')
+
+    def test_main_roads_prefers_names_and_drops_ramps(self):
+        from regions.management.commands.fill_suburb_routes import main_roads
+        self.assertEqual(main_roads([
+            {'name': 'Great Western Highway', 'ref': 'A9', 'distance': 4000},
+            {'name': 'Western Motorway', 'ref': 'M4', 'distance': 30000},
+            {'name': 'M8 Motorway Tunnel Onramp', 'distance': 500},
+        ]), 'Great Western Highway and M4 Western Motorway')
+
+    def test_roads_dropped_when_osrm_started_somewhere_else(self):
+        from unittest import mock
+        from regions.management.commands.fill_suburb_routes import Command
+        s = self._sub('hillside', 'Hillside', km=19)
+        airport = mock.Mock(lat=-37.67, lng=144.84)
+        geo = mock.Mock(); geo.json.return_value = [{'lat': '-37.9', 'lon': '145.3'}]
+        osrm = mock.Mock(); osrm.json.return_value = {'routes': [{'distance': 60000, 'legs': [{'steps': [
+            {'name': 'Burwood Highway', 'distance': 30000}, {'name': 'Eastern Freeway', 'ref': 'M3', 'distance': 30000}]}]}]}
+        with mock.patch('regions.management.commands.fill_suburb_routes.requests.get', side_effect=[geo, osrm]), \
+                mock.patch('regions.management.commands.fill_suburb_routes.time.sleep'):
+            self.assertEqual(Command()._roads(s, airport, 'key', road_km=19.2), '')

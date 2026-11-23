@@ -61,19 +61,36 @@ def home(request):
 
 
 
+# 대표 페이지(/maxi-taxi/)에서 링크하는 6곳만 수버브 페이지를 남긴다. 나머지 380여 개는
+# 3개월 클릭 24회라 2026-11-24 에 /maxi-taxi/ 로 301 — 찍어낸 페이지 수를 줄이고 링크 가치를
+# 대표 페이지로 모은다. 남긴 6곳은 검색에도 나오게 한다(noindex 해제, sitemap 포함).
+MAXI_TAXI_SUBURBS = {'chatswood', 'hornsby', 'parramatta', 'blacktown', 'hotels-in-cbd', 'lindfield'}
+MAXI_TAXI_SLUG_ALIASES = {'hotels-in-city': 'hotels-in-cbd'}  # 예전 링크 주소
+
+
+def maxi_taxi_legacy(request, suburb):
+    """/maxi_taxi/<suburb>/ → 최종 주소로 한 번에 (301 이 두 번 이어지지 않게)."""
+    slug = MAXI_TAXI_SLUG_ALIASES.get(suburb.lower(), suburb.lower())
+    if slug in MAXI_TAXI_SUBURBS:
+        return redirect('basecamp:maxi_taxi_suburb', suburb=slug, permanent=True)
+    return redirect('basecamp:maxi_taxi_hyphen', permanent=True)
+
+
 def maxi_taxi(request, suburb=None):
-    if suburb and suburb != suburb.lower():
-        return redirect('basecamp:maxi_taxi_suburb', suburb=suburb.lower(), permanent=True)
-    
     if not suburb:
         return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
-    
-    suburb_obj = RegionSuburb.objects.filter(
-        region__slug='sydney', slug=suburb, is_active=True,
-    ).first()
 
+    slug = MAXI_TAXI_SLUG_ALIASES.get(suburb.lower(), suburb.lower())
+    if slug not in MAXI_TAXI_SUBURBS:
+        return redirect('basecamp:maxi_taxi_hyphen', permanent=True)
+    if slug != suburb:
+        return redirect('basecamp:maxi_taxi_suburb', suburb=slug, permanent=True)
+
+    suburb_obj = RegionSuburb.objects.filter(
+        region__slug='sydney', slug=slug, is_active=True,
+    ).first()
     if not suburb_obj:
-        return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
+        return redirect('basecamp:maxi_taxi_hyphen', permanent=True)
 
     zone_info = area_zones.get(suburb_obj.zone, {})
     context = _build_pillar_context(suburb_obj, zone_info)
@@ -97,10 +114,8 @@ def more_suburbs1(request):
 
 
 def more_suburbs_maxi_taxi(request):
-    suburbs = RegionSuburb.objects.filter(
-        region__slug='sydney', is_active=True,
-    ).order_by('name')
-    return render(request, 'basecamp/layouts/more_suburbs_maxi_taxi.html', {'more_suburbs': suburbs})
+    # 수버브별 maxi-taxi 페이지를 없애면서 그 목록 페이지도 대표 페이지로 합쳤다.
+    return redirect('basecamp:maxi_taxi_hyphen', permanent=True)
 
 
 def booking(request):

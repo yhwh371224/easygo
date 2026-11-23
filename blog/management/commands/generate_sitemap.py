@@ -62,7 +62,6 @@ class Command(BaseCommand):
             {"loc": f"{BASE_URL}/meeting_point/",            "changefreq": "monthly", "priority": "0.6000"},
             {"loc": f"{BASE_URL}/arrival_guide/",            "changefreq": "monthly", "priority": "0.6000"},
             {"loc": f"{BASE_URL}/more_suburbs/",             "changefreq": "weekly",  "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/more_suburbs_maxi_taxi/",   "changefreq": "weekly",  "priority": "0.6000"},
             {"loc": f"{BASE_URL}/payment_options/",          "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/payonline/",                "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/payonline/paypal/",         "changefreq": "monthly", "priority": "0.5000"},
@@ -92,13 +91,16 @@ class Command(BaseCommand):
                     "changefreq": "weekly",
                     "priority": "0.8000",
                 })
-                sydney_urls.append({
-                    "loc": f"{BASE_URL}/maxi-taxi/{suburb.slug}/",
-                    "changefreq": "weekly",
-                    "priority": "0.8000",
-                })
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"  Sydney suburbs error: {e}"))
+        # /maxi-taxi/ 에서 링크하는 6곳만 수버브 maxi-taxi 페이지가 남아 있다 (나머지는 301).
+        from basecamp.views.pillars import MAXI_TAXI_SUBURBS
+        for slug in sorted(MAXI_TAXI_SUBURBS):
+            sydney_urls.append({
+                "loc": f"{BASE_URL}/maxi-taxi/{slug}/",
+                "changefreq": "weekly",
+                "priority": "0.7000",
+            })
         _write_urlset(sydney_urls, os.path.join(base_dir, "sitemap-sydney.xml"), today)
         index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-sydney.xml", "lastmod": today})
         self.stdout.write(f"  sitemap-sydney.xml  — {len(sydney_urls)} URLs")

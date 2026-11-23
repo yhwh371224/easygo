@@ -26,7 +26,6 @@ from django.utils import timezone
 from regions.models import RegionSuburb
 
 DM_URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
-GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 OSRM_URL = "https://router.project-osrm.org/route/v1/driving/{o_lng},{o_lat};{d_lng},{d_lat}"
 OFFPEAK = (11, 0)
@@ -43,8 +42,20 @@ def next_tuesday(tz_name, hour, minute):
     return int(datetime.datetime(day.year, day.month, day.day, hour, minute, tzinfo=tz).timestamp())
 
 
+# 지역 state 와 실제 state 가 다른 수버브 (Gold Coast 지역의 NSW 쪽 Tweed) 와 실제 지명이 아닌 항목.
+# 2026-11-24 첫 실행에서 Tweed Heads 를 "QLD" 로 찾아 900분, Gold Coast "Hotels in CBD" 를
+# Brisbane 북쪽으로 찾는 등 엉뚱한 곳이 잡혔다.
+STATE_OVERRIDE = {"tweed-heads": "NSW", "tweed-heads-south": "NSW", "tweed-heads-west": "NSW",
+                  "banora-point": "NSW", "bilambil-heights": "NSW"}
+ORIGIN_OVERRIDE = {("gold-coast", "hotels-in-cbd"): "Surfers Paradise QLD, Australia",
+                   ("sydney", "hotels-in-cbd"): "Sydney NSW 2000, Australia"}
+
+
 def origin_text(s):
-    return f"{s.name} {s.region.state_code}, Australia"
+    override = ORIGIN_OVERRIDE.get((s.region.slug, s.slug))
+    if override:
+        return override
+    return f"{s.name} {STATE_OVERRIDE.get(s.slug, s.region.state_code)}, Australia"
 
 
 _RAMP = re.compile(r"\b(on|off)[- ]?ramp\b|\bexit\b|\bslip\b", re.I)
@@ -126,12 +137,14 @@ class Command(BaseCommand):
                     failed += len(batch)
                     self.stdout.write(f"  FAIL batch {region.slug}: {exc}")
                     continue
-                for s, off_min, peak_min in zip(batch, off, peak):
-                    if off_min is None:
+                for s, off_res, peak_res in zip(batch, off, peak):
+                    if off_res is None:
                         failed += 1
                         self.stdout.write(f"  FAIL  {region.slug}/{s.slug}: no route")
                         continue
-                    roads = "" if opts["no_roads"] else self._roads(s, airport, key)
+                    off_min, road_km = off_res
+                    peak_min = peak_res[0] if peak_res else None
+                    roads = "" if opts["no_roads"] else self._roads(s, airport, key, road_km=road_km)
                     ok += 1
                     self.stdout.write(f"  OK    {region.slug}/{s.slug}: {off_min} min (peak {peak_min}) via {roads or '-'}")
                     if not opts["dry_run"]:
@@ -163,34 +176,37 @@ class Command(BaseCommand):
             if el.get("status") != "OK":
                 out.append(None)
                 continue
-            out.append(round((el.get("duration_in_traffic") or el["duration"])["value"] / 60))
+            out.append((round((el.get("duration_in_traffic") or el["duration"])["value"] / 60),
+                        el["distance"]["value"] / 1000))
         return out
 
-    def _roads(self, s, airport, key):
-        """Main roads via OSRM. Needs coordinates: the suburb's own, else Google geocode."""
+    def _roads(self, s, airport, key, road_km=None):
+        """Main roads via OSRM. The start point is geocoded with Nominatim *bounded to
+        ~1° around the airport* so a same-name town elsewhere can't be picked; if OSRM's
+        route length is far from the Google road distance, the roads are dropped."""
         try:
-            lat, lng = s.latitude, s.longitude
-            if lat is None or lng is None:
-                g = requests.get(GEOCODE_URL, params={"address": origin_text(s), "key": key}, timeout=15).json()
-                if g.get("status") == "OK":
-                    loc = g["results"][0]["geometry"]["location"]
-                    lat, lng = loc["lat"], loc["lng"]
-                else:
-                    # 키에 Geocoding 이 안 켜져 있으면 무료 Nominatim (≤1 req/s)
-                    time.sleep(1.1)
-                    n = requests.get(NOMINATIM_URL, params={
-                        "q": origin_text(s), "format": "json", "limit": 1, "countrycodes": "au",
-                    }, headers={"User-Agent": "EasyGoShuttle/1.0"}, timeout=15).json()
-                    if not n:
-                        return ""
-                    lat, lng = n[0]["lat"], n[0]["lon"]
-            time.sleep(1.1)  # OSRM public server: ≤1 req/s
-            r = requests.get(OSRM_URL.format(o_lng=lng, o_lat=lat, d_lng=airport.lng, d_lat=airport.lat),
+            lat, lng = float(airport.lat), float(airport.lng)
+            if s.latitude is not None and s.longitude is not None:
+                o_lat, o_lng = s.latitude, s.longitude
+            else:
+                time.sleep(1.1)  # Nominatim / OSRM public servers: ≤1 req/s
+                n = requests.get(NOMINATIM_URL, params={
+                    "q": origin_text(s), "format": "json", "limit": 1, "countrycodes": "au",
+                    "viewbox": f"{lng - 1},{lat + 1},{lng + 1},{lat - 1}", "bounded": 1,
+                }, headers={"User-Agent": "EasyGoShuttle/1.0"}, timeout=15).json()
+                if not n:
+                    return ""
+                o_lat, o_lng = n[0]["lat"], n[0]["lon"]
+            time.sleep(1.1)
+            r = requests.get(OSRM_URL.format(o_lng=o_lng, o_lat=o_lat, d_lng=airport.lng, d_lat=airport.lat),
                              params={"steps": "true", "overview": "false"}, timeout=15,
                              headers={"User-Agent": "EasyGoShuttle/1.0"})
             r.raise_for_status()
-            steps = r.json()["routes"][0]["legs"][0]["steps"]
-            return main_roads(steps)
+            route = r.json()["routes"][0]
+            ref = road_km if road_km is not None else (float(s.distance_km) if s.distance_km else None)
+            if ref and abs(route["distance"] / 1000 - ref) > max(5, 0.35 * ref):
+                return ""  # OSRM started somewhere else — no roads beats wrong roads
+            return main_roads(route["legs"][0]["steps"])
         except Exception as exc:
             self.stdout.write(f"    roads lookup failed for {s.slug}: {exc}")
             return ""
