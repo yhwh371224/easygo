@@ -9,7 +9,6 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 
 from regions.models import Region, RegionSuburb, CruiseTerminal
-from regions.pricing import get_pricing_rule, suburb_price_table, surcharge_windows
 from articles.models import Post as BlogPost
 
 logger = logging.getLogger(__name__)
@@ -182,11 +181,6 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
 
     service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
     service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
-    try:
-        rule = get_pricing_rule(region.id)
-        surcharges = surcharge_windows(rule)
-    except Exception:
-        surcharges = []
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
@@ -195,8 +189,10 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
-        'price_table': suburb_price_table(suburb),
-        'surcharges': surcharges,
+        # 인원별 가격표·할증 안내는 가격 규칙 기준이라 실제 (수동) 견적과 안 맞는다 —
+        # 실제 가격 기준이 정해질 때까지 숨긴다.
+        'price_table': [],
+        'surcharges': [],
     })
 
 

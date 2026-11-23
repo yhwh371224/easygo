@@ -402,22 +402,15 @@ class AirportShuttleSuburbViewTests(TestCase):
         })
         return self.client.get(url, secure=True)
 
-    def test_from_price_uses_pricing_rule_not_stored_price(self):
-        # 40km × $3 + $20 = $140 — the stored price ($75) is what pages used to show
+    def test_from_price_is_the_admin_price(self):
+        # 견적은 수동이라 admin 의 price 가 실제 시작 가격 — 가격 규칙(40km → $140)이 있어도 $75
         self._rule()
         RegionSuburb.objects.filter(pk=self.suburb.pk).update(distance_km=40)
         response = self._get()
         html = response.content.decode()
-        self.assertIn('$140', html)
-        self.assertNotIn('$75', html)
-        self.assertEqual(response.context['price_table'][0], (2, 140))
-        # 4 pax: +$10 for each from the 3rd
-        self.assertIn((4, 160), response.context['price_table'])
-        self.assertIn('10pm–4am add 15%', html)
-
-    def test_from_price_falls_back_to_stored_price_without_rule(self):
-        self.assertEqual(self.suburb.from_price, 75)
-        self.assertEqual(self._get().context['price_table'], [])
+        self.assertIn('$75', html)
+        self.assertNotIn('$140', html)
+        self.assertEqual(response.context['price_table'], [])
 
     def test_route_facts_shown_when_filled(self):
         self._rule()

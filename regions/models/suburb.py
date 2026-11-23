@@ -63,12 +63,10 @@ class RegionSuburb(models.Model):
 
     @property
     def from_price(self):
-        """페이지에 보여주는 "From $" — 실제 견적과 같은 가격 규칙으로 계산한
-        가장 싼 견적(1–2명, 할증 없는 시간). price 필드는 규칙이 없을 때만 쓴다."""
-        if not hasattr(self, "_from_price"):
-            from regions.pricing import suburb_from_price
-            self._from_price = suburb_from_price(self)
-        return self._from_price
+        """페이지에 보여주는 "From $". 견적은 사장님이 직접 내고 있어서(자동 견적 안 씀)
+        admin 에서 관리하는 price 가 실제 시작 가격이다. 2026-11-24 에 가격 규칙
+        (거리 × rate) 계산값으로 바꿨다가 실제보다 높게 나가서 되돌렸다."""
+        return int(self.price) if self.price is not None else None
 
     @property
     def zone_phrase(self):
