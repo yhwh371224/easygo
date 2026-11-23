@@ -41,3 +41,31 @@ def get_suburbs():
     return suburbs
 
 suburbs = get_suburbs()
+
+
+# 캐러셀 이름 → Sydney RegionSuburb slug
+_CAROUSEL_SLUGS = {'Hotels In CBD': 'sydney-cbd'}
+
+
+def get_carousel_suburbs():
+    """홈 캐러셀용. get_suburbs() 의 하드코딩 가격과 문구("shared rides starting from
+    $35")는 실제 견적·"100% private" 안내와 안 맞아서, 가격과 설명을 실제 가격 규칙으로
+    다시 만든다. RegionSuburb 를 못 찾으면 그 카드는 원래 값을 그대로 쓴다."""
+    from django.utils.text import slugify
+    from regions.models import RegionSuburb
+
+    cards = get_suburbs()
+    slugs = {name: _CAROUSEL_SLUGS.get(name, slugify(name)) for name in cards}
+    found = {
+        s.slug: s for s in
+        RegionSuburb.objects.filter(region__slug='sydney', is_active=True, slug__in=slugs.values())
+    }
+    for name, card in cards.items():
+        suburb = found.get(slugs[name])
+        price = suburb.from_price if suburb else None
+        if not price:
+            continue
+        card['price'] = price
+        card['description'] = f"Private airport transfer for 1–2 passengers from ${price}."
+        card['extra'] = '*additional $10 per person from the 3rd passenger*'
+    return cards

@@ -152,7 +152,13 @@ class RegionSuburbAdmin(admin.ModelAdmin):
             "fields": ("meta_title", "meta_description"),
             "classes": ("collapse",),
         }),
+        ("Suburb page content", {
+            "description": "Drive times / route are filled by <code>manage.py fill_suburb_routes</code>. "
+                           "Local content is hand-written HTML for top suburbs.",
+            "fields": ("drive_minutes", "drive_minutes_peak", "route_summary", "route_checked_at", "local_content"),
+        }),
     )
+    readonly_fields = ("route_checked_at",)
 
 
 @admin.register(CruiseTerminal)

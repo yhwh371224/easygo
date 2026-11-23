@@ -9,7 +9,7 @@ from django.db.models import Q
 
 from regions.models import Region, RegionSuburb
 from regions.models import Terminal
-from basecamp.area import get_suburbs
+from basecamp.area import get_suburbs, get_carousel_suburbs
 from basecamp.area_zones import area_zones
 from basecamp.basecamp_utils import get_sorted_suburbs
 from articles.models import Post
@@ -35,7 +35,7 @@ def _build_pillar_context(suburb_obj, zone_info):
 
 
 def home(request):
-    carousel_suburbs = get_suburbs()  # carousel - 그대로 유지
+    carousel_suburbs = get_carousel_suburbs()
     region = get_object_or_404(Region, slug='sydney', is_active=True)
     home_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     airport_terminals = Terminal.objects.filter(

@@ -9,6 +9,7 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 
 from regions.models import Region, RegionSuburb, CruiseTerminal
+from regions.pricing import get_pricing_rule, suburb_price_table, surcharge_windows
 from articles.models import Post as BlogPost
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ def region_home(request, region_slug):
     featured_suburbs = (
         region.suburbs
         .filter(is_active=True, is_featured=True)
-        .only('name', 'slug', 'price', 'meta_description', 'featured_order', 'carousel_image')
+        .only('name', 'slug', 'price', 'distance_km', 'region_id', 'meta_description', 'featured_order', 'carousel_image')
         .order_by('featured_order', 'name')[:5]
     )
 
@@ -163,14 +164,29 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
     suburb = get_object_or_404(
         RegionSuburb, region=region, slug=suburb_slug, is_active=True,
     )
-    zone_suburbs = (
+    zone_suburbs = list(
         RegionSuburb.objects
         .filter(region=region, zone=suburb.zone, is_active=True)
         .exclude(slug=suburb_slug)
         .order_by('name')
     )
+    # 같은 구역 60여 개를 다 붙이면 본문보다 링크가 길어진다 — 공항 거리가 비슷한
+    # (= 대체로 가까운) 12곳만 보여준다.
+    if suburb.distance_km is not None:
+        zone_suburbs.sort(key=lambda s: (
+            s.distance_km is None,
+            abs((s.distance_km or 0) - suburb.distance_km),
+            s.name,
+        ))
+    zone_suburbs = sorted(zone_suburbs[:12], key=lambda s: s.name)
+
     service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
     service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
+    try:
+        rule = get_pricing_rule(region.id)
+        surcharges = surcharge_windows(rule)
+    except Exception:
+        surcharges = []
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
@@ -179,6 +195,8 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
+        'price_table': suburb_price_table(suburb),
+        'surcharges': surcharges,
     })
 
 
@@ -208,7 +226,7 @@ def _build_city_context(request, slug):
     featured_suburbs = (
         region.suburbs
         .filter(is_active=True, is_featured=True)
-        .only('name', 'slug', 'price', 'meta_description', 'featured_order', 'carousel_image')
+        .only('name', 'slug', 'price', 'distance_km', 'region_id', 'meta_description', 'featured_order', 'carousel_image')
         .order_by('featured_order', 'name')[:5]
     )
     latest_post = (

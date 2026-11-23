@@ -383,6 +383,73 @@ class AirportShuttleSuburbViewTests(TestCase):
         self.assertNotIn('chatswood', zone_slugs)
         self.assertIn('artarmon', zone_slugs)
 
+    def _rule(self):
+        from django.core.cache import cache
+        from regions.models import PricingRule
+        cache.delete(f'pricing_rule_{self.region.id}')
+        return PricingRule.objects.create(
+            region=self.region,
+            peak_windows=[
+                {'type': 'night', 'start': 22, 'end': 23, 'surcharge_rate': 0.15},
+                {'type': 'night', 'start': 0, 'end': 3, 'surcharge_rate': 0.15},
+                {'type': 'peak', 'start': 7, 'end': 8, 'surcharge_rate': 0.1},
+            ],
+        )
+
+    def _get(self, slug='chatswood'):
+        url = reverse('regions:airport_shuttle_suburb', kwargs={
+            'region_slug': 'test-suburb-region', 'suburb_slug': slug
+        })
+        return self.client.get(url, secure=True)
+
+    def test_from_price_uses_pricing_rule_not_stored_price(self):
+        # 40km × $3 + $20 = $140 — the stored price ($75) is what pages used to show
+        self._rule()
+        RegionSuburb.objects.filter(pk=self.suburb.pk).update(distance_km=40)
+        response = self._get()
+        html = response.content.decode()
+        self.assertIn('$140', html)
+        self.assertNotIn('$75', html)
+        self.assertEqual(response.context['price_table'][0], (2, 140))
+        # 4 pax: +$10 for each from the 3rd
+        self.assertIn((4, 160), response.context['price_table'])
+        self.assertIn('10pm–4am add 15%', html)
+
+    def test_from_price_falls_back_to_stored_price_without_rule(self):
+        self.assertEqual(self.suburb.from_price, 75)
+        self.assertEqual(self._get().context['price_table'], [])
+
+    def test_route_facts_shown_when_filled(self):
+        self._rule()
+        RegionSuburb.objects.filter(pk=self.suburb.pk).update(
+            distance_km=40, drive_minutes=38, drive_minutes_peak=55, route_summary='M1 and Southern Cross Drive')
+        html = self._get().content.decode()
+        self.assertIn('around 38 minutes outside peak hours', html)
+        self.assertIn('closer to 55 minutes', html)
+        self.assertIn('via M1 and Southern Cross Drive', html)
+        self.assertIn('How long is the drive from Chatswood', html)
+
+    def test_route_facts_hidden_when_empty(self):
+        html = self._get().content.decode()
+        self.assertNotIn('Drive time:', html)
+        self.assertNotIn('How long is the drive', html)
+
+    def test_zone_code_is_humanised(self):
+        RegionSuburb.objects.filter(pk=self.suburb.pk).update(zone='upper_north_shore')
+        html = self._get().content.decode()
+        self.assertIn('Upper North Shore', html)
+        self.assertNotIn('upper_north_shore', html)
+
+    def test_nearby_suburbs_capped_at_twelve_closest(self):
+        RegionSuburb.objects.filter(pk=self.suburb.pk).update(distance_km=20)
+        for i in range(20):
+            RegionSuburb.objects.create(region=self.region, name=f'S{i:02d}', slug=f's{i:02d}',
+                                        price=50, zone='North', is_active=True, distance_km=20 + i)
+        names = [s.name for s in self._get().context['zone_suburbs']]
+        self.assertEqual(len(names), 12)
+        self.assertIn('S00', names)
+        self.assertNotIn('S19', names)
+
     def test_inactive_suburb_returns_404(self):
         RegionSuburb.objects.create(
             region=self.region, name='Hidden', slug='hidden',

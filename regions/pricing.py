@@ -270,3 +270,94 @@ def calculate_inquiry_price(inquiry, region) -> str | None:
         total += calculate_price(config, return_booking)["total"]
 
     return str(total)
+
+
+# ── Public page prices ────────────────────────────────────────────────────────
+# 수버브 페이지·홈 캐러셀의 "From $" 는 예전엔 RegionSuburb.price 를 그대로 찍었는데,
+# 실제 견적은 위 가격 규칙(거리 × rate + base_fee …)으로 계산돼서 698/832 곳에서
+# 페이지 가격이 견적보다 낮았다(예: Hornsby 페이지 $115, 견적 $140). 페이지에 보이는
+# 가격은 전부 여기서 견적과 같은 공식으로 계산한다.
+
+PAGE_TABLE_PAX = (2, 4, 7, 10, 13)  # "Up to N passengers" rows on the suburb page
+
+
+def offpeak_hour(rule) -> int:
+    """An hour with no peak/night surcharge, for the headline 'from' price."""
+    windows = [WindowConfig.from_dict(w) for w in rule.peak_windows]
+    for hour in (11, 12, 10, 13, 14, 9, 20):
+        if not any(w.matches_hour(hour) for w in windows):
+            return hour
+    return 12
+
+
+def suburb_quote(suburb, passengers: int, rule=None, hour: int | None = None):
+    """Whole-dollar quote (int) for a plain trip with no extras, or None."""
+    try:
+        rule = rule or get_pricing_rule(suburb.region_id)
+    except Exception:
+        return None
+    hour = offpeak_hour(rule) if hour is None else hour
+    config = build_config_from_rule(suburb, rule)
+    if config.base_fare is None:
+        return None
+    total = calculate_price(config, BookingInput(passengers=passengers, pickup_hour=hour))["total"]
+    return int(total)
+
+
+def suburb_from_price(suburb):
+    """Cheapest real quote: 1–2 passengers, off-peak, no extras."""
+    price = suburb_quote(suburb, 1)
+    if price is None and suburb.price is not None:
+        return int(suburb.price)
+    return price
+
+
+def suburb_price_table(suburb):
+    """[(max_passengers, price), …] off-peak, for the suburb page table."""
+    try:
+        rule = get_pricing_rule(suburb.region_id)
+    except Exception:
+        return []
+    rows = []
+    for pax in PAGE_TABLE_PAX:
+        price = suburb_quote(suburb, pax, rule=rule)
+        if price is None:
+            return []
+        rows.append((pax, price))
+    return rows
+
+
+def _fmt_hour(h: int) -> str:
+    h %= 24
+    if h == 0:
+        return "midnight"
+    if h == 12:
+        return "noon"
+    return f"{h % 12}{'am' if h < 12 else 'pm'}"
+
+
+def surcharge_windows(rule):
+    """Human labels for the peak/night windows, merging ranges that run past
+    midnight: [{'type': 'night', 'label': '10pm–4am', 'percent': 15}, …]."""
+    by_key = {}
+    for w in (WindowConfig.from_dict(d) for d in rule.peak_windows):
+        key = (w.window_type, w.surcharge_rate)
+        by_key.setdefault(key, set()).update(range(w.start, w.end + 1))
+    out = []
+    for (wtype, rate), hours in by_key.items():
+        # 연속된 시간끼리 묶는다 (23 → 0 도 연속).
+        starts = [h for h in hours if (h - 1) % 24 not in hours] or [min(hours)]
+        for start in sorted(starts):
+            end = start
+            while (end + 1) % 24 in hours and (end + 1) % 24 != start:
+                end = (end + 1) % 24
+            out.append({
+                "type": wtype,
+                "label": f"{_fmt_hour(start)}–{_fmt_hour(end + 1)}",
+                "percent": int((rate * 100).quantize(Decimal("1"))),
+                "_start": start,
+            })
+    out.sort(key=lambda x: (x["type"] != "peak", x["_start"]))
+    for x in out:
+        del x["_start"]
+    return out

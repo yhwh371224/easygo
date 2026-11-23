@@ -10,7 +10,7 @@ from blog.tasks import send_telegram_task
 from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
-from basecamp.area import get_suburbs
+from basecamp.area import get_suburbs, get_carousel_suburbs
 from regions.models import Region, RegionSuburb, Terminal, CruiseTerminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
@@ -74,7 +74,7 @@ def price_detail(request):
             return render(request, 'basecamp/home.html', {
                 'error_message': str(e),
                 'suburbs': get_suburbs(),
-                'carousel_suburbs': get_suburbs(),
+                'carousel_suburbs': get_carousel_suburbs(),
                 'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
                 'airport_terminals': _airport_terminals_for_request(request),
                 'cruise_terminals': _cruise_terminals_for_request(request),
@@ -163,7 +163,7 @@ def price_detail(request):
         # Region-less legacy home can still render, but it won't allow terminal-based pricing.
         return render(request, 'basecamp/home.html', {
             'suburbs': get_suburbs(),
-            'carousel_suburbs': get_suburbs(),
+            'carousel_suburbs': get_carousel_suburbs(),
             'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
             'airport_terminals': _airport_terminals_for_request(request),
             'cruise_terminals': _cruise_terminals_for_request(request),

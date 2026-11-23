@@ -9,10 +9,10 @@
 
 {% block meta %}
 {% if service_type == 'transfer' %}
-  <meta name="description" content="Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %} Book online.">
+  <meta name="description" content="Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.from_price %} Fixed price ${{ suburb.from_price }}.{% endif %} Book online.">
   <meta name="keywords" content="{{ suburb.name }} airport transfer, private car {{ suburb.name }} airport{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport taxi {{ suburb.name }} {{ region.name }}">
 {% else %}
-  <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed-price private door-to-door service for families and groups.{% if suburb.price %} From ${{ suburb.price }}.{% endif %} Book online.{% endif %}">
+  <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed-price private door-to-door service for families and groups.{% if suburb.from_price %} From ${{ suburb.from_price }}.{% endif %} Book online.{% endif %}">
   <meta name="keywords" content="{{ suburb.name }} airport shuttle{% if region and region.primary_airport %}, shuttle from {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, group airport transfer {{ suburb.name }} {{ region.name }}">
 {% endif %}
 <meta name="author" content="easygoshuttle.com.au">
@@ -27,11 +27,11 @@
   {% if service_type == 'transfer' %}
   "serviceType": "TaxiService",
   "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Airport Transfer",
-  "description": "Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle and professional driver.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %}",
+  "description": "Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle and professional driver.{% if suburb.from_price %} Fixed price ${{ suburb.from_price }}.{% endif %}",
   {% else %}
   "serviceType": "AirportShuttle",
   "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Airport Shuttle",
-  "description": "Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} for families and groups.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %}",
+  "description": "Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} for families and groups.{% if suburb.from_price %} Fixed price ${{ suburb.from_price }}.{% endif %}",
   {% endif %}
   "provider": {
     "@type": "LocalBusiness",
@@ -48,8 +48,8 @@
     }
   },
   "offers": {
-    "@type": "Offer",{% if suburb.price %}
-    "price": "{{ suburb.price }}",
+    "@type": "Offer",{% if suburb.from_price %}
+    "price": "{{ suburb.from_price }}",
     "priceCurrency": "AUD",{% endif %}
     "availability": "https://schema.org/InStock",
     "url": "https://easygoshuttle.com.au/{{ region.slug }}/{{ service_path }}/{{ suburb.slug }}/"
@@ -61,6 +61,26 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {% if suburb.drive_minutes %}
+    {
+      "@type": "Question",
+      "name": "How long is the drive from {{ suburb.name|escapejs }} to {{ region.primary_airport.name|default:'the airport'|escapejs }}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually about {{ suburb.drive_minutes }} minutes outside peak hours{% if suburb.distance_km %} ({{ suburb.distance_km|floatformat:0 }} km){% endif %}.{% if suburb.drive_minutes_peak and suburb.drive_minutes_peak > suburb.drive_minutes %} On weekday mornings allow about {{ suburb.drive_minutes_peak }} minutes.{% endif %}"
+      }
+    },
+    {% endif %}
+    {% if price_table %}
+    {
+      "@type": "Question",
+      "name": "How much is an airport {% if service_type == 'transfer' %}transfer{% else %}shuttle{% endif %} from {{ suburb.name|escapejs }}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{% for pax, price in price_table %}{% if forloop.first %}${{ price }} for 1-{{ pax }} passengers{% elif forloop.counter < 4 %}, ${{ price }} for {{ pax }}{% endif %}{% endfor %}, off-peak, per vehicle, not per person."
+      }
+    },
+    {% endif %}
     {% if service_type == 'transfer' %}
     {
       "@type": "Question",
@@ -138,11 +158,11 @@
       {% endif %}
     </p>
 
-    {% if suburb.price %}
+    {% if suburb.from_price %}
     <div class="mb-5">
       <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 shadow-sm">
         <span class="text-muted fs-sm me-2">From</span>
-        <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.price }}</span>
+        <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.from_price }}</span>
         <span class="text-muted fs-sm ms-2">/ vehicle</span>
       </div>
       <p class="text-white opacity-75 fs-xs mt-2 mb-0">
@@ -168,6 +188,28 @@
     <!-- Left: content -->
     <div class="col-lg-8">
 
+      {% if suburb.local_content %}
+      <div class="suburb-local-content">
+        {{ suburb.local_content|safe }}
+      </div>
+      <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
+      <ul>
+        {% if suburb.from_price %}<li>Base price from ${{ suburb.from_price }} per vehicle (not per person). Final fare depends on passenger count, luggage, and pickup time — but once your booking is confirmed, your price is locked in. No extra charges for traffic or flight delays.</li>{% endif %}
+        <li>Door-to-door from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}</li>
+        {% if service_type == 'transfer' %}
+        <li>Dedicated professional driver</li>
+        <li>Meet &amp; greet at arrival terminal with name board</li>
+        <li>Real-time flight monitoring — automatic adjustment for delays</li>
+        {% else %}
+        <li>Meet &amp; greet at arrival terminal</li>
+        <li>Flight tracking — no extra charge for delays</li>
+        <li>Spacious vehicle with room for group luggage</li>
+        {% endif %}
+        <li>Private vehicle, no shared rides</li>
+        <li>Child seats available for $10 each</li>
+      </ul>
+
+      {% else %}
       {% if service_type == 'transfer' %}
       <h2 class="h4 fw-bold mb-3">{{ suburb.name }} Private Airport Transfer</h2>
       <p>
@@ -186,7 +228,7 @@
 
       <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
       <ul>
-        {% if suburb.price %}<li>Base price from ${{ suburb.price }} per vehicle (not per person). Final fare depends on passenger count, luggage, and pickup time — but once your booking is confirmed, your price is locked in. No extra charges for traffic or flight delays.</li>{% endif %}
+        {% if suburb.from_price %}<li>Base price from ${{ suburb.from_price }} per vehicle (not per person). Final fare depends on passenger count, luggage, and pickup time — but once your booking is confirmed, your price is locked in. No extra charges for traffic or flight delays.</li>{% endif %}
         <li>Door-to-door from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}</li>
         {% if service_type == 'transfer' %}
         <li>Dedicated professional driver</li>
@@ -226,15 +268,56 @@
         <li>All bookings are confirmed via email with driver details.</li>
       </ul>
 
-      <h3 class="h5 fw-semibold mt-4 mb-2">About the Route</h3>
+      {% endif %}
+
+      {% with airport_name=region.primary_airport.name|default:"the airport" %}
+      <h3 class="h5 fw-semibold mt-4 mb-2">Getting from {{ suburb.name }} to {{ airport_name }}</h3>
+      {% if suburb.distance_km or suburb.drive_minutes or suburb.route_summary %}
+      <ul>
+        {% if suburb.distance_km %}<li><strong>Distance:</strong> about {{ suburb.distance_km|floatformat:0 }} km by road</li>{% endif %}
+        {% if suburb.drive_minutes %}<li><strong>Drive time:</strong> around {{ suburb.drive_minutes }} minutes outside peak hours{% if suburb.drive_minutes_peak and suburb.drive_minutes_peak > suburb.drive_minutes %}, closer to {{ suburb.drive_minutes_peak }} minutes in the weekday morning rush{% endif %}</li>{% endif %}
+        {% if suburb.route_summary %}<li><strong>Usual route:</strong> via {{ suburb.route_summary }}</li>{% endif %}
+      </ul>
+      {% endif %}
       <p>
-        {{ suburb.name }} is located in {{ suburb.zone }}, {{ region.state_code }}.
-        Your driver will collect you from your door in {{ suburb.name }} and take you
-        directly{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} — no detours, no shared pickups.
+        {{ suburb.name }} is in {{ suburb.zone_phrase }}{% if region.state_code %}, {{ region.state_code }}{% endif %}.
+        Your driver collects you from your door and takes you straight to {{ airport_name }} — no detours, no shared pickups.
       </p>
+      {% endwith %}
+
+      {% if price_table %}
+      <h3 class="h5 fw-semibold mt-4 mb-2">{{ suburb.name }} Airport {% if service_type == 'transfer' %}Transfer{% else %}Shuttle{% endif %} Prices</h3>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-2" style="max-width: 420px;">
+          <thead><tr><th scope="col">Passengers</th><th scope="col" class="text-end">Price per vehicle</th></tr></thead>
+          <tbody>
+            {% for pax, price in price_table %}
+            <tr><td>{% if forloop.first %}1–{{ pax }}{% else %}{{ pax }}{% endif %}</td><td class="text-end fw-semibold">${{ price }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-muted fs-sm">
+        One way, standard luggage, off-peak pickup. Each passenger from the 3rd adds $10.
+        {% for w in surcharges %}{% if forloop.first %}Pickups {% endif %}{{ w.label }} add {{ w.percent }}%{% if not forloop.last %}; {% else %}.{% endif %}{% endfor %}
+        Your price is locked in once your booking is confirmed.
+      </p>
+      {% endif %}
 
       <!-- FAQ -->
       <h3 class="h5 fw-semibold mt-4 mb-2">Frequently Asked Questions</h3>
+      {% if suburb.drive_minutes %}
+      <div class="mb-3">
+        <p class="fw-medium mb-1">How long is the drive from {{ suburb.name }} to {{ region.primary_airport.name|default:"the airport" }}?</p>
+        <p class="text-muted fs-sm">Usually about {{ suburb.drive_minutes }} minutes outside peak hours{% if suburb.distance_km %} ({{ suburb.distance_km|floatformat:0 }} km){% endif %}.{% if suburb.drive_minutes_peak and suburb.drive_minutes_peak > suburb.drive_minutes %} On weekday mornings allow about {{ suburb.drive_minutes_peak }} minutes.{% endif %}</p>
+      </div>
+      {% endif %}
+      {% if price_table %}
+      <div class="mb-3">
+        <p class="fw-medium mb-1">How much is an airport {% if service_type == 'transfer' %}transfer{% else %}shuttle{% endif %} from {{ suburb.name }}?</p>
+        <p class="text-muted fs-sm">{% for pax, price in price_table %}{% if forloop.first %}${{ price }} for 1–{{ pax }} passengers{% elif forloop.counter < 4 %}, ${{ price }} for {{ pax }}{% endif %}{% endfor %} — off-peak, per vehicle, not per person.</p>
+      </div>
+      {% endif %}
       {% if service_type == 'transfer' %}
       <div class="mb-3">
         <p class="fw-medium mb-1">Is the vehicle exclusively for my party?</p>
@@ -270,8 +353,8 @@
         {% else %}
         <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport shuttle?</p>
         {% endif %}
-        {% if suburb.price %}
-        <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
+        {% if suburb.from_price %}
+        <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now — ${{ suburb.from_price }}</a>
         {% else %}
         <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now</a>
         {% endif %}
@@ -296,13 +379,13 @@
           <li class="py-2 border-bottom">
             <div class="d-flex justify-content-between">
               <span class="text-muted">Base Price</span>
-              {% if suburb.price %}
-              <span class="fw-bold" style="color: #eb7828;">${{ suburb.price }}</span>
+              {% if suburb.from_price %}
+              <span class="fw-bold" style="color: #eb7828;">${{ suburb.from_price }}</span>
               {% else %}
               <span class="fw-bold" style="color: #eb7828;">Call Us</span>
               {% endif %}
             </div>
-            {% if suburb.price %}
+            {% if suburb.from_price %}
             <p class="text-muted fs-xs mb-0 mt-1">May vary by passengers, luggage &amp; time.<br>Once confirmed, locked in — no extra charges for traffic or delays.</p>
             {% endif %}
           </li>
@@ -326,14 +409,14 @@
 {% if zone_suburbs %}
 <section class="bg-light py-5">
   <div class="container">
-    <h2 class="h5 fw-semibold mb-3">Other {{ suburb.zone }} Suburbs</h2>
+    <h2 class="h5 fw-semibold mb-3">Nearby {{ suburb.zone_label }} Suburbs</h2>
     <div class="row g-2">
       {% for s in zone_suburbs %}
       <div class="col-6 col-md-4 col-lg-3">
         <a href="/{{ region.slug }}/{{ service_path }}/{{ s.slug }}/"
            class="d-block text-decoration-none p-2 border rounded bg-white">
           <span class="d-block fw-medium text-dark fs-sm">{{ s.name }}</span>
-          <span class="text-muted fs-xs">From ${{ s.price }}</span>
+          <span class="text-muted fs-xs">From ${{ s.from_price }}</span>
         </a>
       </div>
       {% endfor %}
