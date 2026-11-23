@@ -286,7 +286,20 @@ class DriverAgreementAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
 
 
-class InquiryAdmin(admin.ModelAdmin):
+class SearchByIdMixin:
+    """검색창에 숫자만 넣으면 그 ID(부킹·문의 번호)도 찾는다. 이름·이메일 등 기존 검색은 그대로.
+    예: 14863 → 이 번호의 Inquiry. Post 는 price/paid 검색과 함께 ID 일치도 결과에 더한다."""
+
+    def get_search_results(self, request, queryset, search_term):
+        base = queryset
+        results, may_have_duplicates = super().get_search_results(request, queryset, search_term)
+        term = search_term.strip().lstrip('#')
+        if term.isdigit():
+            results = results | base.filter(pk=int(term))
+        return results, may_have_duplicates
+
+
+class InquiryAdmin(SearchByIdMixin, admin.ModelAdmin):
     list_display = ['pickup_date', 'region', 'suburb', 'pickup_time', 'direction', 'no_of_passenger',
                     'return_flight_number', 'is_confirmed', 'cancelled', 'pending', 'created']
     list_filter  = ['region', 'is_confirmed', 'cancelled', 'pending']
@@ -404,7 +417,7 @@ class StripePaymentAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'amount']
 
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(SearchByIdMixin, admin.ModelAdmin):
     list_display = ['pickup_date', 'region', 'name', 'direct_booking', 'suburb', 'pickup_time', 'price', 'paid', 'driver_price',
                     'cancelled', 'pending', 'cash', 'sent_email', 'direction', 'return_flight_number', 'created']
     list_filter  = ['region', 'direct_booking', 'cancelled', 'pending', 'cash', 'bulk_invoice']
