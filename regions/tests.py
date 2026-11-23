@@ -1211,3 +1211,19 @@ class FillSuburbRoutesHelpersTests(TestCase):
         with mock.patch('regions.management.commands.fill_suburb_routes.requests.get', side_effect=[geo, osrm]), \
                 mock.patch('regions.management.commands.fill_suburb_routes.time.sleep'):
             self.assertEqual(Command()._roads(s, airport, 'key', road_km=19.2), '')
+
+
+class BrisbaneClosedRedirectTests(TestCase):
+    """Brisbane closed 2026-10-13; since 2026-11-24 every /brisbane/ URL 301s to the home page."""
+
+    def test_brisbane_urls_redirect_home(self):
+        for url in ['/brisbane/', '/brisbane/airport-shuttle/', '/brisbane/airport-transfer/brisbane-cbd/',
+                    '/brisbane/inquiry/', '/brisbane/maxi-taxi/']:
+            r = self.client.get(url, secure=True)
+            self.assertEqual(r.status_code, 301, url)
+            self.assertEqual(r['Location'], '/', url)
+
+    def test_other_regions_unaffected(self):
+        make_region(slug='melbourne', name='Melbourne')
+        r = self.client.get('/melbourne/airport-shuttle/', secure=True)
+        self.assertNotEqual(r.status_code, 301)

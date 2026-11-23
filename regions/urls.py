@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.views.generic import RedirectView
 from regions.views.wrappers import make_region_view
@@ -10,7 +10,11 @@ app_name = 'regions'
 
 urlpatterns = [
     # City-specific home pages (must come before generic <slug> route)
-    path('brisbane/', views.brisbane_home, name='brisbane_home'),
+    # Brisbane 서비스는 2026-10-13 에 닫았다(Region.is_active=False → 모든 Brisbane 주소가 404).
+    # 다시 열 계획이 없어서 2026-11-24 부터 /brisbane/ 아래 모든 주소를 홈으로 301 — 남아 있는
+    # 외부 링크 가치를 살린다. 다시 열면 이 두 줄을 지우고 brisbane_home 경로를 되살리면 된다.
+    path('brisbane/', RedirectView.as_view(url='/', permanent=True), name='brisbane_home'),
+    re_path(r'^brisbane/.+$', RedirectView.as_view(url='/', permanent=True, query_string=False)),
     path('melbourne/', views.melbourne_home, name='melbourne_home'),
     path('gold-coast/', views.gold_coast_home, name='gold_coast_home'),
 

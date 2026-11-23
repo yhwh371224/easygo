@@ -30,5 +30,6 @@ class SurveyBannerTests(TestCase):
         self._assert_banner('/perth/')
 
     def test_city_pages(self):
-        for url in ['/brisbane/', '/melbourne/', '/gold-coast/']:
+        # /brisbane/ 는 2026-11-24 부터 홈으로 301 (서비스 종료)
+        for url in ['/melbourne/', '/gold-coast/']:
             self._assert_banner(url)
