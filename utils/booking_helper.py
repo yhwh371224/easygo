@@ -1,4 +1,5 @@
 import logging
+from django.db.models import Q
 from django.utils import timezone
 
 from blog.bird_proxy import get_proxy_number
@@ -47,6 +48,14 @@ def reverse_direction(direction):
 # 이 지역 도착 건은 기본 만남 장소를 자동 배정하지 않고, 메일에도 "드라이버에게 연락해 지시를
 # 받고, 연락이 안 되면 이메일" 안내만 넣는다. (어드민에서 수동 지정한 장소는 그대로 존중)
 DRIVER_DIRECTED_REGION_SLUGS = {'melbourne'}
+
+
+def address_q(address):
+    """주소 하나로 예약(Post)·문의(Inquiry)를 찾는 규칙 — 손님 email / 예약자 booker_email /
+    추가 email1 어느 칸에 있어도 찾는다 (대소문자 무시). Email dispatch 와 confirm_booking 이
+    같이 쓴다."""
+    address = (address or '').strip()
+    return Q(email__iexact=address) | Q(booker_email__iexact=address) | Q(email1__iexact=address)
 
 
 def region_arrival_point(region):

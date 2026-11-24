@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
-from utils.booking_helper import normalize_direction
+from utils.booking_helper import normalize_direction, address_q
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from blog.blog_utils import resolve_driver, _net_adjustment, clean_float, booking_balance
@@ -396,12 +396,10 @@ def sending_email_input_data_detail(request):
 
 
 # email dispatching
-def _contact_q(address):
-    """Email dispatch 에 넣은 주소로 예약·문의를 찾는 규칙 한 곳.
-    손님 email / 예약자 booker_email / 추가 email1 어느 칸에 있어도 찾는다 (대소문자 무시).
-    예전에는 옵션마다 email 만, 또는 email+booker_email 만 보는 식으로 제각각이라
-    booker_email 로 넣으면 결제 반영·시간 변경·왕복 처리가 안 됐다."""
-    return Q(email__iexact=address) | Q(booker_email__iexact=address) | Q(email1__iexact=address)
+# Email dispatch 에 넣은 주소로 예약·문의를 찾는 규칙 — utils.booking_helper.address_q 참고.
+# 예전에는 옵션마다 email 만, 또는 email+booker_email 만 보는 식으로 제각각이라
+# booker_email 로 넣으면 결제 반영·시간 변경·왕복 처리가 안 됐다.
+_contact_q = address_q
 
 
 def _return_sibling(booking):

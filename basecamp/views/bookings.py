@@ -28,7 +28,7 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
 from utils import email
-from utils.booking_helper import reverse_direction
+from utils.booking_helper import address_q, reverse_direction
 
 logger = logging.getLogger(__name__)
 
@@ -212,6 +212,16 @@ def _honeypot_blocked(request):
     return render_inquiry_done(request)
 
 
+def _confirm_inquiries(address):
+    """confirm_booking 에 넣은 주소의 문의들. 예약자(booker_email)로 먼저 찾고, 없으면 손님
+    email / email1 로 찾는다 (예약자 우선 순서는 화면의 번호(index) 선택과 맞추기 위해 유지)."""
+    address = (address or '').strip()
+    users = Inquiry.objects.filter(booker_email__iexact=address)
+    if not users.exists():
+        users = Inquiry.objects.filter(Q(email__iexact=address) | Q(email1__iexact=address))
+    return users
+
+
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
 def confirm_booking_detail(request):
@@ -235,9 +245,7 @@ def confirm_booking_detail(request):
     cash = request.POST.get('cash') == 'on'
     prepay = request.POST.get('prepay') == 'on'
 
-    users = Inquiry.objects.filter(booker_email__iexact=email)
-    if not users.exists():
-        users = Inquiry.objects.filter(email__iexact=email)
+    users = _confirm_inquiries(email)
 
     if users.exists() and 0 <= index < len(users):
         user = users[index]
@@ -294,8 +302,12 @@ def confirm_booking_detail(request):
 
     # ── 도착편 + 첫이용 → prepay 강제 ──
     is_arrival = (direction or "").startswith("Pickup from")
+    # 예약자(booker)로 여러 번 예약한 회사 손님도 '첫 이용'으로 보지 않도록 주소 세 칸을 다 본다.
+    customer_q = address_q(email)
+    if user.email:
+        customer_q |= address_q(user.email)
     has_completed_trip = Post.objects.filter(
-        email__iexact=email,
+        customer_q,
         cancelled=False,
         pending=False,
     ).exists()
@@ -349,7 +361,9 @@ def confirm_booking_detail(request):
 
     # Post 모델 저장
     p = Post(
-        name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+        # 손님 email 은 문의에 있는 값을 쓴다. 폼에 넣은 주소(예약자 주소일 수 있음)를 넣으면
+        # 예약자 주소가 손님 email 칸에 들어가고 손님 실제 주소가 사라졌다.
+        name=name, contact=contact, email=user.email or email, company_name=company_name, email1=email1,
         booker_name=booker_name, booker_email=booer_email, booker_contact=getattr(user, 'booker_contact', None),
         pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
         direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
@@ -416,9 +430,7 @@ def confirm_booking_prepay_detail(request):
     cash = request.POST.get('cash') == 'on'
     prepay = request.POST.get('prepay') == 'on'
 
-    users = Inquiry.objects.filter(booker_email__iexact=email)
-    if not users.exists():
-        users = Inquiry.objects.filter(email__iexact=email)
+    users = _confirm_inquiries(email)
 
     if users.exists() and 0 <= index < len(users):
         user = users[index]
@@ -499,7 +511,9 @@ def confirm_booking_prepay_detail(request):
     is_confirmed = False
 
     p = Post(
-        name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+        # 손님 email 은 문의에 있는 값을 쓴다. 폼에 넣은 주소(예약자 주소일 수 있음)를 넣으면
+        # 예약자 주소가 손님 email 칸에 들어가고 손님 실제 주소가 사라졌다.
+        name=name, contact=contact, email=user.email or email, company_name=company_name, email1=email1,
         booker_name=booker_name, booker_email=booer_email, booker_contact=getattr(user, 'booker_contact', None),
         pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
         direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
@@ -522,7 +536,7 @@ def confirm_booking_prepay_detail(request):
         logger.warning(f"[BOOKING PREPAY] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
         # 연타로 들어온 두 번째 요청 — 첫 요청이 만든 Post 로 결제 페이지를 연다.
         existing = Post.objects.filter(
-            Q(email__iexact=email) | Q(booker_email__iexact=email),
+            address_q(email),
             pickup_date=pickup_date_obj,
         ).order_by('-id').first()
         return _redirect_to_prepay_payment(existing, name, final_price)
