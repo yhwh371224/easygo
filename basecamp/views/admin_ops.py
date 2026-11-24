@@ -396,6 +396,40 @@ def sending_email_input_data_detail(request):
 
 
 # email dispatching
+def _contact_q(address):
+    """Email dispatch 에 넣은 주소로 예약·문의를 찾는 규칙 한 곳.
+    손님 email / 예약자 booker_email / 추가 email1 어느 칸에 있어도 찾는다 (대소문자 무시).
+    예전에는 옵션마다 email 만, 또는 email+booker_email 만 보는 식으로 제각각이라
+    booker_email 로 넣으면 결제 반영·시간 변경·왕복 처리가 안 됐다."""
+    return Q(email__iexact=address) | Q(booker_email__iexact=address) | Q(email1__iexact=address)
+
+
+def _return_sibling(booking):
+    """왕복 반대편 Post. handle_return_trip() 이 FK 없이 pickup_date /
+    return_pickup_date 를 서로 맞바꿔 저장하므로 어느 쪽 다리에서든
+    같은 조건으로 짝을 찾을 수 있다 (utils.post_helper._find_return_leg
+    는 아웃바운드에서만 동작해서 여기서는 대칭 버전을 쓴다)."""
+    if not booking.return_pickup_date or not booking.pickup_date:
+        return None
+    qs = (
+        Post.objects
+        .filter(
+            email__iexact=booking.email,
+            pickup_date=booking.return_pickup_date,
+        )
+        .exclude(pk=booking.pk)
+        .exclude(cancelled=True)
+        .order_by('pk')
+    )
+    sibling = qs.filter(return_pickup_date=booking.pickup_date).first()
+    if sibling is None:
+        # 어드민에서 손으로 만든 예약 등 return_pickup_date 가 비어 있는
+        # 구 데이터는 날짜 맞교환이 성립하지 않는다. 같은 이메일 + 우리
+        # return_pickup_date 와 정확히 같은 pickup_date 면 충분히 특정된다.
+        sibling = qs.first()
+    return sibling
+
+
 @login_required
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def email_dispatch_detail(request):
@@ -418,22 +452,17 @@ def email_dispatch_detail(request):
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
 
-        # 2️⃣ User 찾기
-        # booker_email 우선, 없으면 email로 fallback 
+        # 2️⃣ User 찾기 — email / booker_email / email1 어느 칸이든 (_contact_q)
+        by_address = _contact_q(email)
         user = (
-            Post.objects.select_related('driver').filter(booker_email__iexact=email).first()
-            or Post.objects.select_related('driver').filter(
-                Q(email__iexact=email) | Q(email1__iexact=email)
-            ).first()
-            or Inquiry.objects.filter(email__iexact=email).first()
+            Post.objects.select_related('driver').filter(by_address).first()
+            or Inquiry.objects.filter(by_address).first()
         )
 
         if not user:
             logger.warning(f"User not found for email: {email}")
             return JsonResponse({'success': False, 'error': 'User not found'})
         
-        _email = getattr(user, 'booker_email', None) or user.email
-
         pickup_time_12h = None
 
         # 3️⃣ Adjusted pickup time 처리
@@ -441,7 +470,7 @@ def email_dispatch_detail(request):
         # "몇 시까지는 출발해야 하는 마지노선" 안내 문구로만 사용하므로 DB 갱신/SMS는 건너뛴다.
         is_pickup_notice_today = selected_option in ("Pickup Notice for Today", "Pickup Notice for Today - new")
         if adjusted_pickup_time and user and not is_pickup_notice_today:
-            users = Post.objects.filter(email=_email, pickup_date__gte=timezone.localdate()).order_by('pickup_date')
+            users = Post.objects.filter(by_address, pickup_date__gte=timezone.localdate()).order_by('pickup_date')
             if users.exists():
                 closest_user = users.first()
                 closest_user.pickup_time = adjusted_pickup_time
@@ -510,7 +539,7 @@ def email_dispatch_detail(request):
         if is_pickup_notice_today:
             today = timezone.localdate()
             user_today = Post.objects.select_related('driver').filter(
-                Q(email=email) | Q(booker_email=email),
+                by_address,
                 pickup_date=today
             ).order_by('pickup_time').first()
             if user_today:
@@ -562,7 +591,7 @@ def email_dispatch_detail(request):
 
             bookings = list(
                 Post.objects
-                .filter(email__iexact=_email, pickup_date__gte=timezone.localdate())
+                .filter(by_address, pickup_date__gte=timezone.localdate())
                 .order_by('pickup_date')
             )
 
@@ -664,31 +693,6 @@ def email_dispatch_detail(request):
             # 한쪽 다리가 이미 완납이면 이번 배분에서 돈을 못 받아 applied_bookings
             # 에 안 들어가고, 손님 메일에 왕복인데 날짜가 하나만 찍힌다.
             # 돈이 붙은 예약의 짝을 찾아 "이 결제가 커버하는 예약" 목록을 따로 만든다.
-            def _return_sibling(booking):
-                """왕복 반대편 Post. handle_return_trip() 이 FK 없이 pickup_date /
-                return_pickup_date 를 서로 맞바꿔 저장하므로 어느 쪽 다리에서든
-                같은 조건으로 짝을 찾을 수 있다 (utils.post_helper._find_return_leg
-                는 아웃바운드에서만 동작해서 여기서는 대칭 버전을 쓴다)."""
-                if not booking.return_pickup_date or not booking.pickup_date:
-                    return None
-                qs = (
-                    Post.objects
-                    .filter(
-                        email__iexact=booking.email,
-                        pickup_date=booking.return_pickup_date,
-                    )
-                    .exclude(pk=booking.pk)
-                    .exclude(cancelled=True)
-                    .order_by('pk')
-                )
-                sibling = qs.filter(return_pickup_date=booking.pickup_date).first()
-                if sibling is None:
-                    # 어드민에서 손으로 만든 예약 등 return_pickup_date 가 비어 있는
-                    # 구 데이터는 날짜 맞교환이 성립하지 않는다. 같은 이메일 + 우리
-                    # return_pickup_date 와 정확히 같은 pickup_date 면 충분히 특정된다.
-                    sibling = qs.first()
-                return sibling
-
             # 이번 배분에서 돈이 붙은 예약이 하나도 없어도(전액 완납 상태에서 재발송
             # 등) 손님에게는 어느 예약 건인지 보여야 한다 — 그 경우 폼에 넣은
             # 이메일로 조회된 예약을 기준으로 삼는다.
@@ -712,7 +716,7 @@ def email_dispatch_detail(request):
                 warning = (
                     f"⚠️ Gratitude For Payment: 입력 ${payment_amount:.2f} 중 "
                     f"${applied_total:.2f} 만 배분되고 ${leftover:.2f} 가 남았습니다 "
-                    f"({_email}). 잔액이 남은 예약이 없어 어디에도 기록되지 않았습니다 — "
+                    f"({email}). 잔액이 남은 예약이 없어 어디에도 기록되지 않았습니다 — "
                     f"금액 오입력이거나 환불/추가 예약 확인이 필요합니다."
                 )
                 logger.warning(warning)
@@ -727,12 +731,9 @@ def email_dispatch_detail(request):
         # ✅ Cancellation
         if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
 
-            user1 = None
-            if user.return_pickup_time == 'x':
-                try:
-                    user1 = Post.objects.filter(email__iexact=_email)[1]
-                except IndexError:
-                    user1 = None
+            # 왕복 반대편 다리. 예전엔 "같은 이메일의 두 번째 예약"([1])을 잡아서, 예약을 여러 건
+            # 가진 예약자(booker)면 엉뚱한 예약이 취소될 수 있었다.
+            user1 = _return_sibling(user) if user.return_pickup_time == 'x' else None
 
             # 취소 처리
             if user.return_pickup_time == 'x':  # 왕복 예약
@@ -804,8 +805,8 @@ def email_dispatch_detail(request):
             user.cancelled = False
             user.save()      
 
-            if user.return_pickup_time == 'x':
-                user1 = Post.objects.filter(email__iexact=_email)[1]
+            user1 = _return_sibling(user) if user.return_pickup_time == 'x' else None
+            if user1 is not None:
                 user1.cash = True if payment_method == "cash" else False
                 user1.prepay = True if payment_method == "card" else False                
                 user1.pending = False if payment_method == "cash" else True
@@ -820,8 +821,7 @@ def email_dispatch_detail(request):
             unpaid_bookings = []
             for booking in (
                 Post.objects
-                .filter(Q(email__iexact=_email) | Q(booker_email__iexact=_email),
-                        pickup_date__gte=timezone.localdate(), cancelled=False)
+                .filter(by_address, pickup_date__gte=timezone.localdate(), cancelled=False)
                 .order_by('pickup_date', 'pickup_time')
             ):
                 amounts = booking_balance(booking)
