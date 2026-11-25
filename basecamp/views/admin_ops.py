@@ -428,6 +428,28 @@ def _return_sibling(booking):
     return sibling
 
 
+def _is_upcoming(booking):
+    """픽업 시각이 아직 안 지났으면 True. 시각을 못 읽으면 날짜만 본다(오늘 포함)."""
+    from blog.driver_reminder import pickup_datetime
+    if not booking.pickup_date:
+        return False
+    dt = pickup_datetime(booking)
+    if dt is not None:
+        return dt > timezone.now()
+    return booking.pickup_date >= timezone.localdate()
+
+
+def _upcoming_bookings(by_address):
+    """이 주소의 취소 안 된 예약 중 아직 픽업 전인 것 전부 (픽업 순)."""
+    candidates = (
+        Post.objects.select_related('driver', 'region')
+        .filter(by_address, cancelled=False,
+                pickup_date__gte=timezone.localdate() - timedelta(days=1))
+        .order_by('pickup_date', 'pk')
+    )
+    return [b for b in candidates if _is_upcoming(b)]
+
+
 @login_required
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def email_dispatch_detail(request):
@@ -729,43 +751,36 @@ def email_dispatch_detail(request):
         # ✅ Cancellation
         if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
 
-            # 왕복 반대편 다리. 예전엔 "같은 이메일의 두 번째 예약"([1])을 잡아서, 예약을 여러 건
-            # 가진 예약자(booker)면 엉뚱한 예약이 취소될 수 있었다.
-            user1 = _return_sibling(user) if user.return_pickup_time == 'x' else None
-
-            # 취소 처리
-            if user.return_pickup_time == 'x':  # 왕복 예약
-                # ① 첫 번째 ❌ / 두 번째 ❌ (모두 취소)
-                if not remain_first_booking and not remain_return_booking:
-                    user.cancelled = True
-                    user.save(update_fields=['cancelled']) 
-
-                    if user1:
-                        user1.cancelled = True
-                        user1.save(update_fields=['cancelled']) 
-
-                # ② 첫 번째 ✅ / 두 번째 ❌
-                elif remain_first_booking and not remain_return_booking:
-                    user.cancelled = True
-                    user.save(update_fields=['cancelled']) 
-
-                # ③ 첫 번째 ❌ / 두 번째 ✅
-                elif not remain_first_booking and remain_return_booking:
-                    if user1:
-                        user1.cancelled = True
-                        user1.save(update_fields=['cancelled']) 
-
-            else:  # 단일 예약
+            # 취소는 지금 시점 이후 예약 전부. 예전엔 "가장 최근에 만든" 예약 하나(+왕복 짝)만
+            # 취소해서 이미 픽업이 끝난 과거 예약이 취소되기도 했다 (2026-11-26: 11/23 완료 건이
+            # 11/29 대신 취소됨). 손님 취소는 보통 남은 예약 전부라 아직 픽업 전인 예약을
+            # 모두 취소한다 — Keep first/second 체크박스는 취소에서는 쓰지 않는다.
+            if isinstance(user, Post):
+                cancelled_bookings = _upcoming_bookings(by_address)
+                if not cancelled_bookings:
+                    logger.warning(f"Cancellation skipped — no upcoming booking for {email}")
+                    return JsonResponse({'success': False, 'error': 'No upcoming booking to cancel (past bookings cannot be cancelled)'})
+                for booking in cancelled_bookings:
+                    booking.cancelled = True
+                    booking.save(update_fields=['cancelled'])
+                user = cancelled_bookings[0]
+                context['name'] = user.name
+            else:  # Inquiry
                 user.cancelled = True
-                user.save(update_fields=['cancelled']) 
+                user.save(update_fields=['cancelled'])
+                cancelled_bookings = [user]
 
-            # context 업데이트 (한 번만)
+            cancelled_dates = [b.pickup_date for b in cancelled_bookings if b.pickup_date]
             context.update({
+                'cancelled_dates': cancelled_dates,
                 'booking_date': user.pickup_date,
-                'return_booking_date': user1.pickup_date if user1 else None,
-                'remain_first_booking': remain_first_booking,
-                'remain_return_booking': remain_return_booking,
             })
+
+            date_list = ", ".join(d.strftime('%Y-%m-%d') for d in cancelled_dates) or "날짜 없음"
+            send_telegram_task.delay(
+                f"🚫 {selected_option}: {email}\n"
+                f"{len(cancelled_bookings)}건 모두 취소됨 — {date_list}"
+            )
 
             # Apology SMS
             if selected_option == "Apologies Cancellation of Booking" and user.contact:

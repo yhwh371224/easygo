@@ -161,31 +161,8 @@
                                                     but it is essential for us to manage our bookings effectively.
                                                     <br><br>													
 
-													{% if return_booking_date %}
-
-														{% if not remain_first_booking and not remain_return_booking %}
-															{# ① 둘 다 취소 #}
-															We inform that your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> 
-															and <strong>{{ booking_date|date:"Y-m-d" }}</strong> have been canceled.
-
-														{% elif remain_first_booking and not remain_return_booking %}
-															{# ② 첫 번째 ✅ / 두 번째(return) ❌ → return 날짜만 취소 #}
-															We inform that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been canceled.
-															<br><br>
-															Please note that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> remains active.
-
-														{% elif not remain_first_booking and remain_return_booking %}
-															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
-															We inform that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been canceled.
-															<br><br>
-															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
-
-														{% endif %}
-														
-													{% else %}
-														{# 단일 예약 취소 #}
-														We inform that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been canceled.
-													{% endif %}									
+													{# 지금 시점 이후 예약 전부 취소 (cancelled_dates) #}
+													We inform that your {% if cancelled_dates|length > 1 %}bookings on {% for d in cancelled_dates %}<strong>{{ d|date:"Y-m-d" }}</strong>{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %} have{% else %}booking on {% for d in cancelled_dates %}<strong>{{ d|date:"Y-m-d" }}</strong>{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %} has{% endif %} been canceled.
 
                                                     Thank you for your understanding.
                                                     <br><br> 

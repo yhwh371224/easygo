@@ -61,21 +61,58 @@ class EmailDispatchAddressLookupTests(TestCase):
         b.refresh_from_db()
         self.assertEqual(b.pickup_time, '08:15')
 
-    def test_round_trip_cancel_hits_the_sibling_not_another_booking(self):
+    def test_cancel_cancels_all_upcoming_and_skips_past(self):
+        # 2026-11-26: 11/23 (done) was created last, so it got cancelled instead of 11/29.
+        # Now every booking still ahead of us is cancelled; finished ones are untouched.
+        f1 = self._post(pickup_date=self.today + datetime.timedelta(days=3))
+        f2 = self._post(booker_email='boss@company.com', email='x@y.com',
+                        pickup_date=self.today + datetime.timedelta(days=10))
+        f2.email1 = 'pax@example.com'
+        f2.save()
+        past = self._post(pickup_date=self.today - datetime.timedelta(days=3))
+        other = self._post(email='someone@else.com', pickup_date=self.today + datetime.timedelta(days=5))
+        self._dispatch('pax@example.com', 'Cancellation by Client')
+        for b in (f1, f2, past, other):
+            b.refresh_from_db()
+        self.assertTrue(f1.cancelled)
+        self.assertTrue(f2.cancelled)
+        self.assertFalse(past.cancelled)
+        self.assertFalse(other.cancelled)
+        ctx = self.send_email.call_args.args[4]
+        self.assertEqual(ctx['cancelled_dates'], [f1.pickup_date, f2.pickup_date])
+        msg = self.mocks[2].delay.call_args.args[0]
+        self.assertIn('2건 모두 취소', msg)
+        self.assertIn(f1.pickup_date.strftime('%Y-%m-%d'), msg)
+        self.assertIn(f2.pickup_date.strftime('%Y-%m-%d'), msg)
+
+    def test_cancel_round_trip_ignores_keep_checkboxes(self):
         out_date = self.today + datetime.timedelta(days=3)
         back_date = self.today + datetime.timedelta(days=10)
-        # an unrelated booking by the same booker
-        other = self._post(email='someone@else.com', booker_email='boss@company.com',
-                           pickup_date=self.today + datetime.timedelta(days=20))
-        outbound = self._post(booker_email='boss@company.com', pickup_date=out_date, return_pickup_date=back_date)
-        ret = self._post(booker_email='boss@company.com', pickup_date=back_date, return_pickup_date=out_date,
-                         return_pickup_time='x')
-        self._dispatch('boss@company.com', 'Cancellation by Client')
-        for b in (other, outbound, ret):
-            b.refresh_from_db()
-        self.assertTrue(ret.cancelled)
+        outbound = self._post(pickup_date=out_date, return_pickup_date=back_date)
+        ret = self._post(pickup_date=back_date, return_pickup_date=out_date, return_pickup_time='x')
+        self._dispatch('pax@example.com', 'Cancellation of Booking', remain_first_booking='on')
+        outbound.refresh_from_db()
+        ret.refresh_from_db()
         self.assertTrue(outbound.cancelled)
-        self.assertFalse(other.cancelled)
+        self.assertTrue(ret.cancelled)
+
+    def test_cancel_email_renders_all_dates(self):
+        from basecamp.basecamp_utils import render_email_template
+        import datetime as dt
+        html = render_email_template('html_email-response-cancelby.html', {
+            'name': 'Pax', 'cancelled_dates': [dt.date(2026, 11, 29), dt.date(2026, 12, 3), dt.date(2026, 12, 9)]})
+        self.assertIn('bookings on <strong>2026-11-29</strong>, <strong>2026-12-03</strong> and <strong>2026-12-09</strong> have', html)
+        html = render_email_template('html_email-response-cancelby.html', {
+            'name': 'Pax', 'cancelled_dates': [dt.date(2026, 11, 29)]})
+        self.assertIn('booking on <strong>2026-11-29</strong> has', html)
+
+    def test_cancel_with_only_past_bookings_does_nothing(self):
+        past = self._post(pickup_date=self.today - datetime.timedelta(days=3))
+        r = self._dispatch('pax@example.com', 'Cancellation by Client')
+        past.refresh_from_db()
+        self.assertFalse(past.cancelled)
+        self.assertFalse(self.send_email.called)
+        self.assertIn(b'No upcoming booking', r.content)
 
     def test_inquiry_found_by_booker_email(self):
         Inquiry.objects.create(name='Pax', email='pax@example.com', booker_email='boss@company.com',
