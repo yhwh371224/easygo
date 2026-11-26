@@ -88,6 +88,13 @@ def handle_message(message):
                   "You're already connected. Job reminders will arrive here.")
             return
 
+    from fleet.fuel import handle_driver_message, is_fuel_message
+    if is_fuel_message(text):
+        driver = Driver.objects.filter(telegram_chat_id=chat_id).first()
+        if driver:
+            _safe(telegram_driver.send_message, chat_id, handle_driver_message(driver, text))
+            return
+
     _safe(telegram_driver.send_message, chat_id, NOT_LINKED_REPLY)
 
 

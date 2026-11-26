@@ -296,6 +296,11 @@ class Command(BaseCommand):
                         if DirectorLoan.record_personal_expense(t) is not None:
                             loans_created += 1
             self.stdout.write(self.style.SUCCESS(f"\nImported {created} transactions."))
+            from fleet.fuel import match_bank_transactions
+            fuel_matched = match_bank_transactions()
+            if fuel_matched:
+                self.stdout.write(self.style.SUCCESS(
+                    f"Matched {fuel_matched} fuel transaction(s) to fleet fuel logs."))
             if loans_created:
                 self.stdout.write(self.style.SUCCESS(
                     f"Recorded {loans_created} director loan repayment(s) for "

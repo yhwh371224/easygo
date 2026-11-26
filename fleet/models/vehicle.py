@@ -20,6 +20,10 @@ class Vehicle(models.Model):
         related_name='vehicles', verbose_name='Assigned driver',
     )
     odometer_km = models.PositiveIntegerField(null=True, blank=True, verbose_name='Current odometer (km)')
+    next_service_km = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Next service due (km)',
+        help_text='주유 기록 텔레그램 답장에 "다음 오일 교환까지 N km" 로 표시된다.',
+    )
     is_active = models.BooleanField(default=True, verbose_name='Active')
     notes = models.TextField(blank=True, verbose_name='Notes')
 
