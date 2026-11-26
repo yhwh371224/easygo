@@ -1,16 +1,16 @@
 from django.contrib import admin
 from django.db import transaction
 
-from .fuel import economy_for, match_bank_transactions, refresh_stored_values
+from .fuel import match_bank_transactions, refresh_stored_values
 from .models import Vehicle, ServiceVisit, ServiceItem, FuelLog
 
 
 class FuelLogInline(admin.TabularInline):
     model = FuelLog
     extra = 0
-    fields = ('date', 'odometer_km', 'litres', 'amount', 'full_tank',
+    fields = ('date', 'distance_km', 'odometer_km', 'litres', 'amount',
               'price_per_litre', 'km_per_l', 'cost_per_km', 'notes')
-    readonly_fields = ('price_per_litre', 'km_per_l', 'cost_per_km')
+    readonly_fields = ('distance_km', 'price_per_litre', 'km_per_l', 'cost_per_km')
     show_change_link = True
     can_delete = False
 
@@ -78,46 +78,43 @@ class ServiceVisitAdmin(admin.ModelAdmin):
 @admin.register(FuelLog)
 class FuelLogAdmin(admin.ModelAdmin):
     list_display = (
-        'date', 'vehicle', 'odometer_km', 'litres', 'amount', 'price_per_litre',
-        'full_tank', 'distance', 'km_per_l', 'l_per_100km', 'cost_per_km', 'driver', 'bank_matched',
+        'date', 'distance_col', 'odometer_col', 'litres', 'amount_col',
+        'price_col', 'km_per_l_col', 'cost_per_km_col',
     )
-    list_filter = ('vehicle', 'full_tank', 'source')
+    list_filter = ('vehicle', 'source')
     date_hierarchy = 'date'
     search_fields = ('vehicle__plate_number', 'notes')
-    raw_id_fields = ('bank_transaction',)
-    readonly_fields = ('price_per_litre', 'km_per_l', 'cost_per_km', 'source', 'created_at')
+    readonly_fields = ('distance_km', 'price_per_litre', 'km_per_l', 'cost_per_km', 'source', 'created_at')
     fields = (
-        'vehicle', 'date', 'odometer_km', 'litres', 'amount', 'full_tank', 'notes',
-        'price_per_litre', 'km_per_l', 'cost_per_km',
-        'driver', 'bank_transaction', 'source', 'created_at',
+        'vehicle', 'date', 'odometer_km', 'litres', 'amount', 'notes',
+        'distance_km', 'price_per_litre', 'km_per_l', 'cost_per_km',
+        'source', 'created_at',
     )
-    actions = ['match_bank']
 
-    def _eco(self, obj):
-        cache = getattr(self, '_eco_cache', None)
-        if cache is None:
-            cache = self._eco_cache = {}
-        if obj.pk not in cache:
-            cache[obj.pk] = economy_for(obj)
-        return cache[obj.pk]
+    # 목록 머리글 이름. (Admin CSS 가 머리글을 대문자로 보여준다.)
+    @admin.display(description='총Km', ordering='distance_km')
+    def distance_col(self, obj):
+        return obj.distance_km if obj.distance_km is not None else '—'
 
-    def changelist_view(self, request, extra_context=None):
-        self._eco_cache = {}
-        return super().changelist_view(request, extra_context)
+    @admin.display(description='Odometer', ordering='odometer_km')
+    def odometer_col(self, obj):
+        return obj.odometer_km
 
-    @admin.display(description='km')
-    def distance(self, obj):
-        eco = self._eco(obj)
-        return eco['distance_km'] if eco else '—'
+    @admin.display(description='Amount', ordering='amount')
+    def amount_col(self, obj):
+        return obj.amount
 
-    @admin.display(description='L/100km')
-    def l_per_100km(self, obj):
-        eco = self._eco(obj)
-        return eco['l_per_100km'] if eco else '—'
+    @admin.display(description='$/1L', ordering='price_per_litre')
+    def price_col(self, obj):
+        return obj.price_per_litre if obj.price_per_litre is not None else '—'
 
-    @admin.display(description='Bank', boolean=True)
-    def bank_matched(self, obj):
-        return obj.bank_transaction_id is not None
+    @admin.display(description='km/1L', ordering='km_per_l')
+    def km_per_l_col(self, obj):
+        return obj.km_per_l if obj.km_per_l is not None else '—'
+
+    @admin.display(description='$/1km', ordering='cost_per_km')
+    def cost_per_km_col(self, obj):
+        return obj.cost_per_km if obj.cost_per_km is not None else '—'
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -138,8 +135,3 @@ class FuelLogAdmin(admin.ModelAdmin):
         super().delete_queryset(request, queryset)
         for vehicle_id in vehicle_ids:
             refresh_stored_values(vehicle_id)
-
-    @admin.action(description='Match selected with bank fuel transactions')
-    def match_bank(self, request, queryset):
-        n = match_bank_transactions(queryset.filter(bank_transaction__isnull=True))
-        self.message_user(request, f'{n} fuel log(s) matched to bank transactions.')

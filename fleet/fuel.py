@@ -100,6 +100,7 @@ def refresh_stored_values(vehicle_id):
         ppl = _q(log.amount / log.litres, '0.001') if log.litres else None
         eco = economy_for(log)
         values = {
+            'distance_km': eco['distance_km'] if eco else None,
             'price_per_litre': ppl,
             'km_per_l': eco['km_per_l'] if eco else None,
             'cost_per_km': eco['cost_per_km'] if eco else None,

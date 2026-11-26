@@ -42,15 +42,19 @@ class FuelLog(models.Model):
     # (첫 기록, 가득 아님 기록은 비어 있음).
     price_per_litre = models.DecimalField(
         max_digits=6, decimal_places=3, null=True, blank=True, editable=False,
-        verbose_name='$/L',
+        verbose_name='$/1L',
+    )
+    distance_km = models.PositiveIntegerField(
+        null=True, blank=True, editable=False, verbose_name='총Km',
+        help_text='직전 가득 주유 이후 달린 거리',
     )
     km_per_l = models.DecimalField(
         max_digits=5, decimal_places=1, null=True, blank=True, editable=False,
-        verbose_name='km/L',
+        verbose_name='km/1L',
     )
     cost_per_km = models.DecimalField(
         max_digits=6, decimal_places=2, null=True, blank=True, editable=False,
-        verbose_name='$/km',
+        verbose_name='$/1km',
     )
 
     class Meta:

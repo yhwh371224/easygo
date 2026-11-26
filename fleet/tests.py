@@ -1,3 +1,4 @@
+import re
 from datetime import timedelta
 from unittest.mock import patch
 
@@ -82,6 +83,7 @@ class FuelMessageTests(FuelBase):
         self.assertEqual(log.price_per_litre, Decimal('2.589'))
         self.assertEqual(log.km_per_l, Decimal('10.3'))
         self.assertEqual(log.cost_per_km, Decimal('0.25'))
+        self.assertEqual(log.distance_km, 544)
         first_log = FuelLog.objects.get(odometer_km=672612)
         self.assertEqual(first_log.price_per_litre, Decimal('2.654'))
         self.assertIsNone(first_log.km_per_l)    # 직전 가득 기록이 없어 구간 없음
@@ -223,6 +225,18 @@ class FuelAdminTests(FuelBase):
         r = c.get(reverse('admin:fleet_fuellog_changelist'), secure=True)
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, '10.3')
+        html = r.content.decode()
+        headers = re.findall(r'<th class="[^"]*column-(\w+)[^"]*" scope="col"', html)
+        self.assertEqual(headers, ['date', 'distance_col', 'odometer_col', 'litres', 'amount_col',
+                                   'price_col', 'km_per_l_col', 'cost_per_km_col'])
+        for label in ('총Km', '>Odometer<', '>Amount<', '$/1L', 'Km/1L', '$/1km'):
+            self.assertContains(r, label)
+        self.assertContains(r, '<td class="field-distance_col">544</td>', html=False)
+        for hidden in ('Full tank', 'Logged by', 'L/100km', 'L/1km', '>Bank<', '>Vehicle<'):
+            self.assertNotContains(r, hidden)
+        add = c.get(reverse('admin:fleet_fuellog_add'), secure=True)
+        for hidden in ('Full tank', 'Logged by', 'Bank transaction'):
+            self.assertNotContains(add, hidden)
         r = c.get(reverse('admin:fleet_vehicle_change', args=[self.vehicle.pk]), secure=True)
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, 'Next service due')
