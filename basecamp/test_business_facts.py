@@ -44,14 +44,22 @@ class BusinessFactsTests(TestCase):
         self.assertContains(r, 'EasyGo in numbers')
         self.assertContains(r, '50%')
         self.assertContains(r, 'started in Sydney in 2014')
-        self.assertContains(r, 'under new management')
-        self.assertContains(r, 'ABN 25 697 358 535')
+        self.assertContains(r, 'href="/company/"')
+        self.assertNotContains(r, 'owner')
+
+    def test_company_page_has_the_details(self, *_):
+        r = self.client.get('/company/', secure=True)
+        self.assertEqual(r.status_code, 200)
+        for text in ('ABN: 25 697 358 535', '2014', 'under new management', '50 minutes', '33%'):
+            self.assertContains(r, text)
+        self.assertNotContains(r, 'owner')
+        self.assertContains(self.client.get('/', secure=True), 'href="/company/"')   # 푸터 링크
 
     @patch.object(business_facts, 'FOUNDED_YEAR', None)
     @patch.object(business_facts, 'ABN', '')
     def test_unconfirmed_facts_hidden(self, *_):
-        r = self.client.get('/about_us/', secure=True)
-        self.assertNotContains(r, 'Founded in')
+        r = self.client.get('/company/', secure=True)
+        self.assertNotContains(r, 'History')
         self.assertNotContains(r, 'ABN')
 
     def test_llms_txt(self, *_):
@@ -75,8 +83,8 @@ class BusinessFactsTests(TestCase):
     @patch.object(business_facts, 'FOUNDED_YEAR', 2019)
     @patch.object(business_facts, 'P2P_AUTHORISATION', 'BSP-123')
     def test_optional_facts_appear_once_filled(self, *_):
-        r = self.client.get('/about_us/', secure=True)
-        self.assertContains(r, 'Founded in 2019')
+        r = self.client.get('/company/', secure=True)
+        self.assertContains(r, '2019: EasyGo Airport Shuttle started')
         self.assertContains(r, 'BSP-123')
         for b in ld_blocks(r.content.decode()):
             if b.get('@type') == 'LocalBusiness':

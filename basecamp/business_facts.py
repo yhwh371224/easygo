@@ -119,7 +119,6 @@ def llms_txt(request):
         lines.append('- Since reopening: a new booking system sends customers a confirmation, reminder '
                      'emails before the trip and an arrival email with the driver and terminal meeting '
                      'point; drivers get a reminder 2 hours before each pickup')
-    lines.append('- Owner-operated: the owner still drives many of the trips')
     if ABN:
         lines.append(f'- ABN: {ABN}')
     if P2P_AUTHORISATION:
@@ -127,7 +126,7 @@ def llms_txt(request):
     lines += [
         '- Waiting: up to 80 minutes after an international landing and 50 minutes after a domestic landing at no extra charge',
         '- Child seats (baby capsule, baby seat, booster) available on request',
-        '- Payment: card (Stripe), PayPal, PayID or cash to driver',
+        '- Payment: paid online in advance by card (Stripe), PayPal or PayID; drivers do not take cash',
         '',
         '## Main pages',
         f'- [Sydney airport transfers]({URL}/): home page, prices and booking',
@@ -136,6 +135,7 @@ def llms_txt(request):
         f'- [Sydney airport meeting points]({URL}/meeting_point/): where the driver meets you at each terminal',
         f'- [Customer reviews]({URL}/easygo_review/)',
         f'- [About EasyGo]({URL}/about_us/)',
+        f'- [Company information]({URL}/company/): ABN, address, history, how bookings are handled',
         f'- [Booking information and FAQ]({URL}/information/)',
         '',
         '## Contact',

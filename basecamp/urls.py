@@ -10,6 +10,7 @@ app_name = "basecamp"
 urlpatterns = [
     path('', views.home, name='home'),
     path('about_us/', views.about_us, name='about_us'),
+    path('company/', views.company, name='company'),
     path('booking/', views.booking, name='booking'),
     path('book-direct/', views.direct_booking, name='direct_booking'),
     path('sovereign_chauffeurs_v2/', views.sovereign_chauffeurs_v2, name='sovereign_chauffeurs_v2'),
