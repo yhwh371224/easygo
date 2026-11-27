@@ -20,9 +20,11 @@ LONGITUDE = '151.2017'
 OPENING_HOURS = 'Mo-Su 00:00-23:59'   # 본문의 "24/7" 과 맞춘다
 
 # ── 오너 확인이 필요한 값 (확인 전에는 비워 둔다) ─────────────────────────
-FOUNDED_YEAR = 2015             # 오너 확인 2026-11-28: 2015 시작, 2020 코로나로 중단, 2023 초 재개
+FOUNDED_YEAR = 2014             # 오너 확인 2026-11-28: 2014 시작, 2020 코로나로 중단, 2023 초 새 경영진으로 재개
 PAUSED_YEAR = 2020
 REOPENED_YEAR = 2023            # 예약 DB 첫 운행 2023-01-06
+# 구글 리뷰가 처음 달린 연도 — GBP 에서 '오래된 순'으로 확인 후 채운다 (사이트 리뷰 DB 는 2022-02 부터뿐).
+GOOGLE_REVIEWS_SINCE_YEAR = None
 P2P_AUTHORISATION = ''          # NSW Point to Point Transport Commission 인가 번호
 ABN = '25 697 358 535'          # 메일 푸터·ATO PRN 과 같은 번호 (오너가 공개하라고 함)
 
@@ -84,6 +86,7 @@ def context(request):
         'opening_hours': OPENING_HOURS, 'founded_year': FOUNDED_YEAR,
         'p2p_authorisation': P2P_AUTHORISATION, 'abn': ABN, 'same_as': SAME_AS,
         'paused_year': PAUSED_YEAR, 'reopened_year': REOPENED_YEAR,
+        'google_reviews_since_year': GOOGLE_REVIEWS_SINCE_YEAR,
     }}
 
 
@@ -108,7 +111,8 @@ def llms_txt(request):
         f'- {n["group_pct"]}% of bookings are groups of 5 or more passengers',
     ]
     if reviews.get('google_rating') and reviews.get('google_review_count'):
-        lines.append(f'- Google rating: {reviews["google_rating"]} from {reviews["google_review_count"]} reviews')
+        since = f', collected since {GOOGLE_REVIEWS_SINCE_YEAR}' if GOOGLE_REVIEWS_SINCE_YEAR else ''
+        lines.append(f'- Google rating: {reviews["google_rating"]} from {reviews["google_review_count"]} reviews{since}')
     if FOUNDED_YEAR:
         lines.append(f'- Founded in {FOUNDED_YEAR} in Sydney; paused in {PAUSED_YEAR} during COVID-19 '
                      f'and reopened under new management in early {REOPENED_YEAR}')

@@ -73,7 +73,7 @@
         <li><strong>{{ trips_label }}</strong> completed airport, cruise and point-to-point trips</li>
         <li><strong>{{ customers_label }}</strong> customers, and <strong>{{ numbers.repeat_pct }}%</strong> of them have booked with us more than once</li>
         <li><strong>{{ numbers.group_pct }}%</strong> of bookings are groups of 5 or more — families, sports teams and corporate groups in 7–13 seater vehicles</li>
-        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
+        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews{% if facts.google_reviews_since_year %}, written by real customers since {{ facts.google_reviews_since_year }}{% endif %} — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
         <li>Every flight is tracked. We wait up to <strong>80 minutes</strong> after an international landing and <strong>50 minutes</strong> after a domestic landing at no extra charge</li>
         <li>Fixed price confirmed before you travel — no surge pricing, no charge for traffic or flight delays</li>
       </ul>

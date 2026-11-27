@@ -43,7 +43,7 @@ class BusinessFactsTests(TestCase):
         r = self.client.get('/about_us/', secure=True)
         self.assertContains(r, 'EasyGo in numbers')
         self.assertContains(r, '50%')
-        self.assertContains(r, 'started in Sydney in 2015')
+        self.assertContains(r, 'started in Sydney in 2014')
         self.assertContains(r, 'under new management')
         self.assertContains(r, 'ABN 25 697 358 535')
 
@@ -60,7 +60,7 @@ class BusinessFactsTests(TestCase):
         self.assertTrue(r['Content-Type'].startswith('text/plain'))
         self.assertIn('# EasyGo Airport Shuttle', r.content.decode())
         self.assertIn('since reopening in 2023: 3', r.content.decode())
-        self.assertIn('Founded in 2015', r.content.decode())
+        self.assertIn('Founded in 2014', r.content.decode())
 
     def test_home_schema_is_valid_json_with_same_as_and_real_geo(self, *_):
         r = self.client.get('/', secure=True)
