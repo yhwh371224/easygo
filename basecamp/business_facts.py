@@ -20,9 +20,11 @@ LONGITUDE = '151.2017'
 OPENING_HOURS = 'Mo-Su 00:00-23:59'   # 본문의 "24/7" 과 맞춘다
 
 # ── 오너 확인이 필요한 값 (확인 전에는 비워 둔다) ─────────────────────────
-FOUNDED_YEAR = None             # 실제 사업 시작 연도 (DB 기록은 2023 부터)
+FOUNDED_YEAR = 2015             # 오너 확인 2026-11-28: 2015 시작, 2020 코로나로 중단, 2023 초 재개
+PAUSED_YEAR = 2020
+REOPENED_YEAR = 2023            # 예약 DB 첫 운행 2023-01-06
 P2P_AUTHORISATION = ''          # NSW Point to Point Transport Commission 인가 번호
-ABN = ''                        # 공개해도 된다고 하면 채운다
+ABN = '25 697 358 535'          # 메일 푸터·ATO PRN 과 같은 번호 (오너가 공개하라고 함)
 
 # 다른 사이트의 EasyGo 프로필 — schema sameAs. AI 가 같은 회사로 묶는 근거.
 SAME_AS = [
@@ -81,6 +83,7 @@ def context(request):
         'postcode': POSTCODE, 'latitude': LATITUDE, 'longitude': LONGITUDE,
         'opening_hours': OPENING_HOURS, 'founded_year': FOUNDED_YEAR,
         'p2p_authorisation': P2P_AUTHORISATION, 'abn': ABN, 'same_as': SAME_AS,
+        'paused_year': PAUSED_YEAR, 'reopened_year': REOPENED_YEAR,
     }}
 
 
@@ -100,14 +103,16 @@ def llms_txt(request):
         '',
         '## Key facts',
         f'- Address: {STREET}, {LOCALITY} {REGION} {POSTCODE}, Australia',
-        f'- Completed trips: {rounded_down(n["trips"])} (from our booking records, {n["as_of"]:%B %Y})',
+        f'- Completed trips since reopening in {REOPENED_YEAR}: {rounded_down(n["trips"])} (booking records, {n["as_of"]:%B %Y})',
         f'- Customers: {rounded_down(n["customers"])}; {n["repeat_pct"]}% have booked more than once',
         f'- {n["group_pct"]}% of bookings are groups of 5 or more passengers',
     ]
     if reviews.get('google_rating') and reviews.get('google_review_count'):
         lines.append(f'- Google rating: {reviews["google_rating"]} from {reviews["google_review_count"]} reviews')
     if FOUNDED_YEAR:
-        lines.append(f'- Operating since: {FOUNDED_YEAR}')
+        lines.append(f'- Founded in {FOUNDED_YEAR} in Sydney; paused in {PAUSED_YEAR} during COVID-19 '
+                     f'and running again since early {REOPENED_YEAR}')
+    lines.append('- Owner-operated: the owner still drives many of the trips')
     if ABN:
         lines.append(f'- ABN: {ABN}')
     if P2P_AUTHORISATION:

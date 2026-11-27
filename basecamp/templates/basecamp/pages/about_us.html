@@ -52,8 +52,15 @@
   <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5 content-card-box">
     <div class="entry-content">
 
+      {% if facts.founded_year %}
+      <h2>Our story</h2>
+      <p>EasyGo Airport Shuttle started in Sydney in {{ facts.founded_year }}, offering private airport transfers in 7–13 seater vehicles for families, groups and travellers with plenty of luggage — trips that don't fit in a taxi or rideshare.</p>
+      <p>In {{ facts.paused_year }}, when COVID-19 shut down air travel, we paused the business like many small transport operators. We started driving again in early {{ facts.reopened_year }} with the same idea: a fixed price agreed before you travel, a driver who tracks your flight and waits for you, and a vehicle big enough for everyone and their bags.</p>
+      <p>Since reopening we have grown from Sydney to Melbourne and the Gold Coast. EasyGo is owner-operated — the owner still drives many of the trips and answers bookings personally, which is why so many customers come back.</p>
+      {% endif %}
+
       <h2>EasyGo in numbers</h2>
-      <p class="text-muted fs-sm">Counted from our own booking records{% if numbers.as_of %} as of {{ numbers.as_of|date:"F Y" }}{% endif %}.</p>
+      <p class="text-muted fs-sm">Counted from our own booking records since we reopened in {{ facts.reopened_year }}{% if numbers.as_of %}, as of {{ numbers.as_of|date:"F Y" }}{% endif %}.</p>
       <ul>
         <li><strong>{{ trips_label }}</strong> completed airport, cruise and point-to-point trips</li>
         <li><strong>{{ customers_label }}</strong> customers, and <strong>{{ numbers.repeat_pct }}%</strong> of them have booked with us more than once</li>
@@ -66,7 +73,7 @@
       <h2>Company details</h2>
       <ul>
         <li>{{ facts.name }}, {{ facts.street }}, {{ facts.locality }} {{ facts.region }} {{ facts.postcode }}</li>
-        {% if facts.founded_year %}<li>Operating since {{ facts.founded_year }}</li>{% endif %}
+        {% if facts.founded_year %}<li>Founded in {{ facts.founded_year }}; running again since {{ facts.reopened_year }} after the COVID-19 pause</li>{% endif %}
         {% if facts.abn %}<li>ABN {{ facts.abn }}</li>{% endif %}
         {% if facts.p2p_authorisation %}<li>Authorised by the NSW Point to Point Transport Commission ({{ facts.p2p_authorisation }})</li>{% endif %}
         <li>Sydney, Melbourne and Gold Coast airport transfers, 24/7 by booking</li>

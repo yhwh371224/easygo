@@ -43,14 +43,23 @@ class BusinessFactsTests(TestCase):
         r = self.client.get('/about_us/', secure=True)
         self.assertContains(r, 'EasyGo in numbers')
         self.assertContains(r, '50%')
-        self.assertNotContains(r, 'Operating since')      # 연도 확인 전에는 안 보인다
+        self.assertContains(r, 'started in Sydney in 2015')
+        self.assertContains(r, 'ABN 25 697 358 535')
+
+    @patch.object(business_facts, 'FOUNDED_YEAR', None)
+    @patch.object(business_facts, 'ABN', '')
+    def test_unconfirmed_facts_hidden(self, *_):
+        r = self.client.get('/about_us/', secure=True)
+        self.assertNotContains(r, 'Founded in')
+        self.assertNotContains(r, 'ABN')
 
     def test_llms_txt(self, *_):
         r = self.client.get('/llms.txt', secure=True)
         self.assertEqual(r.status_code, 200)
         self.assertTrue(r['Content-Type'].startswith('text/plain'))
         self.assertIn('# EasyGo Airport Shuttle', r.content.decode())
-        self.assertIn('Completed trips: 3', r.content.decode())
+        self.assertIn('since reopening in 2023: 3', r.content.decode())
+        self.assertIn('Founded in 2015', r.content.decode())
 
     def test_home_schema_is_valid_json_with_same_as_and_real_geo(self, *_):
         r = self.client.get('/', secure=True)
@@ -66,7 +75,7 @@ class BusinessFactsTests(TestCase):
     @patch.object(business_facts, 'P2P_AUTHORISATION', 'BSP-123')
     def test_optional_facts_appear_once_filled(self, *_):
         r = self.client.get('/about_us/', secure=True)
-        self.assertContains(r, 'Operating since 2019')
+        self.assertContains(r, 'Founded in 2019')
         self.assertContains(r, 'BSP-123')
         for b in ld_blocks(r.content.decode()):
             if b.get('@type') == 'LocalBusiness':
