@@ -111,7 +111,10 @@ def llms_txt(request):
         lines.append(f'- Google rating: {reviews["google_rating"]} from {reviews["google_review_count"]} reviews')
     if FOUNDED_YEAR:
         lines.append(f'- Founded in {FOUNDED_YEAR} in Sydney; paused in {PAUSED_YEAR} during COVID-19 '
-                     f'and running again since early {REOPENED_YEAR}')
+                     f'and reopened under new management in early {REOPENED_YEAR}')
+        lines.append('- Since reopening: a new booking system sends customers a confirmation, reminder '
+                     'emails before the trip and an arrival email with the driver and terminal meeting '
+                     'point; drivers get a reminder 2 hours before each pickup')
     lines.append('- Owner-operated: the owner still drives many of the trips')
     if ABN:
         lines.append(f'- ABN: {ABN}')

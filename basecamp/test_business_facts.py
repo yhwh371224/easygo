@@ -44,6 +44,7 @@ class BusinessFactsTests(TestCase):
         self.assertContains(r, 'EasyGo in numbers')
         self.assertContains(r, '50%')
         self.assertContains(r, 'started in Sydney in 2015')
+        self.assertContains(r, 'under new management')
         self.assertContains(r, 'ABN 25 697 358 535')
 
     @patch.object(business_facts, 'FOUNDED_YEAR', None)
