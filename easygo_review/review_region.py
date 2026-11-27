@@ -91,5 +91,10 @@ def reviews_for_suburb(suburb_name, limit=5):
     by_name = Q()
     for n in names:
         by_name |= Q(name__iexact=n)
-    candidates = Review.objects.filter(by_name, is_published=True).order_by('-date', '-created')[:limit * 4]
-    return [r for r in attach_suburbs(candidates) if r.suburb == target][:limit]
+    candidates = Review.objects.filter(by_name, is_published=True).order_by('-date', '-created')[:limit * 8]
+    picked, seen = [], set()
+    for r in attach_suburbs(candidates):         # 한 사람당 최신 리뷰 하나만
+        if r.suburb == target and _key(r.name) not in seen:
+            seen.add(_key(r.name))
+            picked.append(r)
+    return picked[:limit]

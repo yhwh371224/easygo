@@ -191,7 +191,7 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
     if local_reviews_on(region.slug, suburb.slug, service_type):
         from django.core.cache import cache
         from easygo_review.review_region import reviews_for_suburb
-        key = f'suburb_reviews:{region.slug}:{suburb.slug}'
+        key = f'suburb_reviews:v2:{region.slug}:{suburb.slug}'
         local_reviews = cache.get(key)
         if local_reviews is None:
             local_reviews = [

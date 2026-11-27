@@ -81,6 +81,8 @@ class SuburbLocalReviewsTests(TestCase):
                                suburb='Ryde', pickup_date=d - datetime.timedelta(days=5))
         Review.objects.create(name='Kath Riddell', author='Kath Riddell', content='Driver was on time', date=d)
         Review.objects.create(name='Other Person', author='Other Person', content='From Ryde', date=d)
+        Review.objects.create(name='Kath Riddell', author='Kath Riddell', content='Second trip also great',
+                              date=d - datetime.timedelta(days=30))
 
     def get(self, url):
         return self.client.get(url, secure=True)
@@ -95,5 +97,6 @@ class SuburbLocalReviewsTests(TestCase):
         self.assertContains(page, 'Driver was on time')
         self.assertContains(page, 'Kath Riddell, Hornsby Heights')
         self.assertNotContains(page, 'From Ryde')
+        self.assertNotContains(page, 'Second trip also great')     # 한 사람당 하나
         # 합쳐지지 않은 서버브는 shuttle 페이지에만 — transfer 에 같은 후기를 반복하지 않는다.
         self.assertNotContains(self.get('/sydney/airport-transfer/hornsby-heights/'), 'customers say')
