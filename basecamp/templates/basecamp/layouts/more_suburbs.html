@@ -1,4 +1,5 @@
 {% extends 'easygo_review/base_sub.html' %}
+{% load suburb_links %}
 
 {% block title %}
     Sydney Airport Shuttle | Choose Your Suburb | EasyGo
@@ -42,10 +43,10 @@
         {% for s in more_suburbs %}
         <div class="card card-body bg-light text-center align-items-center">
             <div class="icon-xl mb-3">
-                    <a href="/sydney/airport-shuttle/{{ s.slug }}/"></a>
+                    <a href="{% suburb_url 'sydney' s.slug 'shuttle' %}"></a>
             </div>
             <h6 class="mb-0">
-                <a href="/sydney/airport-shuttle/{{ s.slug }}/">{{ s.name }}</a>
+                <a href="{% suburb_url 'sydney' s.slug 'shuttle' %}">{{ s.name }}</a>
             </h6>
         </div>
         {% endfor %}

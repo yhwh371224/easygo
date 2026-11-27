@@ -80,17 +80,15 @@ class Command(BaseCommand):
             sydney_suburbs = RegionSuburb.objects.filter(
                 is_active=True, region__slug='sydney'
             ).order_by('slug')
+            from regions.suburb_merge import sitemap_services, SERVICE_PATH
             for suburb in sydney_suburbs:
-                sydney_urls.append({
-                    "loc": f"{BASE_URL}/sydney/airport-shuttle/{suburb.slug}/",
-                    "changefreq": "weekly",
-                    "priority": "0.8000",
-                })
-                sydney_urls.append({
-                    "loc": f"{BASE_URL}/sydney/airport-transfer/{suburb.slug}/",
-                    "changefreq": "weekly",
-                    "priority": "0.8000",
-                })
+                # 합쳐진 서버브(regions/suburb_merge.py)는 남은 페이지 하나만 — 301 주소는 넣지 않는다.
+                for service in sitemap_services('sydney', suburb.slug):
+                    sydney_urls.append({
+                        "loc": f"{BASE_URL}/sydney/{SERVICE_PATH[service]}/{suburb.slug}/",
+                        "changefreq": "weekly",
+                        "priority": "0.8000",
+                    })
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"  Sydney suburbs error: {e}"))
         # /maxi-taxi/ 에서 링크하는 6곳만 수버브 maxi-taxi 페이지가 남아 있다 (나머지는 301).
@@ -139,17 +137,14 @@ class Command(BaseCommand):
                 suburbs = RegionSuburb.objects.filter(
                     region=region, is_active=True
                 ).order_by('slug')
+                from regions.suburb_merge import sitemap_services, SERVICE_PATH
                 for suburb in suburbs:
-                    region_urls.append({
-                        "loc": f"{BASE_URL}/{region.slug}/airport-shuttle/{suburb.slug}/",
-                        "changefreq": "weekly",
-                        "priority": "0.8000",
-                    })
-                    region_urls.append({
-                        "loc": f"{BASE_URL}/{region.slug}/airport-transfer/{suburb.slug}/",
-                        "changefreq": "weekly",
-                        "priority": "0.8000",
-                    })
+                    for service in sitemap_services(region.slug, suburb.slug):
+                        region_urls.append({
+                            "loc": f"{BASE_URL}/{region.slug}/{SERVICE_PATH[service]}/{suburb.slug}/",
+                            "changefreq": "weekly",
+                            "priority": "0.8000",
+                        })
 
                 filename = f"sitemap-{region.slug}.xml"
                 _write_urlset(region_urls, os.path.join(base_dir, filename), today)

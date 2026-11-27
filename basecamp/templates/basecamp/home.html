@@ -1,3 +1,4 @@
+{% load suburb_links %}
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -359,7 +360,7 @@
               &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
             {% for suburb, details in carousel_suburbs.items %}
               <div class="pb-1">
-                <a class="card border-0 shadow card-hover mx-1" href="/sydney/airport-transfer/{{ suburb|slugify }}/">
+                <a class="card border-0 shadow card-hover mx-1" href="{% suburb_url 'sydney' suburb|slugify 'transfer' %}">
                   <span class="badge badge-lg badge-floating badge-floating-end badge-price" style="background-color:#9ea8b3;">${{ details.price }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
                     <img loading="lazy" src="{{ details.image_url }}" alt="Sydney airport transfer from {{ suburb }} – private 7-13 seater for families and large groups" width="400" height="461" class="offer-card-inner-img">

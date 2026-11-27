@@ -66,3 +66,30 @@ def attach_suburbs(reviews):
             before = [s for d, s in bookings if d and r.date and d <= r.date]
             r.suburb = before[0] if before else bookings[0][1]
     return reviews
+
+
+def reviews_for_suburb(suburb_name, limit=5):
+    """이 서버브에 사는 손님들이 남긴 공개 리뷰, 최신순 최대 limit 개.
+
+    예약 서버브가 이 서버브인 손님 이름 → 그 이름의 리뷰 → attach_suburbs 로 다시
+    확인해서 (리뷰 당시 다른 동네였던 사람 제외) 이 서버브인 것만 남긴다."""
+    from easygo_review.models import Post as Review
+
+    target = clean_suburb(suburb_name)
+    if not target:
+        return []
+    variants = {target, suburb_name.strip()}
+    for pattern, full in ABBREVIATIONS:          # 'Hornsby Heights' 는 'Hornsby Hts' 로도 적힌다
+        short = {'Heights': 'Hts', 'North': 'Nth', 'South': 'Sth', 'Mount': 'Mt'}[full]
+        variants |= {v.replace(full, short) for v in list(variants)}
+    by_suburb = Q()
+    for v in variants:
+        by_suburb |= Q(suburb__iexact=v)
+    names = {n.strip() for n in Booking.objects.filter(by_suburb).values_list('name', flat=True) if n and n.strip()}
+    if not names:
+        return []
+    by_name = Q()
+    for n in names:
+        by_name |= Q(name__iexact=n)
+    candidates = Review.objects.filter(by_name, is_published=True).order_by('-date', '-created')[:limit * 4]
+    return [r for r in attach_suburbs(candidates) if r.suburb == target][:limit]

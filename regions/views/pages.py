@@ -163,6 +163,11 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
     suburb = get_object_or_404(
         RegionSuburb, region=region, slug=suburb_slug, is_active=True,
     )
+    # shuttle/transfer 합치기 (regions/suburb_merge.py, 스위치로 켬): 남긴 페이지가 아니면 301.
+    from regions.suburb_merge import kept_service, local_reviews_on, suburb_url
+    kept = kept_service(region.slug, suburb.slug)
+    if kept and kept != service_type:
+        return redirect(suburb_url(region.slug, suburb.slug), permanent=True)
     zone_suburbs = list(
         RegionSuburb.objects
         .filter(region=region, zone=suburb.zone, is_active=True)
@@ -179,12 +184,32 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         ))
     zone_suburbs = sorted(zone_suburbs[:12], key=lambda s: s.name)
 
+    for s in zone_suburbs:
+        s.page_url = suburb_url(region.slug, s.slug, service_type)
+
+    local_reviews = []
+    if local_reviews_on(region.slug, suburb.slug, service_type):
+        from django.core.cache import cache
+        from easygo_review.review_region import reviews_for_suburb
+        key = f'suburb_reviews:{region.slug}:{suburb.slug}'
+        local_reviews = cache.get(key)
+        if local_reviews is None:
+            local_reviews = [
+                {'name': r.name, 'date': r.date, 'rating': r.rating, 'url': r.get_absolute_url(),
+                 'text': r.get_markdown_content()}
+                for r in reviews_for_suburb(suburb.name)
+            ]
+            cache.set(key, local_reviews, 60 * 60 * 6)
+
     service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
     service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
         'zone_suburbs': zone_suburbs,
+        # 합쳐진 서버브 — 남은 한 페이지가 shuttle·transfer 검색어를 다 받는다.
+        'merged': bool(kept),
+        'local_reviews': local_reviews,
         'current_region': region,
         'service_type': service_type,
         'service_label': service_label,

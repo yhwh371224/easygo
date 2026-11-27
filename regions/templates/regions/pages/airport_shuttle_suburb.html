@@ -1,14 +1,17 @@
 {% extends "regions/base.html" %}
 {% load static %}
 
-{% block title %}{% if service_type == 'transfer' %}{{ suburb.name }} Airport Transfer {{ region.name }} | Private Car Service | EasyGo{% elif suburb.meta_title %}{{ suburb.meta_title }}{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
+{% block title %}{% if merged %}{{ suburb.name }} Airport Shuttle & Transfer {{ region.name }} | EasyGo{% elif service_type == 'transfer' %}{{ suburb.name }} Airport Transfer {{ region.name }} | Private Car Service | EasyGo{% elif suburb.meta_title %}{{ suburb.meta_title }}{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
 
 {% block canonical %}
 <link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/{{ service_path }}/{{ suburb.slug }}/">
 {% endblock %}
 
 {% block meta %}
-{% if service_type == 'transfer' %}
+{% if merged %}
+  <meta name="description" content="Airport shuttle and private transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Private door-to-door vehicle, flight tracking included.{% if suburb.from_price %} Fixed price from ${{ suburb.from_price }}.{% endif %} Book online.">
+  <meta name="keywords" content="{{ suburb.name }} airport shuttle, {{ suburb.name }} airport transfer{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}">
+{% elif service_type == 'transfer' %}
   <meta name="description" content="Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.from_price %} Fixed price ${{ suburb.from_price }}.{% endif %} Book online.">
   <meta name="keywords" content="{{ suburb.name }} airport transfer, private car {{ suburb.name }} airport{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport taxi {{ suburb.name }} {{ region.name }}">
 {% else %}
@@ -144,7 +147,9 @@
 <section class="bg-dark" style="background-size: cover; background-position: center 38%; position: relative; min-height: 480px; display: flex; align-items: center;">
   <div class="container position-relative py-5" style="z-index: 2; padding-top: 110px !important;">
     <h1 class="text-white fw-bold mb-5">
-      {% if service_type == 'transfer' %}
+      {% if merged %}
+      <span style="color: #eb7828;">{{ suburb.name }}</span> Airport Shuttle &amp; Transfer
+      {% elif service_type == 'transfer' %}
       <span style="color: #eb7828;">{{ suburb.name }}</span> Airport Transfer
       {% else %}
       <span style="color: #eb7828;">{{ suburb.name }}</span> to {{ region.name }} Airport Shuttle
@@ -346,6 +351,21 @@
       </div>
       {% endif %}
 
+      {% if local_reviews %}
+      <!-- Local reviews (SUBURB_LOCAL_REVIEWS) -->
+      <section class="mt-4" id="local-reviews">
+        <h2 class="h5 fw-semibold mb-3">What {{ suburb.name }} customers say</h2>
+        {% for r in local_reviews %}
+        <blockquote class="border-start border-3 ps-3 mb-3" style="border-color: #eb7828 !important;">
+          <div class="text-warning fs-sm mb-1" aria-label="{{ r.rating }} out of 5">{% for _ in "12345"|make_list %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+          <div class="text-muted fs-sm mb-1">{{ r.text|striptags|truncatewords:60 }}</div>
+          <footer class="fs-xs"><a href="{{ r.url }}" class="text-decoration-none">— {{ r.name }}, {{ suburb.name }}{% if r.date %} · {{ r.date|date:"M Y" }}{% endif %}</a></footer>
+        </blockquote>
+        {% endfor %}
+        <a href="/easygo_review/" class="fs-sm text-decoration-none">Read all customer reviews →</a>
+      </section>
+      {% endif %}
+
       <!-- CTA box -->
       <div class="p-4 rounded-3 mt-4" style="background: #f8f4ff; border-left: 4px solid #eb7828;">
         {% if service_type == 'transfer' %}
@@ -413,7 +433,7 @@
     <div class="row g-2">
       {% for s in zone_suburbs %}
       <div class="col-6 col-md-4 col-lg-3">
-        <a href="/{{ region.slug }}/{{ service_path }}/{{ s.slug }}/"
+        <a href="{{ s.page_url }}"
            class="d-block text-decoration-none p-2 border rounded bg-white">
           <span class="d-block fw-medium text-dark fs-sm">{{ s.name }}</span>
           <span class="text-muted fs-xs">From ${{ s.from_price }}</span>

@@ -122,3 +122,9 @@ GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
 GOOGLE_PLACES_API_KEY = config('GOOGLE_PLACES_API_KEY', default='') or GOOGLE_MAPS_API_KEY
 # Public place ID of the EasyGo Airport Shuttle Business Profile (service-area business).
 GOOGLE_PLACE_ID = config('GOOGLE_PLACE_ID', default='ChIJgScpoZGnEmsRo1T_fWF7Ato')
+
+# SEO 실험 스위치 (regions/suburb_merge.py). 기본 꺼짐 — 12월 코어 업데이트 완료 + 1주 뒤에
+# vultr .env 에서 켠다. 합치기와 동네 후기는 같은 날 켜지 않는다 (효과를 구분하려고).
+SUBURB_MERGE_MEL_GC = config('SUBURB_MERGE_MEL_GC', default=False, cast=bool)
+SUBURB_MERGE_SYDNEY_PILOT = config('SUBURB_MERGE_SYDNEY_PILOT', default=False, cast=bool)
+SUBURB_LOCAL_REVIEWS = config('SUBURB_LOCAL_REVIEWS', default=False, cast=bool)

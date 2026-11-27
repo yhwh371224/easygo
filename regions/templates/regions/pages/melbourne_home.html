@@ -1,3 +1,4 @@
+{% load suburb_links %}
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -224,7 +225,7 @@
           <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
             {% for suburb in featured_suburbs %}
               <div class="pb-1">
-                <a class="card border-0 shadow card-hover mx-1" href="/melbourne/airport-transfer/{{ suburb.slug }}/">
+                <a class="card border-0 shadow card-hover mx-1" href="{% suburb_url 'melbourne' suburb.slug 'transfer' %}">
                   <span class="badge badge-lg badge-floating badge-floating-end badge-price" style="background-color:#9ea8b3;">${{ suburb.from_price|default:"-" }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
                     {% if suburb.carousel_image %}<img loading="lazy" src="{{ suburb.carousel_image }}" alt="{{ suburb.name }} Melbourne airport transfer" width="400" height="461" class="offer-card-inner-img">{% endif %}
