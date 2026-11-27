@@ -3,7 +3,7 @@ Allow: /
 
 # 관리 페이지
 Disallow: /admin/
-Disallow: /secure-admin-x9k2p7/
+# 실제 어드민 주소(SECRET_ADMIN_URL)는 여기에 적지 않는다 — robots.txt 는 공개 파일이라 주소가 드러난다.
 
 # 보안 및 시스템 파일
 Disallow: /secure/
