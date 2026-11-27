@@ -12,7 +12,7 @@
     <div class="low" style="display: flex; align-items: center;">
         <div>
             <p class="lead">
-                Review by <a href="#">{{ object.name }}</a>
+                Review by <a href="#">{{ object.name }}</a>{% if object.suburb %} <span class="text-muted">&middot; {{ object.suburb }}</span>{% endif %}
             </p>
             <p>posted on {{ object.date }}</p>
         </div>

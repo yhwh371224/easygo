@@ -128,3 +128,50 @@ class SearchSurveyDiscountMachineryTests(TestCase):
         entry.discount_redeemed = timezone.now()
         entry.save(update_fields=['discount_redeemed'])
         self.assertFalse(entry.discount_is_valid)
+
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class ReviewSuburbTests(TestCase):
+    """The review pages show the suburb the reviewer lives in, from their booking."""
+
+    def setUp(self):
+        import datetime
+        self.d = datetime.date(2026, 11, 1)
+
+    def _booking(self, name, suburb, days):
+        from blog.models import Post as Booking
+        return Booking.objects.create(name=name, email=f'{name[:3]}@x.com', no_of_passenger='1',
+                                      price='100', suburb=suburb,
+                                      pickup_date=self.d + timedelta(days=days))
+
+    def _review(self, name):
+        from easygo_review.models import Post as Review
+        return Review.objects.create(name=name, author=name, content='Great', date=self.d)
+
+    def test_suburb_from_booking_before_review(self, *_):
+        from easygo_review.review_region import attach_suburbs
+        self._booking('Kath Riddell', 'Hornsby Hts', -10)
+        self._booking('kath riddell', 'Ryde', 20)          # 리뷰 뒤 예약은 후순위
+        self._booking('Hotel Guest', 'Hotels In CBD', -3)
+        nobody = self._review('No Booking')
+        kath = self._review('Kath Riddell')
+        guest = self._review('Hotel Guest')
+        attach_suburbs([kath, nobody, guest])
+        self.assertEqual(kath.suburb, 'Hornsby Heights')
+        self.assertEqual(nobody.suburb, '')
+        self.assertEqual(guest.suburb, '')
+
+    def test_hotel_booking_skipped_for_home_suburb(self, *_):
+        from easygo_review.review_region import attach_suburbs
+        self._booking('Ros Pethybridge', 'Chatswood', -60)
+        self._booking('Ros Pethybridge', 'Hotel in CBD', -5)
+        ros = self._review('Ros Pethybridge')
+        attach_suburbs([ros])
+        self.assertEqual(ros.suburb, 'Chatswood')
+
+    def test_list_and_detail_pages_show_suburb(self, *_):
+        self._booking('Leisa Kensit', 'north ryde', -5)
+        review = self._review('Leisa Kensit')
+        self.assertContains(self.client.get('/easygo_review/'), 'Leisa Kensit from North Ryde')
+        self.assertContains(self.client.get(review.get_absolute_url()), '· North Ryde')

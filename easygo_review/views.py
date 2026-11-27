@@ -19,6 +19,7 @@ from django_ratelimit.decorators import ratelimit
 from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
 
 from .models import Post, Comment
+from .review_region import attach_suburbs
 from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from main.settings import RECIPIENT_EMAIL
@@ -84,6 +85,7 @@ class PostList(ListView):
         for post in context['object_list']:
             if post.rating is None:
                 post.rating = 5
+        attach_suburbs(context['object_list'])
 
         # send_notice_email.delay('reviews accessed', 'reviews accessed', RECIPIENT_EMAIL)
 
@@ -168,6 +170,7 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
+        attach_suburbs([self.object])
 
         email = self.request.session.get('email', None)
         context['email'] = email
