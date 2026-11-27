@@ -50,7 +50,7 @@ class ServiceItemInline(admin.TabularInline):
 
 @admin.register(ServiceVisit)
 class ServiceVisitAdmin(admin.ModelAdmin):
-    list_display = ('vehicle', 'service_date', 'self_serviced', 'vendor', 'total_cost', 'odometer_km')
+    list_display = ('vehicle', 'service_date', 'self_serviced', 'vendor', 'total_cost', 'odometer_km', 'source')
     list_filter = ('self_serviced', 'vehicle')
     date_hierarchy = 'service_date'
     search_fields = ('vehicle__plate_number', 'vendor')

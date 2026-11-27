@@ -4,7 +4,8 @@
     673156 52.83 136.78                 주행거리 km, 리터, 금액 $ (가득 주유)
     673156 52.83 136.78 BP Forestville  뒤의 글은 메모
     p 673500 20 52                      p = 가득 아님(partial)
-    undo / cancel / 취소                 방금 보낸 기록 삭제(24시간 이내)
+    undo / cancel / 취소                 방금 보낸 기록 삭제(24시간 이내, 서비스 기록 포함)
+    service ...                          서비스 기록 (fleet/service_log.py)
     fuel / /fuel                         사용법
 
 연비는 '가득 → 가득' 방식: 직전 가득 주유 이후 달린 거리 ÷ 그 사이(이번 포함)에
@@ -47,13 +48,18 @@ HELP_TEXT = (
     "e.g. 673156 52.83 136.78\n"
     "Add a note after: 673156 52.83 136.78 BP Forestville\n"
     "Not a full tank? Start with p: p 673500 20 52\n"
-    "Wrong entry? Send: undo"
+    "Wrong entry? Send: undo\n"
+    "Service? Send: service odometer amount what-was-done"
 )
 
 
 def is_fuel_message(text):
+    """드라이버 봇이 차량 기록(주유·서비스·undo)으로 처리할 메시지인지."""
+    from fleet.service_log import is_service_message
+
     t = (text or '').strip()
-    return bool(FUEL_RE.match(t)) or t.lower() in UNDO_WORDS | HELP_WORDS
+    return (bool(FUEL_RE.match(t)) or t.lower() in UNDO_WORDS | HELP_WORDS
+            or is_service_message(t))
 
 
 def _q(value, places='0.01'):
@@ -145,6 +151,9 @@ def handle_driver_message(driver, text):
         return HELP_TEXT
     if low in UNDO_WORDS:
         return _undo(driver)
+    from fleet.service_log import handle_service_message, is_service_message
+    if is_service_message(t):
+        return handle_service_message(driver, t)
     m = FUEL_RE.match(t)
     if not m:
         return HELP_TEXT
@@ -231,13 +240,20 @@ def _saved_reply(vehicle, log):
 
 
 def _undo(driver):
-    from fleet.models import FuelLog, Vehicle
+    """주유·서비스 중 이 드라이버가 텔레그램으로 마지막에 보낸 기록 하나를 지운다."""
+    from fleet.models import FuelLog, ServiceVisit, Vehicle
+    from fleet.service_log import undo_visit
 
     cutoff = timezone.now() - UNDO_WINDOW
     with db_transaction.atomic():
         log = (FuelLog.objects.select_for_update()
                .filter(driver=driver, source=FuelLog.SOURCE_TELEGRAM, created_at__gte=cutoff)
                .order_by('-created_at').first())
+        visit = (ServiceVisit.objects.select_for_update()
+                 .filter(driver=driver, source=ServiceVisit.SOURCE_TELEGRAM, created_at__gte=cutoff)
+                 .order_by('-created_at').first())
+        if visit and (log is None or visit.created_at > log.created_at):
+            return undo_visit(visit)
         if log is None:
             return "Nothing to undo (only entries from the last 24 hours can be undone here)."
         vehicle = Vehicle.objects.select_for_update().get(pk=log.vehicle_id)
@@ -249,4 +265,4 @@ def _undo(driver):
             if prev:
                 Vehicle.objects.filter(pk=vehicle.pk).update(odometer_km=prev.odometer_km)
         refresh_stored_values(vehicle.pk)
-    return f"🗑 Deleted: {desc}"
+    return f"🗑 Deleted fuel log: {desc}"

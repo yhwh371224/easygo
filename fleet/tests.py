@@ -258,3 +258,87 @@ class FuelAdminRecomputeTests(FuelBase):
         r = c.post(reverse('admin:fleet_fuellog_delete', args=[partial.pk]), {'post': 'yes'}, secure=True)
         self.assertEqual(r.status_code, 302)
         self.assertEqual(FuelLog.objects.get(odometer_km=10500).km_per_l, Decimal('16.7'))
+
+
+# ── 서비스 기록 (텔레그램 드라이버 봇) ───────────────────────────────────────
+from fleet.models import ServiceItem, ServiceVisit
+from fleet.service_log import parse_items
+
+
+class ServiceMessageTests(FuelBase):
+    def setUp(self):
+        super().setUp()
+        self.vehicle.odometer_km = 673156
+        self.vehicle.save()
+
+    def kinds(self, visit):
+        return [i.service_type for i in visit.items.all()]
+
+    def test_self_oil_change_sets_next_service(self):
+        reply = self.send('service 674100 140 oil filter Penrite 10w40, Ryco')
+        self.assertIn('Self serviced · 674,100 km · $140', reply)
+        self.assertIn('• Engine oil', reply)
+        self.assertIn('• Oil filter', reply)
+        self.assertIn('Next service: 681,100 km', reply)
+        visit = ServiceVisit.objects.get()
+        self.assertTrue(visit.self_serviced)
+        self.assertEqual(visit.vendor, '')
+        self.assertEqual(visit.total_cost, Decimal('140'))
+        self.assertEqual(visit.notes, 'oil filter Penrite 10w40, Ryco')
+        self.assertEqual(visit.source, ServiceVisit.SOURCE_TELEGRAM)
+        self.assertEqual(visit.driver, self.driver)
+        self.assertEqual(self.kinds(visit), ['engine_oil', 'oil_filter'])
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.next_service_km, 681100)
+        self.assertEqual(self.vehicle.odometer_km, 674100)
+
+    def test_known_workshop_without_separator(self):
+        ServiceVisit.objects.create(vehicle=self.vehicle, service_date=date(2026, 9, 9),
+                                    vendor='Ultra Tune Artarmon')
+        reply = self.send('Service 674000 503 @Ultra Tune Artarmon coolant leak fixed, not genuine part')
+        visit = ServiceVisit.objects.filter(source=ServiceVisit.SOURCE_TELEGRAM).get()
+        self.assertFalse(visit.self_serviced)
+        self.assertEqual(visit.vendor, 'Ultra Tune Artarmon')
+        self.assertEqual(visit.notes, 'coolant leak fixed, not genuine part')
+        self.assertIn('Next service still: 674,000 km', reply)
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.next_service_km, 674000)
+
+    def test_new_workshop_name_ends_at_colon(self):
+        self.send('service 673500 700 @Seven Stars: transmission oil, brake pads')
+        visit = ServiceVisit.objects.get()
+        self.assertEqual(visit.vendor, 'Seven Stars')
+        self.assertEqual(visit.notes, 'transmission oil, brake pads')
+        self.assertEqual(self.kinds(visit), ['transmission_oil', 'brake_pad'])
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.next_service_km, 674000)   # 엔진오일 아님
+
+    def test_item_words(self):
+        self.assertEqual(parse_items('air filter, tyres'), ['air_filter', 'tyre'])
+        self.assertEqual(parse_items('diff oil and fuel filter'), [])
+        self.assertEqual(parse_items('battery changed'), [])
+
+    def test_undo_service_restores_vehicle(self):
+        self.send('service 674100 140 oil filter')
+        self.assertIn('Deleted service', self.send('undo'))
+        self.assertFalse(ServiceVisit.objects.exists())
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.next_service_km, 674000)
+        self.assertEqual(self.vehicle.odometer_km, 673156)
+
+    def test_undo_takes_latest_of_fuel_and_service(self):
+        self.send('service 673200 140 oil filter')
+        self.send('673500 50 130')
+        self.assertIn('Deleted fuel log', self.send('undo'))
+        self.assertIn('Deleted service', self.send('undo'))
+
+    def test_bad_messages_not_saved(self):
+        self.assertIn('Service log', self.send('service'))
+        self.assertIn('Service log', self.send('service 674100'))
+        self.assertIn('far from', self.send('service 690000 140 oil'))
+        self.assertFalse(ServiceVisit.objects.exists())
+
+    def test_fuel_messages_unchanged(self):
+        self.assertIn('Fuel log', self.send('fuel'))
+        self.assertIn('Saved', self.send('673500 50 130'))
+        self.assertFalse(ServiceVisit.objects.exists())

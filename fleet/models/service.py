@@ -17,6 +17,24 @@ class ServiceVisit(models.Model):
     )
     notes = models.TextField(blank=True, verbose_name='Notes')
 
+    SOURCE_TELEGRAM = 'telegram'
+    SOURCE_ADMIN = 'admin'
+    SOURCE_CHOICES = [
+        (SOURCE_TELEGRAM, 'Telegram'),
+        (SOURCE_ADMIN, 'Admin'),
+    ]
+    driver = models.ForeignKey(
+        'blog.Driver', on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='service_visits', verbose_name='Logged by',
+    )
+    source = models.CharField(
+        max_length=10, choices=SOURCE_CHOICES, default=SOURCE_ADMIN, verbose_name='Source',
+    )
+    # 텔레그램 기록이 차의 next_service_km / odometer_km 를 바꿨다면 바꾸기 전 값. undo 때 되돌린다.
+    replaced_next_service_km = models.PositiveIntegerField(null=True, blank=True, editable=False)
+    replaced_odometer_km = models.PositiveIntegerField(null=True, blank=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
     class Meta:
         ordering = ['-service_date', '-pk']
         verbose_name = 'Service Visit'
