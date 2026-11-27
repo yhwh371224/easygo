@@ -60,7 +60,7 @@ class ReminderRunTests(TestCase):
         send.assert_called_once()
         chat_id, text, buttons = send.call_args[0]
         self.assertEqual(chat_id, '111')
-        self.assertEqual(text, '🚐 EasyGo job in 2 hours.')
+        self.assertEqual(text, '🚐 EasyGo job today 02:30 PM.')
         self.assertIn('url', buttons[0][0])  # Dashboard 버튼
         self.assertNotIn('callback_data', json.dumps(buttons))  # 확인 버튼 없음, 알림만
         sms.assert_not_called()
@@ -89,6 +89,48 @@ class ReminderRunTests(TestCase):
         send.assert_not_called()  # 새벽 픽업이라 1시간 전
         self.run_at(at(DAY, '23:31'))
         send.assert_called_once()
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job tomorrow 12:30 AM.')
+
+    def test_child_seats_with_ages(self, send, staff, sms):
+        make_post(make_driver(chat_id=None), no_of_baggage='L2, Baby1, Booster1',
+                  message='Child age: 2, 6\nPlease call on arrival')
+        self.run_at(at(DAY, '12:31'))
+        self.assertEqual(sms.call_args[0][1], 'EasyGo job today 02:30 PM. Baby1, Booster1 (age 2, 6)')
+
+    def test_child_seat_telegram_without_age_line(self, send, staff, sms):
+        # 자유 문장 나이는 해석하지 않는다 — 개수만.
+        make_post(make_driver(), no_of_baggage='L4, M4, S4, Baby1', message='14 months old')
+        self.run_at(at(DAY, '12:31'))
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job today 02:30 PM. Baby1')
+
+    def test_no_child_seats_no_note(self, send, staff, sms):
+        make_post(make_driver(chat_id=None), no_of_baggage='L2, Pram1', message='Child age: 3')
+        self.run_at(at(DAY, '12:31'))
+        self.assertEqual(sms.call_args[0][1], 'EasyGo job today 02:30 PM.')
+
+    def test_child_age_kept_gsm_and_short(self, send, staff, sms):
+        make_post(make_driver(chat_id=None), no_of_baggage='Baby2, Booster3',
+                  message='Child age: 2살 and 6 and 9 and 11 and 13 and 15 and 17 years')
+        self.run_at(at(DAY, '12:31'))
+        text = sms.call_args[0][1]
+        self.assertTrue(text.isascii())
+        self.assertLessEqual(len(text), 160)
+        self.assertIn('Baby2, Booster3 (age 2 and 6', text)
+
+    def test_child_age_typed_loosely_in_admin(self, send, staff, sms):
+        for i, line in enumerate(['child age 2, 6', 'Child ages: 2, 6', 'CHILD AGE:2, 6']):
+            sms.reset_mock()
+            make_post(make_driver(name=f'D{i}', chat_id=None), no_of_baggage='Baby1, Booster1',
+                      message=f'Some note\n{line}')
+            self.run_at(at(DAY, '12:31'))
+            self.assertEqual(sms.call_args[0][1],
+                             'EasyGo job today 02:30 PM. Baby1, Booster1 (age 2, 6)', line)
+
+    def test_late_assignment_states_pickup_time(self, send, staff, sms):
+        # 픽업 45분 전에 배정된 건(2026-11-26 Don): 'in 2 hours' 가 아니라 실제 시각.
+        make_post(make_driver(chat_id=None), time='16:00')
+        self.run_at(at(DAY, '15:15'))
+        self.assertEqual(sms.call_args[0][1], 'EasyGo job today 04:00 PM.')
 
     def test_early_pickup_one_hour_before(self, send, staff, sms):
         make_post(make_driver(), time='05:45')
@@ -96,19 +138,19 @@ class ReminderRunTests(TestCase):
         send.assert_not_called()
         self.run_at(at(DAY, '04:46'))
         send.assert_called_once()
-        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job in 1 hour.')
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job today 05:45 AM.')
         self.assertIn('1시간 전', staff.call_args[0][0])
 
     def test_early_pickup_sms_one_hour(self, send, staff, sms):
         make_post(make_driver(chat_id=None), time='05:00')
         self.run_at(at(DAY, '04:00'))
-        self.assertEqual(sms.call_args[0][1], 'EasyGo job in 1 hour.')
+        self.assertEqual(sms.call_args[0][1], 'EasyGo job today 05:00 AM.')
 
     def test_six_am_pickup_still_two_hours(self, send, staff, sms):
         make_post(make_driver(), time='06:00')
         self.run_at(at(DAY, '04:00'))
         send.assert_called_once()
-        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job in 2 hours.')
+        self.assertEqual(send.call_args[0][1], '🚐 EasyGo job today 06:00 AM.')
 
     def test_unlinked_driver_gets_sms_once(self, send, staff, sms):
         post = make_post(make_driver(chat_id=None))
@@ -118,7 +160,8 @@ class ReminderRunTests(TestCase):
         sms.assert_called_once()
         number, text = sms.call_args[0]
         self.assertEqual(number, '0400111222')
-        self.assertEqual(text, 'EasyGo job in 2 hours.')  # 1 segment
+        self.assertEqual(text, 'EasyGo job today 02:30 PM.')
+        self.assertLessEqual(len(text), 160)  # 1 segment
         self.assertIn('SMS', staff.call_args[0][0])
         post.refresh_from_db()
         self.assertIsNotNone(post.driver_reminder_sent_at)

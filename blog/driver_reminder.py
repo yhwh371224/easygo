@@ -17,6 +17,7 @@ DB 로 다시 판단한다.
 """
 
 import logging
+import re
 from datetime import datetime, time, timedelta
 
 import pytz
@@ -24,6 +25,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 
+from basecamp.modules.baggage_utils import split_child_seats
 from basecamp.modules.date_utils import format_pickup_time_12h
 
 from utils import telegram_driver
@@ -85,23 +87,67 @@ def reminder_lead(pickup_dt):
     return EARLY_REMINDER_LEAD if pickup_dt.time() < EARLY_PICKUP_BEFORE else REMINDER_LEAD
 
 
-def lead_label(pickup_dt):
-    hours = int(reminder_lead(pickup_dt).total_seconds() // 3600)
-    return '1 hour' if hours == 1 else f'{hours} hours'
+def pickup_day_label(pickup_dt, now_dt):
+    """'today' / 'tomorrow'(자정 넘긴 새벽 픽업은 전날 밤에 알림이 간다) / 그 밖엔 'Fri 21 Nov'."""
+    days = (pickup_dt.date() - now_dt.astimezone(pickup_dt.tzinfo).date()).days
+    if days == 0:
+        return 'today'
+    if days == 1:
+        return 'tomorrow'
+    return f'{pickup_dt:%a %d %b}'
 
 
-def reminder_text(pickup_dt):
-    return f'EasyGo job in {lead_label(pickup_dt)}.'
+def reminder_text(pickup_dt, now_dt):
+    """'EasyGo job today 04:00 PM.' — 남은 시간('in 2 hours') 대신 픽업 시각을 쓴다.
+    픽업 2시간 안에 늦게 배정된 건은 첫 크론에서 바로 나가는데, 그때도 'in 2 hours'
+    라고 해서 기사가 시간을 잘못 알았다(2026-11-26 Don, 45분 전 배정)."""
+    when = format_pickup_time_12h(f'{pickup_dt:%H:%M}')
+    return f'EasyGo job {pickup_day_label(pickup_dt, now_dt)} {when}.'
+
+
+# 예약 폼이 카시트를 고른 손님의 나이를 message 맨 앞에 'Child age: 9, 6' 으로 붙인다
+# (basecamp.modules.baggage_utils.message_with_child_ages).
+# 어드민에서 손으로 넣을 때 콜론을 빼거나 'ages' 로 써도 읽는다('child age 2, 6').
+CHILD_AGE_LINE = re.compile(r'^\s*Child ages?\s*:?\s*(\d.*?)\s*$', re.IGNORECASE | re.MULTILINE)
+CHILD_AGE_MAX = 30
+
+
+def child_seat_note(booking):
+    """'Baby1, Booster1 (age 9, 6)' — 카시트가 없으면 ''.
+
+    개수는 짐 문자열의 BabyN/BoosterN(정해진 형식)에서, 나이는 폼이 붙인 'Child age:'
+    줄에서만 읽는다. 손님이 자유롭게 쓴 문장('14 months old')은 해석하지 않는다 —
+    카시트는 안전 문제라 추측하느니 대시보드에서 보게 한다. 나이는 손님 입력이라
+    SMS 가 UCS-2 로 바뀌지 않게 ASCII 만 남기고 길이를 자른다."""
+    _, baby, booster = split_child_seats(booking.no_of_baggage, booking.special_items)
+    seats = [f'{label}{n}' for label, n in (('Baby', baby), ('Booster', booster)) if n > 0]
+    if not seats:
+        return ''
+    note = ', '.join(seats)
+    m = CHILD_AGE_LINE.search(booking.message or '')
+    if m:
+        ages = re.sub(r'[^ -~]', '', m.group(1)).strip()[:CHILD_AGE_MAX].strip()
+        if ages:
+            note += f' (age {ages})'
+    return note
+
+
+def reminder_body(booking, pickup_dt, now_dt):
+    """'EasyGo job today 04:00 PM. Baby1 (age 2)' — 텔레그램과 SMS 가 같은 내용."""
+    text = reminder_text(pickup_dt, now_dt)
+    seats = child_seat_note(booking)
+    return f'{text} {seats}' if seats else text
 
 
 def build_message(booking, pickup_dt, now_dt):
     """텔레그램 — 한 줄만. 자세한 내용은 Dashboard 버튼으로 본다."""
-    return f'🚐 {reminder_text(pickup_dt)}'
+    return f'🚐 {reminder_body(booking, pickup_dt, now_dt)}'
 
 
 def build_sms_message(booking, pickup_dt, now_dt):
-    """1 segment 로 짧게. 이모지를 넣으면 UCS-2 로 바뀌어 요금이 늘어나니 넣지 말 것."""
-    return reminder_text(pickup_dt)
+    """1 segment(GSM-7 160자) 로 짧게. 이모지를 넣으면 UCS-2 로 바뀌어 요금이 늘어나니 넣지 말 것.
+    주소·전화번호는 넣지 않는다: 문자는 남고 전달될 수 있어 대시보드에서만 보여준다."""
+    return reminder_body(booking, pickup_dt, now_dt)
 
 
 
