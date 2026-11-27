@@ -32,7 +32,7 @@ ABN = '25 697 358 535'          # 메일 푸터·ATO PRN 과 같은 번호 (오�
 # 다른 사이트의 EasyGo 프로필 — schema sameAs. AI 가 같은 회사로 묶는 근거.
 SAME_AS = [
     'https://www.google.com/maps/place/?q=place_id:ChIJgScpoZGnEmsRo1T_fWF7Ato',
-    # 'https://www.tripadvisor.com.au/...d27753160...',   # 크롬으로 정확한 주소 확인 후
+    'https://www.tripadvisor.com.au/Attraction_Review-g255060-d27753160-Reviews-Easygo_Airport_Shuttle-Sydney_New_South_Wales.html',
     # 'https://www.facebook.com/easygoshuttle',           # 계정이 살아 있는지 확인 후
 ]
 
