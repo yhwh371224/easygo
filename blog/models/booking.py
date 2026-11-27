@@ -12,6 +12,15 @@ OWNER_DRIVER_NAMES = {'sam', 'sung', 'peter'}
 # (see Post.non_gst_deduction).
 NON_GST_DEDUCTION_RATE = Decimal('10')
 
+# Drivers the company keeps a flat $ per ride from (Driver pk → $), filled into
+# Post.commission_amount_override when the driver is assigned. Kept in code
+# rather than a Driver field because only two drivers have it (2026-11-27):
+# Pascal (Gold Coast) and Dillon (Melbourne), $10 a ride.
+FLAT_COMMISSION_BY_DRIVER = {
+    50: Decimal('10'),   # Pascal
+    58: Decimal('10'),   # Dillon
+}
+
 
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
@@ -373,7 +382,7 @@ class Post(models.Model):
         if self.pk:
             previous = (
                 Post.objects.filter(pk=self.pk)
-                .values('driver_id', 'commission_rate')
+                .values('driver_id', 'commission_rate', 'commission_amount_override')
                 .first()
             )
             if (
@@ -385,6 +394,19 @@ class Post(models.Model):
                 uf = kwargs.get('update_fields')
                 if uf is not None:
                     kwargs['update_fields'] = set(uf) | {'commission_rate'}
+            # Same for the flat $ commission: an amount auto-filled for the old
+            # driver is dropped when the job moves to someone else.
+            old_flat = FLAT_COMMISSION_BY_DRIVER.get(previous['driver_id']) if previous else None
+            if (
+                old_flat is not None
+                and previous['driver_id'] != self.driver_id
+                and previous['commission_amount_override'] == old_flat
+                and self.commission_amount_override == old_flat
+            ):
+                self.commission_amount_override = None
+                uf = kwargs.get('update_fields')
+                if uf is not None:
+                    kwargs['update_fields'] = set(uf) | {'commission_amount_override'}
         # driver_collected_cash rides are skipped: the customer paid the driver
         # directly, the money never passed through the company, and no
         # commission is charged on them. They are excluded from settlements
@@ -396,6 +418,19 @@ class Post(models.Model):
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'commission_rate'}
+        # Flat $ per ride for the drivers in FLAT_COMMISSION_BY_DRIVER. Only
+        # when the booking has no amount yet, so one typed in by hand (even 0)
+        # is kept.
+        flat = FLAT_COMMISSION_BY_DRIVER.get(self.driver_id)
+        if (
+            flat is not None
+            and self.commission_amount_override is None
+            and not self.driver_collected_cash
+        ):
+            self.commission_amount_override = flat
+            uf = kwargs.get('update_fields')
+            if uf is not None:
+                kwargs['update_fields'] = set(uf) | {'commission_amount_override'}
         # Until driver_price is manually set, it follows price minus 10.
         if not self.driver_price:
             try:

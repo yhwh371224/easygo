@@ -4882,3 +4882,58 @@ class DuplicateRoundTripPaymentTests(TestCase):
                 self.captureOnCommitCallbacks(execute=True):
             self._round_trip('11:30')
         tg.assert_not_called()
+
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class FlatCommissionTests(TestCase):
+    """Pascal and Dillon keep $10 a ride for the company (2026-11-27): the
+    amount goes into commission_amount_override when they are assigned."""
+
+    def setUp(self):
+        self.flat = make_driver()
+        self.other = make_driver(user=make_user('other_flat'))
+        self.patcher = patch.dict('blog.models.booking.FLAT_COMMISSION_BY_DRIVER',
+                                  {self.flat.pk: Decimal('10')}, clear=True)
+        self.patcher.start()
+        self.addCleanup(self.patcher.stop)
+
+    def _post(self, **kw):
+        return Post.objects.create(name='Pax', email='p@x.com', no_of_passenger='1',
+                                   price='150', driver_price='125', **kw)
+
+    def test_filled_on_create_and_payout_reduced(self, *_):
+        post = self._post(driver=self.flat)
+        self.assertEqual(post.commission_amount_override, Decimal('10'))
+        self.assertEqual(post.subcontractor_payout, Decimal('115.00'))
+
+    def test_filled_when_assigned_later(self, *_):
+        post = self._post()
+        self.assertIsNone(post.commission_amount_override)
+        post.driver = self.flat
+        post.save(update_fields=['driver'])
+        post.refresh_from_db()
+        self.assertEqual(post.commission_amount_override, Decimal('10'))
+
+    def test_dropped_when_moved_to_other_driver(self, *_):
+        post = self._post(driver=self.flat)
+        post.driver = self.other
+        post.save()
+        post.refresh_from_db()
+        self.assertIsNone(post.commission_amount_override)
+        self.assertEqual(post.subcontractor_payout, Decimal('125.00'))
+
+    def test_hand_typed_amount_kept(self, *_):
+        post = self._post(driver=self.flat, commission_amount_override=Decimal('0'))
+        self.assertEqual(post.commission_amount_override, Decimal('0'))
+        post.driver = self.other
+        post.save()
+        post.refresh_from_db()
+        self.assertEqual(post.commission_amount_override, Decimal('0'))
+
+    def test_other_drivers_untouched(self, *_):
+        self.assertIsNone(self._post(driver=self.other).commission_amount_override)
+
+    def test_driver_collected_cash_skipped(self, *_):
+        post = self._post(driver=self.flat, driver_collected_cash=True)
+        self.assertIsNone(post.commission_amount_override)
