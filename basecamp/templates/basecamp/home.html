@@ -26,7 +26,7 @@
       "url": "https://easygoshuttle.com.au",
       "telephone": "+61406883355",
       "address": { "@type": "PostalAddress", "streetAddress": "119 Willoughby Road", "addressLocality": "Crows Nest", "addressRegion": "NSW", "postalCode": "2065", "addressCountry": "AU" },
-      "geo": { "@type": "GeoCoordinates", "latitude": "-33.8688", "longitude": "151.2093" },
+      "geo": { "@type": "GeoCoordinates", "latitude": "{{ facts.latitude }}", "longitude": "{{ facts.longitude }}" },
       "areaServed": [
         {
           "@type": "AdministrativeArea",
@@ -87,8 +87,9 @@
         }
       ],
       "priceRange": "$$",
-      "openingHours": "Mo-Su 03:00-23:00",
+      "openingHours": "{{ facts.opening_hours }}",
       "aggregateRating": { "@type": "AggregateRating", "ratingValue": "{{ google_rating }}", "reviewCount": "{{ google_review_count }}" },
+      {% include "basecamp/includes/schema_facts.html" %},
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Sydney Airport Transfer Services",

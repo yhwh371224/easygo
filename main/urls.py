@@ -10,6 +10,7 @@ from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
 from blog import bird_webhooks, driver_views, telegram_driver_webhook
 from easygo_review import search_survey_views
+from basecamp import business_facts
 from decouple import config
 
 
@@ -61,6 +62,7 @@ SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 urlpatterns = [
     re_path(r'^(?P<filename>sitemap[\w\-]*\.xml)$', serve_sitemap, name='sitemap'),
+    path('llms.txt', business_facts.llms_txt, name='llms_txt'),
     path('.well-known/assetlinks.json', serve_assetlinks, name='assetlinks'),
     path('driver/manifest.webmanifest', serve_driver_manifest,
          name='driver_manifest'),

@@ -13,7 +13,13 @@ def blackglide(request):
 
 def about_us(request): 
     # send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
-    return render(request, 'basecamp/pages/about_us.html')
+    from basecamp.business_facts import rounded_down, stats
+    numbers = stats()
+    return render(request, 'basecamp/pages/about_us.html', {
+        'numbers': numbers,
+        'trips_label': rounded_down(numbers['trips']),
+        'customers_label': rounded_down(numbers['customers']),
+    })
 
 def arrival_guide(request): 
     return render(request, 'basecamp/pages/arrival_guide.html')

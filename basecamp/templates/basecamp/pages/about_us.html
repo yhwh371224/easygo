@@ -52,6 +52,27 @@
   <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5 content-card-box">
     <div class="entry-content">
 
+      <h2>EasyGo in numbers</h2>
+      <p class="text-muted fs-sm">Counted from our own booking records{% if numbers.as_of %} as of {{ numbers.as_of|date:"F Y" }}{% endif %}.</p>
+      <ul>
+        <li><strong>{{ trips_label }}</strong> completed airport, cruise and point-to-point trips</li>
+        <li><strong>{{ customers_label }}</strong> customers, and <strong>{{ numbers.repeat_pct }}%</strong> of them have booked with us more than once</li>
+        <li><strong>{{ numbers.group_pct }}%</strong> of bookings are groups of 5 or more — families, sports teams and corporate groups in 7–13 seater vehicles</li>
+        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
+        <li>Every flight is tracked. We wait up to <strong>80 minutes</strong> after an international landing and <strong>50 minutes</strong> after a domestic landing at no extra charge</li>
+        <li>Fixed price confirmed before you travel — no surge pricing, no charge for traffic or flight delays</li>
+      </ul>
+
+      <h2>Company details</h2>
+      <ul>
+        <li>{{ facts.name }}, {{ facts.street }}, {{ facts.locality }} {{ facts.region }} {{ facts.postcode }}</li>
+        {% if facts.founded_year %}<li>Operating since {{ facts.founded_year }}</li>{% endif %}
+        {% if facts.abn %}<li>ABN {{ facts.abn }}</li>{% endif %}
+        {% if facts.p2p_authorisation %}<li>Authorised by the NSW Point to Point Transport Commission ({{ facts.p2p_authorisation }})</li>{% endif %}
+        <li>Sydney, Melbourne and Gold Coast airport transfers, 24/7 by booking</li>
+        <li>Quality Business Awards 2026 — Best Airport Shuttle Service, Mosman Council area (based on a quality rating over 95%)</li>
+      </ul>
+
       <h2>Why Choose EasyGo Airport Shuttle?</h2>
       <h3>EasyGo Airport Shuttle – Service Highlights</h3>
 
