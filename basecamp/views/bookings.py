@@ -886,7 +886,6 @@ def quick_rebook_confirm(request, region_slug=None):
     previous_booker_email  = previous.booker_email
     previous_booker_contact = previous.booker_contact
     previous_customer_history   = previous.customer_history
-    previous_terminal_pickup_point = previous.terminal_pickup_point
     previous_extra_stop_area    = previous.extra_stop_area
     previous_private_ride       = previous.private_ride
     previous_cruise             = previous.cruise
@@ -957,7 +956,8 @@ def quick_rebook_confirm(request, region_slug=None):
         no_of_baggage   = baggage_str,
         message         = message_with_child_ages(request, message),
         customer_history      = previous_customer_history,
-        terminal_pickup_point = previous_terminal_pickup_point,
+        # 픽업 장소(terminal_pickup_point)는 지난 예약에서 가져오지 않는다 — 항공편·터미널이
+        # 바뀌면 엉뚱한 미팅 포인트가 안내된다. 비워 두면 리마인더가 새로 배정한다.
         extra_stop_area       = previous_extra_stop_area,
         private_ride          = previous_private_ride,
         cruise                = previous_cruise,

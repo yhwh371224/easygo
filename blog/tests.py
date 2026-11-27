@@ -4756,6 +4756,32 @@ class ChildAgesMessageTests(TestCase):
         self.assertEqual(post.message, 'Child age: 1\nGate 3 please')
         self.assertEqual(post.no_of_baggage, 'L1, Baby1')
 
+    def test_quick_rebook_does_not_copy_pickup_point(self):
+        from regions.models import Airport, Country, Terminal, TerminalPickupPoint
+        cache.clear()
+        country, _ = Country.objects.get_or_create(name='Australia')
+        airport = Airport.objects.create(country=country, city='Sydney', code='SYX', name='Sydney Test')
+        terminal = Terminal.objects.create(airport=airport, name='T3 Qantas Domestic',
+                                           type=Terminal.TerminalType.DOMESTIC)
+        accessible = TerminalPickupPoint.objects.create(terminal=terminal, name='Accessible Pickup')
+        pickup_date = datetime.date.today() + timedelta(days=10)
+        previous = Post.objects.create(
+            name='Point Rebook', email='point@example.com', contact='0400000000',
+            no_of_passenger='2', no_of_baggage='L1', price='100',
+            direction='Pickup from Domestic Airport', suburb='Ryde',
+            pickup_date=datetime.date.today() - timedelta(days=30),
+            terminal_pickup_point=accessible,
+        )
+        self.client.post(reverse('basecamp:quick_rebook_confirm'), {
+            'email': 'point@example.com', 'previous_id': previous.pk,
+            'pickup_date': pickup_date.isoformat(), 'pickup_time': '10:00',
+            'contact': '0400000000', 'no_of_passenger': '2',
+            'direction': 'Pickup from Domestic Airport', 'suburb': 'Ryde', 'trip_type': 'airport',
+            'no_of_baggage': 'L1',
+        })
+        post = Post.objects.get(pickup_date=pickup_date)
+        self.assertIsNone(post.terminal_pickup_point)
+
 
 @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
 @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
