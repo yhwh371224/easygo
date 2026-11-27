@@ -1,0 +1,4 @@
+{% comment %}LocalBusiness JSON-LD 뒷부분 — basecamp/business_facts.py 값. 앞 속성 뒤에 콤마 없이 넣는다.{% endcomment %}"sameAs": [{% for u in facts.same_as %}"{{ u }}"{% if not forloop.last %}, {% endif %}{% endfor %}]{% if facts.founded_year %},
+      "foundingDate": "{{ facts.founded_year }}"{% endif %}{% if facts.abn %},
+      "taxID": "ABN {{ facts.abn }}"{% endif %}{% if facts.p2p_authorisation %},
+      "hasCredential": { "@type": "EducationalOccupationalCredential", "name": "NSW Point to Point Transport Commission authorised booking service provider", "identifier": "{{ facts.p2p_authorisation }}" }{% endif %}

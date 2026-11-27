@@ -13,7 +13,23 @@ def blackglide(request):
 
 def about_us(request): 
     # send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
-    return render(request, 'basecamp/pages/about_us.html')
+    return render(request, 'basecamp/pages/about_us.html', _facts_context())
+
+
+def _facts_context():
+    from basecamp.business_facts import rounded_down, stats
+    numbers = stats()
+    return {
+        'numbers': numbers,
+        'trips_label': rounded_down(numbers['trips']),
+        'customers_label': rounded_down(numbers['customers']),
+    }
+
+
+def company(request):
+    """회사 정보 페이지 — 손님용 About 은 짧게 두고, 사실 정보는 여기에 (푸터 링크).
+    봇에게만 보이는 페이지가 아니라 누구나 볼 수 있다 (클로킹 금지)."""
+    return render(request, 'basecamp/pages/company.html', _facts_context())
 
 def arrival_guide(request): 
     return render(request, 'basecamp/pages/arrival_guide.html')

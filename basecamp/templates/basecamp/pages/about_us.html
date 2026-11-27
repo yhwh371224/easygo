@@ -52,6 +52,18 @@
   <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5 content-card-box">
     <div class="entry-content">
 
+      <h2>About us</h2>
+      <p>EasyGo Airport Shuttle started in Sydney in {{ facts.founded_year }}, running private airport transfers in 7–13 seater vehicles for families, groups and travellers with plenty of luggage. We now also serve Melbourne and the Gold Coast.</p>
+      <p>Our booking system sends you a confirmation, reminders before your trip and, for airport pickups, an arrival email with your driver and terminal meeting point — and every driver gets a reminder before each pickup, so nothing is missed.</p>
+
+      <h2>EasyGo in numbers</h2>
+      <ul>
+        <li><strong>{{ trips_label }}</strong> completed trips</li>
+        <li><strong>{{ numbers.repeat_pct }}%</strong> of our customers have booked with us more than once</li>
+        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
+      </ul>
+      <p class="fs-sm"><a href="/company/">Company information</a></p>
+
       <h2>Why Choose EasyGo Airport Shuttle?</h2>
       <h3>EasyGo Airport Shuttle – Service Highlights</h3>
 

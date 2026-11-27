@@ -1,0 +1,54 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+
+{% block title %}Company Information | EasyGo Airport Shuttle{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Company details for EasyGo Airport Shuttle: business details, address,{% if facts.founded_year %} history since {{ facts.founded_year }},{% endif %} service areas and how bookings and reminders work.">
+{% endblock %}
+
+{% block content %}
+<section class="container py-5 mt-5" style="max-width: 860px;">
+  <h1 class="h2 mb-4">Company information</h1>
+
+  <h2 class="h5 mt-4">Business details</h2>
+  <ul>
+    <li>Trading name: {{ facts.name }}</li>
+    {% if facts.abn %}<li>ABN: {{ facts.abn }}</li>{% endif %}
+    <li>Address: {{ facts.street }}, {{ facts.locality }} {{ facts.region }} {{ facts.postcode }}, Australia</li>
+    {% if facts.p2p_authorisation %}<li>NSW Point to Point Transport Commission authorisation: {{ facts.p2p_authorisation }}</li>{% endif %}
+    <li>Email: <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></li>
+    <li>Service areas: Sydney, Melbourne and the Gold Coast — airport, cruise terminal and point-to-point transfers</li>
+    <li>Vehicles: private 7–13 seater vans; baby capsules, baby seats and boosters on request</li>
+  </ul>
+
+  {% if facts.founded_year %}
+  <h2 class="h5 mt-4">History</h2>
+  <ul>
+    <li>{{ facts.founded_year }}: EasyGo Airport Shuttle started private airport transfers in Sydney</li>
+    <li>{{ facts.paused_year }}: operations paused during COVID-19</li>
+    <li>{{ facts.reopened_year }}: restarted under new management with a rebuilt booking and reminder system</li>
+    <li>Since then: expanded to Melbourne and the Gold Coast</li>
+  </ul>
+  {% endif %}
+
+  <h2 class="h5 mt-4">How bookings are handled</h2>
+  <ul>
+    <li>A fixed price is confirmed before travel — no surge pricing and no charge for traffic or flight delays</li>
+    <li>Customers receive an email confirmation, reminder emails before the trip and on the day</li>
+    <li>For airport pickups, an arrival email about an hour before landing gives the driver's details and the terminal meeting point with maps</li>
+    <li>Missing details such as a flight number or contact number are checked automatically and requested before the travel day</li>
+    <li>Drivers receive a reminder two hours before each pickup with the pickup time and any child seats needed</li>
+    <li>Free waiting: up to 80 minutes after an international landing and 50 minutes after a domestic landing</li>
+  </ul>
+
+  <h2 class="h5 mt-4">Track record</h2>
+  <p class="text-muted fs-sm">Counted from our booking records since {{ facts.reopened_year }}{% if numbers.as_of %}, as of {{ numbers.as_of|date:"F Y" }}{% endif %}.</p>
+  <ul>
+    <li>{{ trips_label }} completed trips</li>
+    <li>{{ customers_label }} customers; {{ numbers.repeat_pct }}% have booked more than once</li>
+    <li>{{ numbers.group_pct }}% of bookings are groups of 5 or more passengers</li>
+    {% if google_rating and google_review_count %}<li>Google rating {{ google_rating }} from {{ google_review_count }} reviews{% if facts.google_reviews_since_year %}, collected since {{ facts.google_reviews_since_year }}{% endif %}</li>{% endif %}
+    <li>Quality Business Awards 2026 — Best Airport Shuttle Service, Mosman Council area</li>
+  </ul>
+</section>
+{% endblock %}

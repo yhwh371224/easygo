@@ -92,6 +92,7 @@ TEMPLATES = [
                 'basecamp.context_processors.rebook_error',
                 'basecamp.context_processors.google_review_url',
                 'basecamp.context_processors.review_stats',
+                'basecamp.business_facts.context',
             ],
         },
     },
