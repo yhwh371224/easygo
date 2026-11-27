@@ -4755,3 +4755,104 @@ class ChildAgesMessageTests(TestCase):
         post = Post.objects.get(pickup_date=pickup_date)
         self.assertEqual(post.message, 'Child age: 1\nGate 3 please')
         self.assertEqual(post.no_of_baggage, 'L1, Baby1')
+
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class DuplicateRoundTripPaymentTests(TestCase):
+    """A round trip booked twice (Isaac Choi 2026-11-26): the payment fills the
+    newer booking's two legs, and the duplicate is flagged on Telegram."""
+
+    def _round_trip(self, pickup_time='11:10'):
+        today = datetime.date.today()
+        return Post.objects.create(
+            name='Isaac Choi', email='isaac@example.com', no_of_passenger='8',
+            direction='Pickup from Domestic Airport', suburb='Overseas Cruise Terminal',
+            pickup_date=today + timedelta(days=5), pickup_time=pickup_time,
+            return_direction='Drop off to Domestic Airport',
+            return_pickup_date=today + timedelta(days=14), return_pickup_time='08:00',
+            price='240',
+        )
+
+    def _legs(self, outbound):
+        ret = Post.objects.get(return_pickup_time='x', pk__gt=outbound.pk,
+                               pickup_date=outbound.return_pickup_date,
+                               email=outbound.email, created__gte=outbound.created)
+        return Post.objects.get(pk=outbound.pk), ret
+
+    def _pay(self, amount='240.00'):
+        from blog.tasks import notify_user_payment_stripe
+        payment = StripePayment.objects.create(
+            name='Isaac Choi', email='isaac@example.com', amount=Decimal(amount),
+            payment_intent_id=f'pi_{Post.objects.count()}_{amount}',
+        )
+        with patch('blog.tasks.send_post_confirmation_email_task'), \
+                patch('blog.blog_utils.send_telegram_sync') as tg, \
+                patch('blog.blog_utils.render_email_template', return_value=''), \
+                patch('blog.blog_utils.send_html_email'):
+            notify_user_payment_stripe(payment.pk)
+        return tg
+
+    @staticmethod
+    def _dup_alerts(tg):
+        return [c[0][0] for c in tg.call_args_list if 'duplicate' in c[0][0]]
+
+    def test_single_round_trip_fills_both_legs(self, *mocks):
+        out, ret = self._legs(self._round_trip())
+        tg = self._pay()
+        out.refresh_from_db(); ret.refresh_from_db()
+        self.assertEqual(float(out.paid), 120.0)
+        self.assertEqual(float(ret.paid), 120.0)
+        self.assertFalse(self._dup_alerts(tg))
+
+    def test_duplicate_round_trip_pays_newest_pair_and_alerts(self, *mocks):
+        old_out, old_ret = self._legs(self._round_trip('11:10'))
+        new_out, new_ret = self._legs(self._round_trip('11:30'))
+        tg = self._pay()
+        for p in (old_out, old_ret, new_out, new_ret):
+            p.refresh_from_db()
+        self.assertEqual(float(new_out.paid), 120.0)
+        self.assertEqual(float(new_ret.paid), 120.0)
+        self.assertFalse(old_out.paid)
+        self.assertFalse(old_ret.paid)
+        alerts = self._dup_alerts(tg)
+        self.assertEqual(len(alerts), 1)
+        text = alerts[0]
+        self.assertIn(f'#{old_out.pk}', text)
+        self.assertIn(f'#{old_ret.pk}', text)
+
+    def test_pairing_picks_return_leg_created_with_its_outbound(self, *mocks):
+        from blog.blog_utils import group_booking_legs
+        old_out, old_ret = self._legs(self._round_trip('11:10'))
+        new_out, new_ret = self._legs(self._round_trip('11:30'))
+        units = group_booking_legs([old_out, new_out, old_ret, new_ret])
+        pairs = sorted([sorted(p.pk for p in u) for u in units])
+        self.assertEqual(pairs, sorted([[old_out.pk, old_ret.pk], [new_out.pk, new_ret.pk]]))
+
+    def test_creating_a_duplicate_booking_alerts_telegram(self, *mocks):
+        first = self._round_trip('11:10')
+        with patch('blog.tasks.send_telegram_task.delay') as tg, \
+                self.captureOnCommitCallbacks(execute=True):
+            second = self._round_trip('11:30')
+        tg.assert_called_once()
+        text = tg.call_args[0][0]
+        self.assertIn(f'#{first.pk}', text)
+        self.assertIn(f'#{second.pk}', text)
+
+    def test_first_booking_and_other_dates_do_not_alert(self, *mocks):
+        with patch('blog.tasks.send_telegram_task.delay') as tg, \
+                self.captureOnCommitCallbacks(execute=True):
+            first = self._round_trip()
+            Post.objects.create(
+                name='Isaac Choi', email='isaac@example.com', no_of_passenger='2',
+                pickup_date=first.pickup_date + timedelta(days=30), pickup_time='09:00', price='100',
+            )
+        tg.assert_not_called()
+
+    def test_cancelled_duplicate_does_not_alert(self, *mocks):
+        first = self._round_trip()
+        Post.objects.filter(email='isaac@example.com').update(cancelled=True)
+        with patch('blog.tasks.send_telegram_task.delay') as tg, \
+                self.captureOnCommitCallbacks(execute=True):
+            self._round_trip('11:30')
+        tg.assert_not_called()

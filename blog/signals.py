@@ -20,7 +20,9 @@ from .tasks import (
 
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
-from .blog_utils import _amount
+from django.utils import timezone
+
+from .blog_utils import _amount, _is_return_leg, duplicate_booking_alert_text, find_duplicate_bookings
 
 logger = logging.getLogger('easygo')
 
@@ -131,6 +133,27 @@ def alert_paid_booking_cancel_state(sender, instance, created, **kwargs):
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
+# 같은 손님이 같은 날짜로 또 예약하면 텔레그램으로 알린다. 결제가 두 부킹에
+# 나뉘어 들어가 진짜 부킹이 미결제로 남는다 (2026-11-26 Isaac Choi 8589/8594).
+# 리턴 편은 편도 저장 중에 만들어지므로 편도/원웨이 쪽에서 한 번만 본다.
+@receiver(post_save, sender=Post, dispatch_uid="alert_duplicate_booking_once")
+def alert_duplicate_booking(sender, instance, created, **kwargs):
+    if not created or kwargs.get('raw') or _is_return_leg(instance):
+        return
+    if not instance.pickup_date or instance.pickup_date < timezone.localdate():
+        return
+    try:
+        duplicates = find_duplicate_bookings(instance)
+    except Exception:
+        logger.warning('alert_duplicate_booking: check failed for Post pk=%s', instance.pk, exc_info=True)
+        return
+    if not duplicates:
+        return
+    text = duplicate_booking_alert_text(instance, duplicates)
+    logger.info('alert_duplicate_booking: Post pk=%s looks like %s', instance.pk, [p.pk for p in duplicates])
+    transaction.on_commit(lambda: send_telegram_task.delay(text))
+
+
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
 def notify_user_post_cancelled(sender, instance, created, **kwargs):
     update_fields = kwargs.get('update_fields')

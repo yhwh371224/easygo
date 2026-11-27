@@ -89,6 +89,141 @@ def is_deposit_protected(post):
     return is_deposit_satisfied(post) and post.discrepancy_final_sent_at is None
 
 
+def _is_return_leg(post):
+    return (post.return_pickup_time or '').strip().lower() == 'x'
+
+
+def group_booking_legs(posts_list):
+    """Split bookings into units: [outbound, return_leg] pairs and [single]s.
+
+    handle_return_trip() stores a round trip as two Post rows with no FK: the
+    return leg has return_pickup_time 'x' and the two rows swap pickup_date /
+    return_pickup_date. A customer who books the same round trip twice leaves
+    two outbounds that both fit one return leg by dates alone, so each return
+    leg takes the outbound created just before it (they are saved together, so
+    the pks are adjacent). Units come back in pickup-date order.
+    """
+    outbounds = [p for p in posts_list if not _is_return_leg(p)]
+    taken = set()
+    units = []
+    for ret in sorted((p for p in posts_list if _is_return_leg(p)), key=lambda p: p.pk):
+        candidates = [
+            o for o in outbounds
+            if o.pk not in taken
+            and o.pickup_date == ret.return_pickup_date
+            and o.return_pickup_date == ret.pickup_date
+            and (o.email or '').lower() == (ret.email or '').lower()
+        ]
+        if not candidates:
+            units.append([ret])
+            continue
+        # 리턴 편 바로 앞에 만들어진 편도가 짝이다. 없으면 pk 가 가장 가까운 것.
+        before = [o for o in candidates if o.pk < ret.pk]
+        mate = max(before, key=lambda o: o.pk) if before else min(candidates, key=lambda o: abs(o.pk - ret.pk))
+        taken.add(mate.pk)
+        units.append([mate, ret])
+    units.extend([o] for o in outbounds if o.pk not in taken)
+    units.sort(key=lambda u: (min(p.pickup_date for p in u), u[0].pk))
+    return units
+
+
+def _unit_balance(unit):
+    total = 0.0
+    for post in unit:
+        amounts = booking_balance(post)
+        if amounts is None:
+            return None
+        total += max(amounts[2], 0.0)
+    return round(total, 2)
+
+
+def order_posts_for_payment(posts_list, amount):
+    """Order bookings so a payment fills whole bookings, both legs together.
+
+    Legs of one round trip sit next to each other, and a booking whose
+    outstanding balance equals the amount paid goes first (the newest such
+    booking when there are several — a re-booked duplicate is paid after the
+    stale one was left). Without that, Isaac Choi's $240 round trip booked
+    twice (2026-11-26, Posts 8589/8590 and 8594/8595) was split $120 onto each
+    outbound by date order and his real return leg stayed unpaid.
+    """
+    units = group_booking_legs(posts_list)
+    amount = round(float(amount or 0), 2)
+    exact = [u for u in units if amount > 0 and _unit_balance(u) == amount]
+    if exact:
+        first = max(exact, key=lambda u: max(p.pk for p in u))
+        units.remove(first)
+        units.insert(0, first)
+    return [p for u in units for p in u]
+
+
+def find_duplicate_bookings(post):
+    """Other live upcoming bookings that look like this same booking again.
+
+    Same customer (email and name), same pickup date and same leg kind
+    (outbound/one-way vs return leg), not cancelled. Pickup time is not
+    compared — a re-booking usually changes it a little (11:10 → 11:30).
+    """
+    if post.cancelled or not post.pickup_date or not post.email or not post.name:
+        return []
+    qs = Post.objects.filter(
+        email__iexact=post.email,
+        name__iexact=post.name.strip(),
+        pickup_date=post.pickup_date,
+        cancelled=False,
+    ).exclude(pk=post.pk)
+    if _is_return_leg(post):
+        qs = qs.filter(return_pickup_time__iexact='x')
+    else:
+        qs = qs.exclude(return_pickup_time__iexact='x')
+    return list(qs.order_by('pk'))
+
+
+def _booking_line(post):
+    leg = 'return leg' if _is_return_leg(post) else (post.direction or post.start_point or '')
+    return (
+        f"#{post.pk} {post.pickup_date} {post.pickup_time or ''} {leg} "
+        f"price ${post.price} paid ${post.paid or 0}"
+    ).replace('  ', ' ')
+
+
+def duplicate_booking_alert_text(post, duplicates):
+    lines = "\n".join(_booking_line(p) for p in [*duplicates, post])
+    return (
+        f"⚠️ Possible duplicate booking — same customer, same date\n\n"
+        f"👤 {post.name}\n"
+        f"📧 {post.email}\n\n"
+        f"{lines}\n\n"
+        f"Cancel the stale one if it is a duplicate."
+    )
+
+
+def _alert_unpaid_duplicates(instance, method_label, posts_list):
+    """After a payment, flag unpaid look-alikes of the bookings it paid."""
+    paid_posts = [p for p in posts_list if p._applied]
+    paid_pks = {p.pk for p in paid_posts}
+    dupes = {}
+    for post in paid_posts:
+        for dup in find_duplicate_bookings(post):
+            if dup.pk in paid_pks:
+                continue
+            amounts = booking_balance(dup)
+            if amounts is not None and amounts[2] > 0:
+                dupes[dup.pk] = dup
+    if not dupes:
+        return
+    applied = "\n".join(f"{_booking_line(p)} (+${clean_float(p._applied)})" for p in paid_posts)
+    unpaid = "\n".join(_booking_line(p) for p in sorted(dupes.values(), key=lambda p: p.pk))
+    send_telegram_sync(
+        f"⚠️ Payment via {method_label} — customer has an unpaid duplicate booking\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n\n"
+        f"Paid:\n{applied}\n\n"
+        f"Unpaid look-alike:\n{unpaid}\n\n"
+        f"Cancel the duplicate so no payment reminder goes out."
+    )
+
+
 def process_generic_payment(payment_instance, posts, admin_email, calculated_amount=None):
     """
     Stripe/PayPal 결제 건을 분석하여 여러 예약(Post)에 금액을 배분합니다.
@@ -121,7 +256,9 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         pickup_date__isnull=False,
         pickup_date__gte=timezone.localdate(),
     )
-    posts_list = list(posts)
+    posts_list = order_posts_for_payment(
+        list(posts), calculated_amount if calculated_amount is not None else instance.amount
+    )
     has_future_bookings = bool(posts_list)
 
     total_balance = 0.0
@@ -245,6 +382,11 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
             f"💰 paid ${clean_float(paid_total)}\n"
             f"Applied: {applied or 'none'}"
         )
+
+    try:
+        _alert_unpaid_duplicates(instance, method_label, posts_list)
+    except Exception:
+        logger.warning('duplicate booking check failed for %s', instance.email, exc_info=True)
 
     # 남은 잔액(total_balance > 0)이 전부 "디파짓 인보이스로 이미 예고된 미납분"으로
     # 설명되면 미납 안내 메일을 보낼 필요가 없음. 디파짓 문턱(deposit_amount_due)을
