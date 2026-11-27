@@ -149,22 +149,28 @@
 													It's Peter. We are so grateful for choosing us<br><br></p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Your review will mean the world to us and keep us doing our business successfully<br><br></p>
+{% comment %}
+  2026-11-28 ~ 2026-12-28 (한 달): Tripadvisor 리뷰를 먼저 모으려고 Tripadvisor 를 1번, Google 을 2번으로
+  두고 웹사이트 리뷰는 뺐다. 한 달 뒤 Google 1번 / Tripadvisor 2번 / 웹사이트 3번으로 되돌린다.
+{% endcomment %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please choose <strong>one</strong> of the three ways below — whichever is easiest for you:<br><br></p>
+													Please choose whichever is easiest for you:<br><br></p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													<strong>1. Google</strong> — click the image to leave a Google review:<br><br>
-                                                    <a href="https://g.page/r/CaNU_31hewLaEBM/review" target="_blank">
-														<img src="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/google-review.webp" title="source: google-review" width="140" >
-													</a><br><br></p>
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													<strong>2. Tripadvisor</strong> >>> 
+													<strong>1. Tripadvisor</strong> >>> 
 													<a href="https://www.tripadvisor.com.au/UserReviewEdit-g255060-d27753160-Easygo_Airport_Shuttle-Sydney_New_South_Wales.html" target="_blank">Write a Tripadvisor review</a><br>
 													<span style="color:#737491;">Our Tripadvisor page is still new — a few words from you would really help other travellers find us.</span><br>
 													<br></p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													<strong>2. Google</strong> — click the image to leave a Google review:<br><br>
+                                                    <a href="https://g.page/r/CaNU_31hewLaEBM/review" target="_blank">
+														<img src="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/google-review.webp" title="source: google-review" width="140" >
+													</a><br><br></p>
+{% comment %} 웹사이트 리뷰 (한 달 동안 숨김, 2026-12-28 쯤 되살린다)
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													<strong>3. Our website</strong> — log in with your email {{ email }} >>> 
 													<a href="https://easygoshuttle.com.au/easygo_review/custom_login">Log In for a Review</a><br>
 													<br></p>
+{% endcomment %}
                                                 <p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
                                                     Thank you! we will remember you, {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}<br><br>
                                                     Regards,<br>
