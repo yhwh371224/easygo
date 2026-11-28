@@ -498,7 +498,8 @@ def email_dispatch_detail(request):
 
                 message = "Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
                 if closest_user.contact:
-                    send_sms_notice(closest_user.contact, message)
+                    send_sms_notice(closest_user.contact, message, booking=closest_user,
+                                    label='pickup time changed')
 
                 pickup_time_12h = format_pickup_time_12h(adjusted_pickup_time)
 
@@ -789,7 +790,7 @@ def email_dispatch_detail(request):
                     f"Dear {user.name}, We have sent an urgent email. Please check your email.\n"
                     "Reply only via email >> info@easygoshuttle.com.au"
                 )
-                send_sms_notice(user.contact, message)
+                send_sms_notice(user.contact, message, booking=user, label='cancellation apology')
                 # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
                 # send_whatsapp_template(user.contact, user.name)
 
@@ -899,7 +900,7 @@ def send_sms(request):
         if not contact or not message:
             context['error'] = "Phone number and message are both required."
         else:
-            sid = send_sms_notice(contact, message + SMS_FOOTER)
+            sid = send_sms_notice(contact, message + SMS_FOOTER, label='manual')
             if sid:
                 context = {'success': f"SMS sent to {format_au_phone(contact)} (SID: {sid})"}
             else:

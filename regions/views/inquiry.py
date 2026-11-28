@@ -138,12 +138,11 @@ def region_inquiry_details(request, region_slug):
         p.customer_history = history
         p.save()
 
-        ip = get_client_ip(request)
         send_telegram_task.delay(
             f"✈️ New inquiry:\n"
-            f"Region: {region.name}\n"
-            f"IP: `{ip}`\n",
-            location_ip=ip,
+            f"{p.name} | {p.email}\n"
+            f"Pickup: {p.pickup_date or '-'} {p.pickup_time or ''}\n"
+            f"Region: {region.name}\n",
         )
         return booking_success_response(request)
 

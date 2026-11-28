@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from blog.models import Post
-from blog.sms_utils import normalize_phone
+from blog.sms_utils import normalize_phone, notify_sms_sent
 
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
@@ -92,6 +92,8 @@ class Command(BaseCommand):
 
                     sms_logger.info(f"[SMS SENT] {notice.name} {formatted_number}")
                     sms_sent = True
+                    notify_sms_sent(formatted_number, notice.contact, booking=notice,
+                                    label='unpaid urgent notice')
 
                 except TwilioRestException as e:
                     sms_logger.error(

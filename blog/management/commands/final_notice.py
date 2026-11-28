@@ -148,7 +148,8 @@ class Command(BaseCommand):
             # 보내지 않고 기록을 남기지 않아, 다음 실행에서 SMS+메일을 함께 재시도한다
             # (메일만 먼저 나가고 재시도 때 또 나가는 중복 방지).
             if notice.contact:
-                if send_sms_notice(notice.contact, sms_message) is None:
+                if send_sms_notice(notice.contact, sms_message, booking=notice,
+                                   label=f'final notice ({label})') is None:
                     sms_logger.warning(
                         f"Final-notice SMS ({label}) failed for #{notice.id} — will retry"
                     )

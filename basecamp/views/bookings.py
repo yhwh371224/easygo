@@ -205,9 +205,7 @@ def _honeypot_blocked(request):
             f"Page: {request.path}\n"
             f"Email: {email or '-'}\n"
             f"Hidden field: {filled}\n"
-            f"If this is a real customer, their booking was NOT processed — contact them.\n"
-            f"IP: {ip}\n",
-            location_ip=ip,
+            f"If this is a real customer, their booking was NOT processed — contact them.\n",
         )
     return render_inquiry_done(request)
 
@@ -392,14 +390,11 @@ def confirm_booking_detail(request):
     if request.POST.get('send_invoice') == 'on':
         _send_invoice_for_new_booking(request, p)
 
-    ip = get_client_ip(request)
     try:
         send_telegram_task.delay(
             _confirm_click_header("Clicked the confirm button", price_warning) +
             f"{_confirm_click_details(user, p)}"
-            f"{price_warning}"
-            f"IP: `{ip}`\n",
-            location_ip=ip,
+            f"{price_warning}",
         )
     except Exception as e:
         logger.error(f"[TELEGRAM] Failed to queue: {e}")
@@ -554,14 +549,11 @@ def confirm_booking_prepay_detail(request):
     if request.POST.get('send_invoice') == 'on':
         _send_invoice_for_new_booking(request, p)
 
-    ip = get_client_ip(request)
     try:
         send_telegram_task.delay(
             _confirm_click_header("Clicked the confirm button (prepay)", price_warning) +
             f"{_confirm_click_details(user, p)}"
-            f"{price_warning}"
-            f"IP: `{ip}`\n",
-            location_ip=ip,
+            f"{price_warning}",
         )
     except Exception as e:
         logger.error(f"[TELEGRAM] Failed to queue: {e}")
@@ -988,12 +980,11 @@ def quick_rebook_confirm(request, region_slug=None):
 
     logger.info(f"[QUICK REBOOK CONFIRM] Post id={p.id} email={email} date={pickup_date_str}")
 
-    ip      = get_client_ip(request)
     try:
         send_telegram_task.delay(
             f"🔄 Quick Rebook:\n"
-            f"IP: `{ip}`\n",
-            location_ip=ip,
+            f"{p.name} | {p.email}\n"
+            f"Pickup: {p.pickup_date or '-'} {p.pickup_time or ''}\n",
         )
     except Exception as e:
         logger.error(f"[TELEGRAM] Quick Rebook failed: {e}")
@@ -1015,7 +1006,7 @@ def _direct_booking_region(request):
     return region or Region.objects.filter(slug='sydney', is_active=True).first()
 
 
-def _direct_booking_alert(post, open_inquiries, ip):
+def _direct_booking_alert(post, open_inquiries):
     when = f"{post.pickup_date} {post.pickup_time or ''}".rstrip()
     lines = [
         "📩 DIRECT BOOKING (/book-direct/) — check price & confirm",
@@ -1035,7 +1026,6 @@ def _direct_booking_alert(post, open_inquiries, ip):
     if open_inquiries:
         lines.append(f"⚠️ {open_inquiries} open inquiry for this email — delete it if it's the same trip")
     lines.append(f"Region: {post.region.name if post.region else '-'}")
-    lines.append(f"IP: `{ip}`")
     return "\n".join(lines) + "\n"
 
 
@@ -1129,7 +1119,7 @@ def direct_booking(request):
     p.save()
 
     try:
-        send_telegram_task.delay(_direct_booking_alert(p, open_inquiries, ip), location_ip=ip)
+        send_telegram_task.delay(_direct_booking_alert(p, open_inquiries))
     except Exception as e:
         logger.error(f"[TELEGRAM] Failed to queue: {e}")
 

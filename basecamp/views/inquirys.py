@@ -197,13 +197,12 @@ def inquiry_details(request):
         p.customer_history = history
         p.save()
 
-        ip = get_client_ip(request)
         try:
             send_telegram_task.delay(
                 f"✈️ New inquiry:\n"
-                f"Region: {post_region.name if post_region else 'Unknown'}\n"
-                f"IP: `{ip}`\n",
-                location_ip=ip,
+                f"{p.name} | {p.email}\n"
+                f"Pickup: {p.pickup_date or '-'} {p.pickup_time or ''}\n"
+                f"Region: {post_region.name if post_region else 'Unknown'}\n",
             )
         except Exception as e:
             logger.error(f"[TELEGRAM] Failed to queue: {e}")
@@ -418,11 +417,10 @@ def inquiry_details1(request):
         p.customer_history = history
         p.save()
 
-        ip = get_client_ip(request)
         send_telegram_task.delay(
             f"✈️ Home Inquiry:\n"
-            f"IP: `{ip}`\n",
-            location_ip=ip,
+            f"{p.name} | {p.email}\n"
+            f"Pickup: {p.pickup_date or '-'} {p.pickup_time or ''}\n",
         )
 
         return render_inquiry_done(request)

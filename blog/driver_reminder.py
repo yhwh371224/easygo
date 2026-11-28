@@ -243,7 +243,9 @@ class ReminderRun:
             self.sent += 1
             return
         from blog import sms_utils
-        sid = sms_utils.send_sms_notice(driver.driver_contact, text) if driver.driver_contact else None
+        # 성공·실패 모두 아래 self.alerts 로 텔레그램 요약에 나가므로 따로 알리지 않는다.
+        sid = (sms_utils.send_sms_notice(driver.driver_contact, text, notify=False)
+               if driver.driver_contact else None)
         # SMS 실패는 재시도하지 않는다 — 잘못된 번호면 매번 같은 실패이고, Twilio 가
         # 실제로는 보냈는데 오류로 보인 경우 15분마다 중복 문자가 나간다.
         self.mark_handled(booking, sent=bool(sid))

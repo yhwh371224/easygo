@@ -357,11 +357,11 @@ def send_telegram_task(text, location_ip=None):
     """Staff Telegram alert off the request thread — send_telegram_sync waits
     on api.telegram.org (≈1s, up to 10s per try, and a second try when
     Markdown is rejected), which a customer or driver pressing a button
-    shouldn't sit through. location_ip appends a "Location:" line looked up
-    here, since get_ip_info is another blocking call (ipinfo.io, up to 3s)."""
-    from utils.telegram import get_ip_info, send_telegram_sync
-    if location_ip:
-        text = f"{text}Location: {get_ip_info(location_ip)}"
+    shouldn't sit through.
+
+    텔레그램 알림에는 IP 도, IP 로 찾은 위치도 넣지 않는다 (2026-11-28). location_ip 는
+    이미 큐에 들어간 예전 작업이 깨지지 않게 받기만 하고 쓰지 않는다."""
+    from utils.telegram import send_telegram_sync
     send_telegram_sync(text)
 
 

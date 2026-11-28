@@ -2162,14 +2162,14 @@ class DriverAcceptJobViewTests(TestCase):
             send_telegram_task('hello')
         inline.assert_called_once_with('hello')
 
-    def test_task_looks_up_location_off_the_request(self, *_):
+    def test_task_ignores_location_ip_from_old_queued_jobs(self, *_):
         from blog.tasks import send_telegram_task
 
-        with patch('utils.telegram.get_ip_info', return_value='Sydney, NSW (Telstra)') as lookup, \
+        with patch('utils.telegram.get_ip_info') as lookup, \
                 patch('utils.telegram.send_telegram_sync') as inline:
-            send_telegram_task('New inquiry:\nIP: `1.2.3.4`\n', location_ip='1.2.3.4')
-        lookup.assert_called_once_with('1.2.3.4')
-        inline.assert_called_once_with('New inquiry:\nIP: `1.2.3.4`\nLocation: Sydney, NSW (Telstra)')
+            send_telegram_task('New inquiry:\n', location_ip='1.2.3.4')
+        lookup.assert_not_called()
+        inline.assert_called_once_with('New inquiry:\n')
 
 
 # ---------------------------------------------------------------------------

@@ -494,8 +494,10 @@ class RegionInquiryViewTests(TestCase):
         # Telegram and the ipinfo.io lookup both happen in the worker, not here.
         lookup.assert_not_called()
         mock_telegram.assert_called_once()
-        self.assertIn('New inquiry', mock_telegram.call_args.args[0])
-        self.assertTrue(mock_telegram.call_args.kwargs['location_ip'])
+        text = mock_telegram.call_args.args[0]
+        self.assertIn('New inquiry', text)
+        self.assertNotIn('IP', text)                                  # IP 는 알림에 넣지 않는다
+        self.assertNotIn('location_ip', mock_telegram.call_args.kwargs)
 
     @patch('blog.tasks.send_telegram_task.delay')
     def test_return_passenger_count_flows_inquiry_to_post(self, *_):

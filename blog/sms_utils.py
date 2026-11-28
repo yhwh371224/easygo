@@ -127,10 +127,43 @@ def is_au_mobile(phone_number, default_region="AU"):
 # =========================
 # SMS (Twilio)
 # =========================
-def send_sms_notice(phone_number, message_body):
+def sms_sent_alert_text(formatted_number, booking=None, label=''):
+    """SMS 성공 텔레그램 문구 — 누구에게, 이메일, 날짜."""
+    lines = [f"📱 SMS sent{f' — {label}' if label else ''}"]
+    if booking is not None:
+        when = f"{booking.pickup_date or '-'} {booking.pickup_time or ''}".rstrip()
+        lines += [f"To: {booking.name or '-'} ({formatted_number})",
+                  f"Email: {booking.email or '-'}",
+                  f"Pickup: {when}"]
+    else:
+        lines.append(f"To: {formatted_number}")
+    return "\n".join(lines) + "\n"
+
+
+def _booking_for_number(phone_number):
+    """예약을 넘겨받지 못한 SMS(어드민 수동 발송 등) — 같은 번호의 가장 최근 예약."""
+    from blog.models import Post
+    return (Post.objects.filter(contact=str(phone_number).strip())
+            .order_by('-pickup_date', '-pk').first())
+
+
+def notify_sms_sent(formatted_number, phone_number, booking=None, label=''):
+    try:
+        from blog.tasks import send_telegram_task
+        if booking is None:
+            booking = _booking_for_number(phone_number)
+        send_telegram_task.delay(sms_sent_alert_text(formatted_number, booking, label))
+    except Exception:
+        sms_logger.warning("[SMS] success alert to Telegram failed", exc_info=True)
+
+
+def send_sms_notice(phone_number, message_body, booking=None, label='', notify=True):
     """
     Send SMS via Twilio.
     Returns message SID or None.
+
+    성공하면 텔레그램으로 알린다 (누구에게·이메일·날짜). booking 을 넘기지 않으면 같은
+    번호의 가장 최근 예약을 찾아 보여준다. 이미 자기 알림을 보내는 곳은 notify=False.
     """
     formatted_number = normalize_phone(phone_number)
 
@@ -152,6 +185,8 @@ def send_sms_notice(phone_number, message_body):
         sms_logger.info(
             f"[SMS SENT] to={formatted_number} sid={message.sid}"
         )
+        if notify:
+            notify_sms_sent(formatted_number, phone_number, booking, label)
 
         return message.sid
 
