@@ -1,0 +1,14 @@
+{% comment %}서비스 페이지 후기 — reviews(list of dict), reviews_title 를 넘긴다 (easygo_review/review_region.py).{% endcomment %}
+{% if reviews %}
+<section class="mt-4 mb-4 text-start" id="customer-reviews">
+  <h2 class="h5 fw-semibold mb-3">{{ reviews_title }}</h2>
+  {% for r in reviews %}
+  <blockquote class="border-start border-3 ps-3 mb-3" style="border-color: #eb7828 !important;">
+    <div class="text-warning fs-sm mb-1" aria-label="{{ r.rating }} out of 5">{% for _ in "12345"|make_list %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+    <div class="text-muted fs-sm mb-1">{{ r.text|striptags|truncatewords:60 }}</div>
+    <footer class="fs-xs"><a href="{{ r.url }}" class="text-decoration-none">— {{ r.name }}{% if r.date %} · {{ r.date|date:"M Y" }}{% endif %}</a></footer>
+  </blockquote>
+  {% endfor %}
+  <a href="/easygo_review/" class="fs-sm text-decoration-none">Read all customer reviews →</a>
+</section>
+{% endif %}

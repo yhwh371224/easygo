@@ -98,3 +98,53 @@ def reviews_for_suburb(suburb_name, limit=5):
             seen.add(_key(r.name))
             picked.append(r)
     return picked[:limit]
+
+
+SERVICE_REVIEW_KINDS = ('region', 'cruise', 'group')
+
+
+def reviews_for_service(kind, region_slug, limit=5, offset=0):
+    """서비스 페이지용 후기 — 그 서비스를 실제로 이용한 손님의 공개 리뷰, 최신순, 한 사람당 하나.
+
+    kind: 'region' 이 지역 예약 손님 / 'cruise' 크루즈 터미널 예약 / 'group' 7명 이상(맥시 택시).
+    offset: 같은 지역의 airport-shuttle·airport-transfer 처럼 비슷한 두 페이지에 같은 후기가
+    반복되지 않게 다른 묶음을 보여줄 때 쓴다. 결과는 dict 목록 (캐시에 넣기 좋게).
+    """
+    from easygo_review.models import Post as Review
+
+    bookings = Booking.objects.filter(region__slug=region_slug, cancelled=False)
+    if kind == 'cruise':
+        bookings = bookings.filter(Q(cruise=True) | Q(suburb__icontains='cruise')
+                                   | Q(start_point__icontains='cruise') | Q(end_point__icontains='cruise'))
+    rows = bookings.values_list('name', 'no_of_passenger')
+    if kind == 'group':
+        rows = [(n, p) for n, p in rows if str(p or '').strip().isdigit() and int(str(p).strip()) >= 7]
+    # 시드니는 예약자가 수천 명이라 이름마다 OR 조건을 거는 대신, 리뷰(수백 개)를 돌며 이름 집합과 맞춘다.
+    names = {_key(n) for n, _ in rows if _key(n)}
+    if not names:
+        return []
+    picked, seen = [], set()
+    for r in Review.objects.filter(is_published=True).order_by('-date', '-created'):
+        if _key(r.name) not in names or _key(r.name) in seen:
+            continue
+        seen.add(_key(r.name))
+        picked.append(r)
+        if len(picked) >= offset + limit:
+            break
+    return [{'name': r.name, 'date': r.date, 'rating': r.rating, 'url': r.get_absolute_url(),
+             'text': r.get_markdown_content()} for r in picked[offset:offset + limit]]
+
+
+def cached_service_reviews(kind, region_slug, offset=0):
+    """SUBURB_LOCAL_REVIEWS 스위치가 켜져 있을 때만, 6시간 캐시."""
+    from django.conf import settings
+    from django.core.cache import cache
+
+    if not getattr(settings, 'SUBURB_LOCAL_REVIEWS', False):
+        return []
+    key = f'service_reviews:v1:{kind}:{region_slug}:{offset}'
+    result = cache.get(key)
+    if result is None:
+        result = reviews_for_service(kind, region_slug, offset=offset)
+        cache.set(key, result, 60 * 60 * 6)
+    return result

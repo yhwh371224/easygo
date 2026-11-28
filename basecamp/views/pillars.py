@@ -78,7 +78,11 @@ def maxi_taxi_legacy(request, suburb):
 
 def maxi_taxi(request, suburb=None):
     if not suburb:
-        return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
+        from easygo_review.review_region import cached_service_reviews
+        return render(request, 'basecamp/pillars/maxi-taxi-pillar.html', {
+            'reviews': cached_service_reviews('group', 'sydney'),
+            'reviews_title': 'What groups of 7–13 say',
+        })
 
     slug = MAXI_TAXI_SLUG_ALIASES.get(suburb.lower(), suburb.lower())
     if slug not in MAXI_TAXI_SUBURBS:

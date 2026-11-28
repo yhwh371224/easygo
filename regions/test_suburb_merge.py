@@ -100,3 +100,45 @@ class SuburbLocalReviewsTests(TestCase):
         self.assertNotContains(page, 'Second trip also great')     # 한 사람당 하나
         # 합쳐지지 않은 서버브는 shuttle 페이지에만 — transfer 에 같은 후기를 반복하지 않는다.
         self.assertNotContains(self.get('/sydney/airport-transfer/hornsby-heights/'), 'customers say')
+
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class ServicePageReviewsTests(TestCase):
+    """서비스 페이지(shuttle/transfer/cruise/maxi taxi)에 그 서비스를 이용한 손님 후기."""
+
+    def setUp(self):
+        from blog.models import Post as Booking
+        from easygo_review.models import Post as Review
+        cache.clear()
+        self.syd = region('sydney', 'Sydney')
+        d = datetime.date(2026, 11, 1)
+        people = [('Cruise Guest', 'Overseas Cruise Terminal', '4'), ('Big Group', 'Ryde', '11')]
+        people += [(f'Person {i}', 'Ryde', '2') for i in range(8)]
+        for i, (name, suburb, pax) in enumerate(people):
+            Booking.objects.create(name=name, email=f'{i}@x.com', no_of_passenger=pax, price='100',
+                                   suburb=suburb, region=self.syd, pickup_date=d - datetime.timedelta(days=5))
+            Review.objects.create(name=name, author=name, content=f'Review by {name}',
+                                  date=d - datetime.timedelta(days=i))
+
+    def get(self, url):
+        return self.client.get(url, secure=True)
+
+    def test_off_by_default(self, *_):
+        self.assertNotContains(self.get('/sydney/airport-shuttle/'), 'customer-reviews')
+
+    @override_settings(SUBURB_LOCAL_REVIEWS=True)
+    def test_each_service_page_gets_matching_reviews(self, *_):
+        cruise = self.get('/sydney/cruise-transfer/')
+        self.assertContains(cruise, 'Review by Cruise Guest')
+        self.assertNotContains(cruise, 'Review by Person 1')
+        self.assertContains(self.get('/sydney_cruise_transfer/'), 'Review by Cruise Guest')
+        maxi = self.get('/sydney/maxi-taxi/')
+        self.assertContains(maxi, 'Review by Big Group')
+        self.assertNotContains(maxi, 'Review by Person 1')
+        self.assertContains(self.get('/maxi-taxi/'), 'Review by Big Group')
+        shuttle = self.get('/sydney/airport-shuttle/').content.decode()
+        transfer = self.get('/sydney/airport-transfer/').content.decode()
+        self.assertIn('Review by Cruise Guest', shuttle)            # 최신 5개
+        self.assertNotIn('Review by Cruise Guest', transfer)        # transfer 는 다음 5개
+        self.assertIn('Review by Person 3', transfer)

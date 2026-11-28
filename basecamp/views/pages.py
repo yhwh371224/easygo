@@ -127,7 +127,11 @@ def sydney_airport_transfer(request):
     return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
 
 def sydney_cruise_transfer(request):
-    return render(request, 'basecamp/pillars/sydney_cruise_transfer.html')
+    from easygo_review.review_region import cached_service_reviews
+    return render(request, 'basecamp/pillars/sydney_cruise_transfer.html', {
+        'reviews': cached_service_reviews('cruise', 'sydney'),
+        'reviews_title': 'What our cruise customers say',
+    })
 
 def service(request):
     return render(request, 'basecamp/pages/service.html')

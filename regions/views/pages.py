@@ -121,21 +121,31 @@ def _render_pillar(request, template_path):
     return render(request, template_path)
 
 
-def _render_pillar_with_region(request, region_slug, template_path):
+def _render_pillar_with_region(request, region_slug, template_path, reviews_kind=None,
+                               reviews_offset=0, reviews_title=''):
+    from easygo_review.review_region import cached_service_reviews
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    return render(request, template_path, {'region': region})
+    reviews = cached_service_reviews(reviews_kind, region.slug, reviews_offset) if reviews_kind else []
+    return render(request, template_path, {
+        'region': region, 'reviews': reviews, 'reviews_title': reviews_title,
+    })
 
 
+# 서비스 페이지 후기 (SUBURB_LOCAL_REVIEWS 스위치): 그 서비스를 실제로 이용한 손님 후기.
+# shuttle·transfer 페이지는 내용이 비슷하니 서로 다른 후기 묶음을 보여준다 (offset 0 / 5).
 def region_airport_shuttle(request, region_slug):
-    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_shuttle.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_shuttle.html',
+                                      'region', 0, 'What our customers say')
 
 
 def region_airport_transfer(request, region_slug):
-    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_transfer.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_transfer.html',
+                                      'region', 5, 'Recent customer reviews')
 
 
 def region_cruise_transfer(request, region_slug):
-    return _render_pillar_with_region(request, region_slug, 'regions/pillars/cruise_transfer.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/cruise_transfer.html',
+                                      'cruise', 0, 'What our cruise customers say')
 
 
 def region_maxi_taxi(request, region_slug):
@@ -145,9 +155,12 @@ def region_maxi_taxi(request, region_slug):
         .filter(region=region, is_active=True, is_pinned=True)
         .order_by('sort_order', 'name')
     )
+    from easygo_review.review_region import cached_service_reviews
     return render(request, 'regions/pillars/maxi_taxi.html', {
         'region': region,
         'pinned_suburbs': pinned_suburbs,
+        'reviews': cached_service_reviews('group', region.slug),
+        'reviews_title': 'What groups of 7–13 say',
     })
 
 
