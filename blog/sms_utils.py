@@ -45,6 +45,20 @@ def format_au_phone(number):
 # =========================
 # Phone Normalization (GLOBAL STANDARD)
 # =========================
+def _international_prefix_to_plus(phone_number):
+    """해외 손님이 국제전화 접두어로 적은 번호: '0065 9690 8362' → '+6596908362'.
+
+    '00' (대부분 나라) 과 '0011' (호주에서 거는 국제전화) 을 '+' 로 바꾼다. 호주 국내
+    번호는 '00' 으로 시작하지 않으므로 겹치지 않는다."""
+    text = str(phone_number).strip()
+    digits = ''.join(ch for ch in text if ch.isdigit())
+    if text.startswith('+') or not digits.startswith('00'):
+        return text
+    if digits.startswith('0011'):
+        return '+' + digits[4:]
+    return '+' + digits[2:]
+
+
 def normalize_phone(phone_number, default_region="AU"):
     """
     Convert any international/local number to E.164 format safely.
@@ -52,6 +66,8 @@ def normalize_phone(phone_number, default_region="AU"):
     """
     if not phone_number:
         return None
+
+    phone_number = _international_prefix_to_plus(phone_number)
 
     try:
         parsed = phonenumbers.parse(phone_number, default_region)
