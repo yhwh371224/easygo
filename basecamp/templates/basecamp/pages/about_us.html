@@ -56,12 +56,45 @@
       <p>EasyGo Airport Shuttle started in Sydney in {{ facts.founded_year }}, running private airport transfers in 7–13 seater vehicles for families, groups and travellers with plenty of luggage. We now also serve Melbourne and the Gold Coast.</p>
       <p>Our booking system sends you a confirmation, reminders before your trip and, for airport pickups, an arrival email with your driver and terminal meeting point — and every driver gets a reminder before each pickup, so nothing is missed.</p>
 
+      {% if facts.founded_year %}
+      <h2>Our history</h2>
+      <ul>
+        <li><strong>{{ facts.founded_year }}</strong> — EasyGo Airport Shuttle started private airport transfers in Sydney</li>
+        <li><strong>{{ facts.paused_year }}</strong> — operations paused during COVID-19</li>
+        <li><strong>{{ facts.reopened_year }}</strong> — restarted under new management with a rebuilt booking and reminder system</li>
+        <li><strong>Since then</strong> — expanded to Melbourne and the Gold Coast</li>
+      </ul>
+      {% endif %}
+
       <h2>EasyGo in numbers</h2>
+      <p class="fs-sm text-muted">Based on our own booking records.</p>
       <ul>
         <li><strong>{{ numbers.repeat_pct }}%</strong> of our customers have booked with us more than once</li>
-        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
+        <li><strong>{{ numbers.group_pct }}%</strong> of bookings are groups of 5 or more passengers</li>
+        {% if google_rating and google_review_count %}<li><strong>{{ google_rating }}★</strong> from <strong>{{ google_review_count }}</strong> Google reviews{% if facts.google_reviews_since_year %}, collected since {{ facts.google_reviews_since_year }}{% endif %} — <a href="/easygo_review/">read customer reviews</a></li>{% endif %}
+        <li>Quality Business Awards 2026 — Best Airport Shuttle Service, Mosman Council area</li>
       </ul>
-      <p class="fs-sm"><a href="/company/">Company information</a></p>
+
+      <h2>How bookings are handled</h2>
+      <ul>
+        <li>A fixed price is confirmed before travel — no surge pricing and no charge for traffic or flight delays</li>
+        <li>You receive an email confirmation, reminder emails before the trip and on the day</li>
+        <li>For airport pickups, an arrival email about an hour before landing gives the driver's details and the terminal meeting point with maps</li>
+        <li>Missing details such as a flight number or contact number are checked automatically and requested before the travel day</li>
+        <li>Drivers receive a reminder two hours before each pickup with the pickup time and any child seats needed</li>
+        <li>Free waiting: up to 80 minutes after an international landing and 50 minutes after a domestic landing</li>
+      </ul>
+
+      <h2 id="company-information">Company information</h2>
+      <ul>
+        <li>Trading name: {{ facts.name }}</li>
+        {% if facts.abn %}<li>ABN: {{ facts.abn }}</li>{% endif %}
+        <li>Address: {{ facts.street }}, {{ facts.locality }} {{ facts.region }} {{ facts.postcode }}, Australia</li>
+        {% if facts.p2p_authorisation %}<li>NSW Point to Point Transport Commission authorisation: {{ facts.p2p_authorisation }}</li>{% endif %}
+        <li>Email: <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></li>
+        <li>Service areas: Sydney, Melbourne and the Gold Coast — airport, cruise terminal and point-to-point transfers</li>
+        <li>Vehicles: private 7–13 seater vans; baby capsules, baby seats and boosters on request</li>
+      </ul>
 
       <h2>Why Choose EasyGo Airport Shuttle?</h2>
       <h3>EasyGo Airport Shuttle – Service Highlights</h3>

@@ -45,22 +45,26 @@ class BusinessFactsTests(TestCase):
         self.assertContains(r, '50%')
         self.assertNotContains(r, 'completed trips')
         self.assertContains(r, 'started in Sydney in 2014')
-        self.assertContains(r, 'href="/company/"')
         self.assertNotContains(r, 'owner')
 
-    def test_company_page_has_the_details(self, *_):
-        r = self.client.get('/company/', secure=True)
-        self.assertEqual(r.status_code, 200)
-        for text in ('ABN: 25 697 358 535', '2014', 'under new management', '50 minutes', '33%'):
+    def test_about_page_has_the_company_details(self, *_):
+        r = self.client.get('/about_us/', secure=True)
+        for text in ('ABN: 25 697 358 535', 'Our history', 'under new management', '50 minutes', '33%',
+                     'id="company-information"'):
             self.assertContains(r, text)
-        self.assertNotContains(r, 'owner')
-        self.assertContains(self.client.get('/', secure=True), 'href="/company/"')   # 푸터 링크
+        self.assertNotContains(r, 'href="/company/"')
+        self.assertContains(self.client.get('/', secure=True), 'href="/about_us/">About us')   # 푸터 링크
+
+    def test_old_company_page_redirects_to_about(self, *_):
+        r = self.client.get('/company/', secure=True)
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r['Location'], '/about_us/#company-information')
 
     @patch.object(business_facts, 'FOUNDED_YEAR', None)
     @patch.object(business_facts, 'ABN', '')
     def test_unconfirmed_facts_hidden(self, *_):
-        r = self.client.get('/company/', secure=True)
-        self.assertNotContains(r, 'History')
+        r = self.client.get('/about_us/', secure=True)
+        self.assertNotContains(r, 'Our history')
         self.assertNotContains(r, 'ABN')
 
     def test_llms_txt(self, *_):
@@ -71,6 +75,7 @@ class BusinessFactsTests(TestCase):
         self.assertIn('50% of customers have booked more than once', r.content.decode())
         self.assertNotIn('Completed trips', r.content.decode())
         self.assertIn('Founded in 2014', r.content.decode())
+        self.assertNotIn('/company/', r.content.decode())
 
     def test_home_schema_is_valid_json_with_same_as_and_real_geo(self, *_):
         r = self.client.get('/', secure=True)
@@ -85,8 +90,8 @@ class BusinessFactsTests(TestCase):
     @patch.object(business_facts, 'FOUNDED_YEAR', 2019)
     @patch.object(business_facts, 'P2P_AUTHORISATION', 'BSP-123')
     def test_optional_facts_appear_once_filled(self, *_):
-        r = self.client.get('/company/', secure=True)
-        self.assertContains(r, '2019: EasyGo Airport Shuttle started')
+        r = self.client.get('/about_us/', secure=True)
+        self.assertContains(r, '<strong>2019</strong> — EasyGo Airport Shuttle started')
         self.assertContains(r, 'BSP-123')
         for b in ld_blocks(r.content.decode()):
             if b.get('@type') == 'LocalBusiness':

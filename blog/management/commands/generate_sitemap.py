@@ -59,7 +59,6 @@ class Command(BaseCommand):
             {"loc": f"{BASE_URL}/easygo_review/",            "changefreq": "weekly",  "priority": "0.7000"},
             {"loc": f"{BASE_URL}/articles/blog/",            "changefreq": "daily",   "priority": "0.7000"},
             {"loc": f"{BASE_URL}/information/",              "changefreq": "monthly", "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/company/",                  "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/meeting_point/",            "changefreq": "monthly", "priority": "0.6000"},
             {"loc": f"{BASE_URL}/arrival_guide/",            "changefreq": "monthly", "priority": "0.6000"},
             {"loc": f"{BASE_URL}/more_suburbs/",             "changefreq": "weekly",  "priority": "0.6000"},

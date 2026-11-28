@@ -17,19 +17,13 @@ def about_us(request):
 
 
 def _facts_context():
-    from basecamp.business_facts import rounded_down, stats
-    numbers = stats()
-    return {
-        'numbers': numbers,
-        'trips_label': rounded_down(numbers['trips']),
-        'customers_label': rounded_down(numbers['customers']),
-    }
+    from basecamp.business_facts import stats
+    return {'numbers': stats()}
 
 
 def company(request):
-    """회사 정보 페이지 — 손님용 About 은 짧게 두고, 사실 정보는 여기에 (푸터 링크).
-    봇에게만 보이는 페이지가 아니라 누구나 볼 수 있다 (클로킹 금지)."""
-    return render(request, 'basecamp/pages/company.html', _facts_context())
+    """예전 회사 정보 페이지 — About 페이지와 겹쳐서 합쳤다 (2026-11-28)."""
+    return redirect('/about_us/#company-information', permanent=True)
 
 def arrival_guide(request): 
     return render(request, 'basecamp/pages/arrival_guide.html')
