@@ -107,8 +107,8 @@ def llms_txt(request):
         '',
         '## Key facts',
         f'- Address: {STREET}, {LOCALITY} {REGION} {POSTCODE}, Australia',
-        f'- Completed trips since reopening in {REOPENED_YEAR}: {rounded_down(n["trips"])} (booking records, {n["as_of"]:%B %Y})',
-        f'- Customers: {rounded_down(n["customers"])}; {n["repeat_pct"]}% have booked more than once',
+        # 총 운행·손님 수는 싣지 않는다 (오너 결정 2026-11-28: 기간과 합치면 하루 운행량이 드러남).
+        f'- {n["repeat_pct"]}% of customers have booked more than once (booking records)',
         f'- {n["group_pct"]}% of bookings are groups of 5 or more passengers',
     ]
     if reviews.get('google_rating') and reviews.get('google_review_count'):

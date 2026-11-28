@@ -42,10 +42,9 @@
   </ul>
 
   <h2 class="h5 mt-4">Track record</h2>
-  <p class="text-muted fs-sm">Counted from our booking records since {{ facts.reopened_year }}{% if numbers.as_of %}, as of {{ numbers.as_of|date:"F Y" }}{% endif %}.</p>
+  <p class="text-muted fs-sm">Based on our own booking records.</p>
   <ul>
-    <li>{{ trips_label }} completed trips</li>
-    <li>{{ customers_label }} customers; {{ numbers.repeat_pct }}% have booked more than once</li>
+    <li>{{ numbers.repeat_pct }}% of our customers have booked with us more than once</li>
     <li>{{ numbers.group_pct }}% of bookings are groups of 5 or more passengers</li>
     {% if google_rating and google_review_count %}<li>Google rating {{ google_rating }} from {{ google_review_count }} reviews{% if facts.google_reviews_since_year %}, collected since {{ facts.google_reviews_since_year }}{% endif %}</li>{% endif %}
     <li>Quality Business Awards 2026 — Best Airport Shuttle Service, Mosman Council area</li>
