@@ -59,29 +59,46 @@ def _international_prefix_to_plus(phone_number):
     return '+' + digits[2:]
 
 
+MOBILE_TYPES = (phonenumbers.PhoneNumberType.MOBILE, phonenumbers.PhoneNumberType.FIXED_LINE_OR_MOBILE)
+
+
+def _parse_valid(text, region):
+    try:
+        parsed = phonenumbers.parse(text, region)
+    except NumberParseException:
+        return None
+    return parsed if phonenumbers.is_valid_number(parsed) else None
+
+
 def normalize_phone(phone_number, default_region="AU"):
     """
     Convert any international/local number to E.164 format safely.
     Returns None if invalid.
+
+    호주 번호로 먼저 본다. 호주 번호로 맞지 않으면 해외 손님이 '+' 없이 적은 것으로
+    보고 다시 본다: '065 9690 8362' (0 하나 + 국가번호) 나 '65 9690 8362' (국가번호만)
+    → '+6596908362' (이때는 휴대폰 번호로 맞을 때만). 호주 번호 (0412 345 678 등) 는 첫 단계에서 끝나므로 바뀌지 않는다.
     """
     if not phone_number:
         return None
 
-    phone_number = _international_prefix_to_plus(phone_number)
-
-    try:
-        parsed = phonenumbers.parse(phone_number, default_region)
-
-        if not phonenumbers.is_valid_number(parsed):
-            return None
-
-        return phonenumbers.format_number(
-            parsed,
-            phonenumbers.PhoneNumberFormat.E164
-        )
-
-    except NumberParseException:
+    text = _international_prefix_to_plus(phone_number)
+    parsed = _parse_valid(text, default_region)
+    if parsed is None and not text.startswith('+'):
+        digits = ''.join(ch for ch in text if ch.isdigit())
+        for candidate in (digits[1:] if digits.startswith('0') else '', digits):
+            if len(candidate) >= 8:
+                parsed = _parse_valid('+' + candidate, None)
+                # 추측한 번호는 휴대폰일 때만 받는다 — '9512853388' (미국 번호에 1 이 빠진 것)
+                # 이 미얀마 유선으로 읽히는 식의 엉뚱한 해석을 막는다.
+                if parsed and phonenumbers.number_type(parsed) in MOBILE_TYPES:
+                    sms_logger.info(f"[PHONE] guessed overseas number: {phone_number!r} -> "
+                                    f"{phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)}")
+                    break
+                parsed = None
+    if parsed is None:
         return None
+    return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
 
 
 def is_au_mobile(phone_number, default_region="AU"):
